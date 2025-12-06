@@ -2,17 +2,36 @@ import React, { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import KanaCard from './KanaCard';
+import MnemonicModal from './MnemonicModal';
 import { hiragana, katakana } from '../data/kanaData';
 
 const KanaPage = () => {
-    const [activeTab, setActiveTab] = useState('hiragana'); // 'hiragana' or 'katakana'
+    const [activeTab, setActiveTab] = useState('hiragana');
+    const [selectedCard, setSelectedCard] = useState(null);
 
     const data = activeTab === 'hiragana' ? hiragana : katakana;
-    const isHiragana = activeTab === 'hiragana';
 
-    console.log('Rendering KanaPage');
-    console.log('Active Tab:', activeTab);
-    console.log('Data Length:', data?.length);
+    const handleCardClick = (item) => {
+        setSelectedCard(item);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedCard(null);
+    };
+
+    const handleNext = () => {
+        if (!selectedCard) return;
+        const currentIndex = data.indexOf(selectedCard);
+        const nextIndex = (currentIndex + 1) % data.length;
+        setSelectedCard(data[nextIndex]);
+    };
+
+    const handlePrev = () => {
+        if (!selectedCard) return;
+        const currentIndex = data.indexOf(selectedCard);
+        const prevIndex = (currentIndex - 1 + data.length) % data.length;
+        setSelectedCard(data[prevIndex]);
+    };
 
     return (
         <div className="min-h-screen p-6 pb-20 bg-[#FFF0F5] transition-colors duration-700">
@@ -61,12 +80,21 @@ const KanaPage = () => {
                             char={item.char}
                             romaji={item.romaji}
                             type={activeTab}
+                            onClick={() => handleCardClick(item)}
                         />
                     ) : (
                         <div key={index} className="w-20 sm:w-24"></div>
                     )
                 ))}
             </div>
+
+            {/* Mnemonic Modal */}
+            <MnemonicModal
+                item={selectedCard}
+                onClose={handleCloseModal}
+                onNext={handleNext}
+                onPrev={handlePrev}
+            />
 
         </div>
     );

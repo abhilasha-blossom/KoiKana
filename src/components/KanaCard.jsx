@@ -1,6 +1,6 @@
 import React from 'react';
 
-const KanaCard = ({ char, romaji, type = 'hiragana' }) => {
+const KanaCard = ({ char, romaji, type = 'hiragana', onClick }) => {
     const isHiragana = type === 'hiragana';
 
     // Colors
@@ -10,7 +10,10 @@ const KanaCard = ({ char, romaji, type = 'hiragana' }) => {
     const glowColor = isHiragana ? 'shadow-pink-300' : 'shadow-purple-300';
 
     return (
-        <div className="group [perspective:1000px] w-20 h-24 sm:w-24 sm:h-28 cursor-pointer">
+        <div
+            onClick={onClick}
+            className="group [perspective:1000px] w-20 h-24 sm:w-24 sm:h-28 cursor-pointer"
+        >
             {/* Card Inner Container - The flipper */}
             <div className={`
                 relative w-full h-full transition-all duration-500 [transform-style:preserve-3d]
