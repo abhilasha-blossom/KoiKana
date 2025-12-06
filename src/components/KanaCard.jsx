@@ -2,39 +2,47 @@ import React from 'react';
 
 const KanaCard = ({ char, romaji, type = 'hiragana' }) => {
     const isHiragana = type === 'hiragana';
-    const baseColor = isHiragana ? 'bg-pink-100' : 'bg-purple-100';
-    const borderColor = isHiragana ? 'border-pink-200' : 'border-purple-200';
-    const textColor = isHiragana ? 'text-pink-600' : 'text-purple-600';
-    const shadowColor = isHiragana ? 'shadow-pink-200/50' : 'shadow-purple-200/50';
+
+    // Colors
+    const baseColor = isHiragana ? 'bg-pink-100' : 'bg-[#E6E6FA]'; // Lavender
+    const borderColor = isHiragana ? 'border-pink-200' : 'border-[#D8BFD8]'; // Thistle
+    const textColor = isHiragana ? 'text-pink-600' : 'text-[#9370DB]'; // Medium Purple
+    const glowColor = isHiragana ? 'shadow-pink-300' : 'shadow-purple-300';
 
     return (
-        <div
-            className={`
-        group relative flex flex-col items-center justify-center 
-        w-20 h-24 sm:w-24 sm:h-28 rounded-2xl 
-        ${baseColor}/40 backdrop-blur-sm border ${borderColor}
-        shadow-lg ${shadowColor}
-        transition-all duration-300 ease-out
-        hover:scale-110 hover:-translate-y-1 hover:bg-white/60
-        cursor-pointer select-none
-      `}
-        >
-            <div className={`text-4xl sm:text-5xl font-bold ${textColor} jp-font drop-shadow-sm group-hover:drop-shadow-md transition-all`}>
-                {char}
-            </div>
-
+        <div className="group [perspective:1000px] w-20 h-24 sm:w-24 sm:h-28 cursor-pointer">
+            {/* Card Inner Container - The flipper */}
             <div className={`
-        absolute bottom-2 text-sm sm:text-base font-medium text-gray-500
-        opacity-0 transform translate-y-2 
-        group-hover:opacity-100 group-hover:translate-y-0 
-        transition-all duration-300 delay-75
-      `}>
-                {romaji}
-            </div>
+                relative w-full h-full transition-all duration-500 [transform-style:preserve-3d]
+                group-hover:[transform:rotateY(180deg)]
+                rounded-2xl shadow-lg group-hover:shadow-[0_0_20px_rgba(255,255,255,0.8)]
+                ${glowColor}/40 group-hover:${glowColor}
+            `}>
 
-            {/* Sparkle effect on hover */}
-            <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 text-xs">
-                ✨
+                {/* FRONT SIDE (Character) */}
+                <div className={`
+                    absolute inset-0 w-full h-full [backface-visibility:hidden] rounded-2xl
+                    flex items-center justify-center
+                    ${baseColor}/60 backdrop-blur-sm border ${borderColor}
+                    z-20
+                `}>
+                    <div className={`text-4xl sm:text-5xl font-bold ${textColor} jp-font drop-shadow-sm`}>
+                        {char}
+                    </div>
+                </div>
+
+                {/* BACK SIDE (Romaji) */}
+                <div className={`
+                    absolute inset-0 w-full h-full [backface-visibility:hidden] rounded-2xl
+                    flex items-center justify-center [transform:rotateY(180deg)]
+                    bg-white/90 border ${borderColor}
+                    z-10
+                `}>
+                    <div className={`text-3xl font-bold ${textColor} tracking-wider`}>
+                        {romaji}
+                    </div>
+                </div>
+
             </div>
         </div>
     );

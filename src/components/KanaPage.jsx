@@ -41,13 +41,13 @@ const KanaPage = () => {
                     </button>
                     <button
                         onClick={() => setActiveTab('katakana')}
-                        className={`relative z-10 w-[140px] py-2 rounded-full font-bold text-lg transition-colors duration-300 ${activeTab !== 'hiragana' ? 'text-purple-500' : 'text-gray-500 hover:text-gray-700'}`}
+                        className={`relative z-10 w-[140px] py-2 rounded-full font-bold text-lg transition-colors duration-300 ${activeTab !== 'hiragana' ? 'text-[#9370DB]' : 'text-gray-500 hover:text-gray-700'}`}
                     >
                         Katakana
                     </button>
                 </div>
 
-                <h1 className={`text-center text-xl font-medium tracking-wide transition-colors duration-500 ${activeTab === 'hiragana' ? 'text-pink-400' : 'text-purple-400'}`}>
+                <h1 className={`text-center text-xl font-medium tracking-wide transition-colors duration-500 ${activeTab === 'hiragana' ? 'text-pink-400' : 'text-[#B19CD9]'}`}>
                     {activeTab === 'hiragana' ? "The Garden of Sounds" : "The Sky of Shapes"}
                 </h1>
             </div>

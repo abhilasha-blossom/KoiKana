@@ -4,6 +4,27 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 3D Flip Utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.rotate-y-0 {
+  transform: rotateY(0deg);
+}
+
 :root {
   /* Pastel Palette from Logo */
   --color-sakura-pink: #FFD1DC;
