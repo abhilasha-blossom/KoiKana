@@ -1,0 +1,75 @@
+import React, { useState } from 'react';
+import { ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import KanaCard from './KanaCard';
+import { hiragana, katakana } from '../data/kanaData';
+
+const KanaPage = () => {
+    const [activeTab, setActiveTab] = useState('hiragana'); // 'hiragana' or 'katakana'
+
+    const data = activeTab === 'hiragana' ? hiragana : katakana;
+    const isHiragana = activeTab === 'hiragana';
+
+    console.log('Rendering KanaPage');
+    console.log('Active Tab:', activeTab);
+    console.log('Data Length:', data?.length);
+
+    return (
+        <div className="min-h-screen p-6 pb-20 bg-[#FFF0F5] transition-colors duration-700">
+            {/* Background elements removed for debugging/visibility */}
+
+            {/* Navigation */}
+            <div className="relative z-10 flex flex-col items-center mb-8 max-w-5xl mx-auto gap-6 transition-all duration-500">
+
+                <div className="w-full flex items-center justify-between">
+                    <Link to="/" className="p-3 rounded-full bg-white/50 hover:bg-white/80 transition-colors backdrop-blur-sm shadow-sm group">
+                        <ArrowLeft className="w-6 h-6 text-gray-600 group-hover:scale-110 transition-transform" />
+                    </Link>
+                    <div className="w-12"></div> {/* Spacer */}
+                </div>
+
+                {/* CUTE TOGGLE SWITCH */}
+                <div className="flex bg-white/40 p-1.5 rounded-full backdrop-blur-md shadow-sm border border-white/50 relative">
+                    {/* Sliding Pill Background */}
+                    <div className={`absolute top-1.5 bottom-1.5 w-[140px] rounded-full bg-white shadow-sm transition-all duration-500 ease-out ${activeTab === 'hiragana' ? 'left-1.5' : 'left-[148px]'}`}></div>
+
+                    <button
+                        onClick={() => setActiveTab('hiragana')}
+                        className={`relative z-10 w-[140px] py-2 rounded-full font-bold text-lg transition-colors duration-300 ${activeTab === 'hiragana' ? 'text-pink-500' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                        Hiragana
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('katakana')}
+                        className={`relative z-10 w-[140px] py-2 rounded-full font-bold text-lg transition-colors duration-300 ${activeTab !== 'hiragana' ? 'text-purple-500' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                        Katakana
+                    </button>
+                </div>
+
+                <h1 className={`text-center text-xl font-medium tracking-wide transition-colors duration-500 ${activeTab === 'hiragana' ? 'text-pink-400' : 'text-purple-400'}`}>
+                    {activeTab === 'hiragana' ? "The Garden of Sounds" : "The Sky of Shapes"}
+                </h1>
+            </div>
+
+            {/* Grid */}
+            <div className="relative z-20 max-w-5xl mx-auto grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-4 sm:gap-6 justify-items-center">
+                {data.map((item, index) => (
+                    item.char ? (
+                        <KanaCard
+                            key={`${activeTab}-${index}`}
+                            char={item.char}
+                            romaji={item.romaji}
+                            type={activeTab}
+                        />
+                    ) : (
+                        <div key={index} className="w-20 sm:w-24"></div>
+                    )
+                ))}
+            </div>
+
+        </div>
+    );
+};
+
+export default KanaPage;
