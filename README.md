@@ -11,9 +11,7 @@
   </a>
 </p>
 
-<p align="center">
-  <img src="https://koi-kana.vercel.app/assets/hero-koi.svg" alt="Koi-chan Animation" width="250" />
-</p>
+  <video src="src/assets/koi-pond.mp4" width="400" controls autoplay loop muted></video>
 
 **A serene, aesthetic journey into the world of Japanese Hiragana & Katakana.**  
 *Learn through emotions, storytelling, and aesthetic comfort.*
