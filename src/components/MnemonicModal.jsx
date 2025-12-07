@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { X, ChevronLeft, ChevronRight, Image as ImageIcon, PenTool } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Image as ImageIcon, PenTool, BookOpen } from 'lucide-react';
 import WritingCanvas from './WritingCanvas';
 
 const MnemonicModal = ({ item, onClose, onNext, onPrev }) => {
-    const [activeTab, setActiveTab] = useState('memory'); // 'memory' | 'practice'
+    const [activeTab, setActiveTab] = useState('memory'); // 'memory' | 'practice' | 'words'
 
     if (!item) return null;
 
@@ -38,7 +38,7 @@ const MnemonicModal = ({ item, onClose, onNext, onPrev }) => {
                     </div>
 
                     {/* TABS */}
-                    <div className="flex p-1 bg-gray-100/80 rounded-full w-full max-w-[200px]">
+                    <div className="flex p-1 bg-gray-100/80 rounded-full w-full max-w-[300px]">
                         <button
                             onClick={() => setActiveTab('memory')}
                             className={`flex-1 py-1.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'memory' ? 'bg-white shadow-sm text-pink-500' : 'text-gray-400 hover:text-gray-600'}`}
@@ -50,6 +50,12 @@ const MnemonicModal = ({ item, onClose, onNext, onPrev }) => {
                             className={`flex-1 py-1.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'practice' ? 'bg-white shadow-sm text-pink-500' : 'text-gray-400 hover:text-gray-600'}`}
                         >
                             <PenTool className="w-4 h-4" /> Draw
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('words')}
+                            className={`flex-1 py-1.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'words' ? 'bg-white shadow-sm text-pink-500' : 'text-gray-400 hover:text-gray-600'}`}
+                        >
+                            <BookOpen className="w-4 h-4" /> Words
                         </button>
                     </div>
 
@@ -82,9 +88,35 @@ const MnemonicModal = ({ item, onClose, onNext, onPrev }) => {
                                     </p>
                                 </div>
                             </div>
-                        ) : (
+                        ) : activeTab === 'practice' ? (
                             <div className="w-full animate-fade-in">
                                 <WritingCanvas char={item.char} />
+                            </div>
+                        ) : (
+                            <div className="w-full h-full flex flex-col items-center justify-start space-y-4 animate-fade-in min-h-[300px] overflow-y-auto pr-2">
+                                <h3 className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-2">Unlocked Vocabulary</h3>
+
+                                {item.examples && item.examples.length > 0 ? (
+                                    <div className="grid grid-cols-1 w-full gap-3">
+                                        {item.examples.map((ex, idx) => (
+                                            <div key={idx} className="bg-gradient-to-br from-white to-gray-50 p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
+                                                <div className="flex flex-col items-start">
+                                                    <span className="text-2xl font-bold text-gray-800 jp-font">{ex.kana}</span>
+                                                    <span className="text-xs text-gray-400 font-bold">{ex.word}</span>
+                                                </div>
+                                                <div className="text-right">
+                                                    <span className="text-pink-500 font-medium text-lg capitalize">{ex.meaning}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center h-[200px] text-gray-400 space-y-2">
+                                        <BookOpen className="w-12 h-12 opacity-20" />
+                                        <p>No words unlocked yet.</p>
+                                        <p className="text-xs">Keep learning to find words!</p>
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
@@ -101,6 +133,7 @@ const MnemonicModal = ({ item, onClose, onNext, onPrev }) => {
                         <div className="flex gap-1.5">
                             <div className={`w-2 h-2 rounded-full transition-colors ${activeTab === 'memory' ? 'bg-pink-400' : 'bg-gray-200'}`}></div>
                             <div className={`w-2 h-2 rounded-full transition-colors ${activeTab === 'practice' ? 'bg-pink-400' : 'bg-gray-200'}`}></div>
+                            <div className={`w-2 h-2 rounded-full transition-colors ${activeTab === 'words' ? 'bg-pink-400' : 'bg-gray-200'}`}></div>
                         </div>
 
                         <button

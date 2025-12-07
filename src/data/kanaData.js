@@ -1,7 +1,77 @@
 export const hiragana = [
-    { char: 'あ', romaji: 'a', type: 'gojuon', mnemonic: 'Ah! An Apple!', image: '/mnemonics/a.png' }, { char: 'い', romaji: 'i', type: 'gojuon', mnemonic: 'Two Eels', image: '/mnemonics/i.jpg' }, { char: 'う', romaji: 'u', type: 'gojuon', mnemonic: 'U! Rabbit', image: '/mnemonics/u.jpg' }, { char: 'え', romaji: 'e', type: 'gojuon', mnemonic: 'Exotic Bird', image: '/mnemonics/e.jpg' }, { char: 'お', romaji: 'o', type: 'gojuon', mnemonic: 'O! UFO', image: '/mnemonics/o.jpg' },
-    { char: 'か', romaji: 'ka', type: 'gojuon', mnemonic: 'Kite', image: '/mnemonics/ka.jpg' }, { char: 'き', romaji: 'ki', type: 'gojuon', mnemonic: 'Key', image: '/mnemonics/ki.jpg' }, { char: 'く', romaji: 'ku', type: 'gojuon', mnemonic: 'Cuckoo', image: '/mnemonics/ku.jpg' }, { char: 'け', romaji: 'ke', type: 'gojuon', mnemonic: 'Keg', image: '/mnemonics/ke.jpg' }, { char: 'こ', romaji: 'ko', type: 'gojuon', mnemonic: 'Koi Fish', image: '/mnemonics/ko.jpg' },
-    { char: 'さ', romaji: 'sa', type: 'gojuon', mnemonic: 'Samurai', image: '/mnemonics/sa.jpg' }, { char: 'し', romaji: 'shi', type: 'gojuon', mnemonic: 'Fishing', image: '/mnemonics/shi.jpg' }, { char: 'す', romaji: 'su', type: 'gojuon', mnemonic: 'Swing', image: '/mnemonics/su.jpg' }, { char: 'せ', romaji: 'se', type: 'gojuon', mnemonic: 'Sunset', image: '/mnemonics/se.jpg' }, { char: 'そ', romaji: 'so', type: 'gojuon', mnemonic: 'Sewing', image: '/mnemonics/so.jpg' },
+    {
+        char: 'あ', romaji: 'a', type: 'gojuon', mnemonic: 'Ah! An Apple!', image: '/mnemonics/a.png',
+        examples: [
+            { word: 'Ai', meaning: 'Love', kana: 'あい' },
+            { word: 'Aoi', meaning: 'Blue', kana: 'あおい' }
+        ]
+    },
+    {
+        char: 'い', romaji: 'i', type: 'gojuon', mnemonic: 'Two Eels', image: '/mnemonics/i.jpg',
+        examples: [
+            { word: 'Ie', meaning: 'House', kana: 'いえ' },
+            { word: 'Ii', meaning: 'Good', kana: 'いい' }
+        ]
+    },
+    {
+        char: 'う', romaji: 'u', type: 'gojuon', mnemonic: 'U! Rabbit', image: '/mnemonics/u.jpg',
+        examples: [
+            { word: 'Ue', meaning: 'Up', kana: 'うえ' },
+            { word: 'Ushi', meaning: 'Cow', kana: 'うし' }
+        ]
+    },
+    {
+        char: 'え', romaji: 'e', type: 'gojuon', mnemonic: 'Exotic Bird', image: '/mnemonics/e.jpg',
+        examples: [
+            { word: 'E', meaning: 'Picture', kana: 'え' },
+            { word: 'Eki', meaning: 'Station', kana: 'えき' }
+        ]
+    },
+    {
+        char: 'お', romaji: 'o', type: 'gojuon', mnemonic: 'O! UFO', image: '/mnemonics/o.jpg',
+        examples: [
+            { word: 'Oi', meaning: 'Nephew', kana: 'おい' },
+            { word: 'Kao', meaning: 'Face', kana: 'かお' }
+        ]
+    },
+    {
+        char: 'か', romaji: 'ka', type: 'gojuon', mnemonic: 'Kite', image: '/mnemonics/ka.jpg',
+        examples: [
+            { word: 'Ka', meaning: 'Mosquito', kana: 'か' },
+            { word: 'Aka', meaning: 'Red', kana: 'あか' }
+        ]
+    },
+    {
+        char: 'き', romaji: 'ki', type: 'gojuon', mnemonic: 'Key', image: '/mnemonics/ki.jpg',
+        examples: [
+            { word: 'Ki', meaning: 'Tree', kana: 'き' },
+            { word: 'Eki', meaning: 'Station', kana: 'えき' }
+        ]
+    },
+    {
+        char: 'く', romaji: 'ku', type: 'gojuon', mnemonic: 'Cuckoo', image: '/mnemonics/ku.jpg',
+        examples: [
+            { word: 'Kiku', meaning: 'Listen', kana: 'きく' }
+        ]
+    },
+    {
+        char: 'け', romaji: 'ke', type: 'gojuon', mnemonic: 'Keg', image: '/mnemonics/ke.jpg',
+        examples: [
+            { word: 'Ike', meaning: 'Pond', kana: 'いけ' }
+        ]
+    },
+    {
+        char: 'こ', romaji: 'ko', type: 'gojuon', mnemonic: 'Koi Fish', image: '/mnemonics/ko.jpg',
+        examples: [
+            { word: 'Koe', meaning: 'Voice', kana: 'こえ' },
+            { word: 'Koi', meaning: 'Carp / Love', kana: 'こい' }
+        ]
+    },
+    { char: 'さ', romaji: 'sa', type: 'gojuon', mnemonic: 'Samurai', image: '/mnemonics/sa.jpg', examples: [{ word: 'Sake', meaning: 'Alcohol', kana: 'さけ' }, { word: 'Kasa', meaning: 'Umbrella', kana: 'かさ' }] },
+    { char: 'し', romaji: 'shi', type: 'gojuon', mnemonic: 'Fishing', image: '/mnemonics/shi.jpg', examples: [{ word: 'Shio', meaning: 'Salt', kana: 'しお' }, { word: 'Ushi', meaning: 'Cow', kana: 'うし' }] },
+    { char: 'す', romaji: 'su', type: 'gojuon', mnemonic: 'Swing', image: '/mnemonics/su.jpg', examples: [{ word: 'Sushi', meaning: 'Sushi', kana: 'すし' }, { word: 'Isu', meaning: 'Chair', kana: 'いす' }] },
+    { char: 'せ', romaji: 'se', type: 'gojuon', mnemonic: 'Sunset', image: '/mnemonics/se.jpg', examples: [{ word: 'Sekai', meaning: 'World', kana: 'せかい' }] },
+    { char: 'そ', romaji: 'so', type: 'gojuon', mnemonic: 'Sewing', image: '/mnemonics/so.jpg', examples: [{ word: 'Uso', meaning: 'Lie', kana: 'うそ' }] },
     { char: 'た', romaji: 'ta', type: 'gojuon', mnemonic: 'Taco', image: '/mnemonics/ta.jpg' }, { char: 'ち', romaji: 'chi', type: 'gojuon', mnemonic: 'Cheerleader', image: '/mnemonics/chi.jpg' }, { char: 'つ', romaji: 'tsu', type: 'gojuon', mnemonic: 'Tsunami', image: '/mnemonics/tsu.jpg' }, { char: 'て', romaji: 'te', type: 'gojuon', mnemonic: 'Tail', image: '/mnemonics/te.jpg' }, { char: 'と', romaji: 'to', type: 'gojuon' },
     { char: 'な', romaji: 'na', type: 'gojuon' }, { char: 'に', romaji: 'ni', type: 'gojuon' }, { char: 'ぬ', romaji: 'nu', type: 'gojuon' }, { char: 'ね', romaji: 'ne', type: 'gojuon' }, { char: 'の', romaji: 'no', type: 'gojuon' },
     { char: 'は', romaji: 'ha', type: 'gojuon' }, { char: 'ひ', romaji: 'hi', type: 'gojuon' }, { char: 'ふ', romaji: 'fu', type: 'gojuon' }, { char: 'へ', romaji: 'he', type: 'gojuon' }, { char: 'ほ', romaji: 'ho', type: 'gojuon' },
