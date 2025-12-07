@@ -1,7 +1,9 @@
 <div align="center">
 
 # 🌸 KoiKana 🌸
-### *The Garden of Sounds*
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=M+PLUS+Rounded+1c&weight=700&size=24&duration=3000&pause=1000&color=F7B7A3&center=true&vCenter=true&width=435&lines=Where+Japanese+feels+like+love;The+Garden+of+Sounds;Learn+Hiragana+%26+Katakana;%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%81%AE%E4%B8%96%E7%95%8C%E3%81%B8%E3%82%88%E3%81%86%E3%81%93%E3%81%9D" alt="Typing SVG" />
+</p>
 
 <p align="center">
   <a href="https://koi-kana.vercel.app/">
@@ -67,7 +69,6 @@ npm install
 npm run dev
 ```
 
-**[View the Live Demo](https://koi-kana.vercel.app/)** or open [http://localhost:5173](http://localhost:5173) to view your local version.
 
 ---
 
