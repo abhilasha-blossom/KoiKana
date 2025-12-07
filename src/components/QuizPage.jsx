@@ -10,6 +10,25 @@ const GAME_MODES = {
     TIME_ATTACK: 'time_attack'
 };
 
+const POSITIVE_MESSAGES = [
+    "You shine so bright! ✨",
+    "Perfect! 🌸",
+    "I'm so proud of you! 💖",
+    "You're a natural! 🌿",
+    "Amazing work! 🎵",
+    "So smart! 🧠",
+    "Keep glowing! ✨"
+];
+
+const NEGATIVE_MESSAGES = [
+    "Oh no... 🥺",
+    "Don't cry! Try again! 💫",
+    "It's okay, I believe in you! 💕",
+    "Mistakes help us grow! 🌱",
+    "You'll get it next time! 🌟",
+    "Don't give up! 🔥"
+];
+
 const QuizPage = () => {
     const [mode, setMode] = useState(GAME_MODES.SELECT);
     const [scriptType, setScriptType] = useState('mix'); // 'hiragana', 'katakana', 'mix'
@@ -19,6 +38,7 @@ const QuizPage = () => {
     const [options, setOptions] = useState([]);
     const [inputAnswer, setInputAnswer] = useState('');
     const [feedback, setFeedback] = useState(null); // 'correct' | 'incorrect'
+    const [mascotMessage, setMascotMessage] = useState('');
     const [timeLeft, setTimeLeft] = useState(60);
     const [isGameOver, setIsGameOver] = useState(false);
 
@@ -63,6 +83,7 @@ const QuizPage = () => {
         const randomItem = allKana[Math.floor(Math.random() * allKana.length)];
         setCurrentQuestion(randomItem);
         setFeedback(null);
+        setMascotMessage('');
         setInputAnswer('');
 
         // Generate options for Multiple Choice
@@ -88,8 +109,10 @@ const QuizPage = () => {
         if (isCorrect) {
             setScore(prev => prev + 1);
             setFeedback('correct');
+            setMascotMessage(POSITIVE_MESSAGES[Math.floor(Math.random() * POSITIVE_MESSAGES.length)]);
         } else {
             setFeedback('incorrect');
+            setMascotMessage(NEGATIVE_MESSAGES[Math.floor(Math.random() * NEGATIVE_MESSAGES.length)]);
         }
 
         // Delay for feedback before next question
@@ -212,6 +235,37 @@ const QuizPage = () => {
 
                 <div className="text-xl font-bold text-pink-500 bg-white/80 px-4 py-2 rounded-full shadow-sm">
                     Score: {score}
+                </div>
+                <div className="text-xl font-bold text-pink-500 bg-white/80 px-4 py-2 rounded-full shadow-sm">
+                    Score: {score}
+                </div>
+            </div>
+
+            {/* MASCOT KOI-CHAN */}
+            <div className="fixed bottom-0 right-0 md:right-10 w-40 md:w-56 pointer-events-none z-50 transition-transform duration-300">
+
+                <img
+                    src={
+                        feedback === 'correct' ? '/mascot/correct.png' :
+                            feedback === 'incorrect' ? '/mascot/wrong.png' :
+                                '/mascot/normal.png'
+                    }
+                    alt="Koi-chan Mascot"
+                    className={`w-full h-auto drop-shadow-xl transition-all duration-300 relative z-10 ${feedback === 'correct' ? 'animate-bounce' :
+                        feedback === 'incorrect' ? 'animate-shake' :
+                            'animate-pulse-slow'
+                        }`}
+                />
+
+                {/* Speech Bubble */}
+                <div className={`
+                    absolute bottom-[110%] right-[0%] bg-white px-6 py-4 rounded-3xl shadow-lg border-2 border-pink-100
+                    transform transition-all duration-300 origin-bottom-right w-48 text-center z-20
+                    ${feedback ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-50 translate-y-4'}
+                `}>
+                    <p className="text-[#4A3B52] font-bold text-lg">{mascotMessage}</p>
+                    {/* Triangle pointer */}
+                    <div className="absolute -bottom-2 right-8 w-4 h-4 bg-white border-b-2 border-r-2 border-pink-100 transform rotate-45"></div>
                 </div>
             </div>
 
