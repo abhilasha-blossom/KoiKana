@@ -64,7 +64,8 @@ const MnemonicModal = ({ item, onClose, onNext, onPrev }) => {
                         {activeTab === 'memory' ? (
                             <div className="w-full space-y-6 animate-fade-in">
                                 {/* Image Area */}
-                                <div className="relative w-full aspect-video sm:aspect-square max-h-[300px] rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-inner group mx-auto">
+                                {/* Visual Memory Section */}
+                                <div className="relative w-full aspect-video sm:aspect-square max-h-[300px] rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-inner group mx-auto flex items-center justify-center">
                                     {item.image ? (
                                         <img
                                             src={item.image}
@@ -72,8 +73,11 @@ const MnemonicModal = ({ item, onClose, onNext, onPrev }) => {
                                             className="w-full h-full object-contain p-4 hover:scale-105 transition-transform duration-500"
                                         />
                                     ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-gray-300 italic">
-                                            Visual memory loading... 🌸
+                                        <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-pink-50 to-purple-50 p-6 text-center">
+                                            <span className="text-sm uppercase tracking-widest text-gray-400 font-bold mb-4">Memory Hint</span>
+                                            <h3 className="text-3xl sm:text-4xl font-bold text-gray-700 font-handwritten leading-relaxed">
+                                                "{item.mnemonic || 'Visualization coming soon...'}"
+                                            </h3>
                                         </div>
                                     )}
                                 </div>
