@@ -4,6 +4,12 @@
 ### *The Garden of Sounds*
 
 <p align="center">
+  <a href="https://koi-kana.vercel.app/">
+    <img src="https://img.shields.io/badge/Live_Demo-FF69B4?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
+  </a>
+</p>
+
+<p align="center">
   <img src="public/mascot/normal.png" alt="Koi-chan" width="150" />
 </p>
 
@@ -61,7 +67,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) to view it in your browser.
+**[View the Live Demo](https://koi-kana.vercel.app/)** or open [http://localhost:5173](http://localhost:5173) to view your local version.
 
 ---
 
