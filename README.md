@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <img src="public/mascot/normal.png" alt="Koi-chan" width="150" />
+  <img src="https://koi-kana.vercel.app/assets/hero-koi.svg" alt="Koi-chan Animation" width="250" />
 </p>
 
 **A serene, aesthetic journey into the world of Japanese Hiragana & Katakana.**  
