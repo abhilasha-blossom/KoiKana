@@ -99,6 +99,31 @@ const QuizPage = () => {
             const allOptions = [...wrongOptions, randomItem].sort(() => Math.random() - 0.5);
             setOptions(allOptions);
         }
+
+        // Generate Bubbles for Time Attack
+        if (activeMode === GAME_MODES.TIME_ATTACK) {
+            const bubbleCount = 6;
+            const newBubbles = [];
+
+            // Add Correct Answer
+            newBubbles.push({ ...randomItem, id: 'correct', left: Math.random() * 80 + 10, delay: 0, duration: 4 + Math.random() * 3 });
+
+            // Add Distractors
+            while (newBubbles.length < bubbleCount) {
+                const random = allKana[Math.floor(Math.random() * allKana.length)];
+                if (random.char !== randomItem.char && !newBubbles.some(b => b.char === random.char)) {
+                    newBubbles.push({
+                        ...random,
+                        id: `wrong-${newBubbles.length}`,
+                        left: Math.random() * 80 + 10,
+                        delay: Math.random() * 2,
+                        duration: 4 + Math.random() * 3
+                    });
+                }
+            }
+            // Shuffle
+            setOptions(newBubbles.sort(() => Math.random() - 0.5));
+        }
     };
 
     const handleAnswer = (answer) => {
@@ -296,7 +321,7 @@ const QuizPage = () => {
                 </div>
 
                 {/* Input Area */}
-                {(mode === GAME_MODES.MULTIPLE_CHOICE) ? (
+                {(mode === GAME_MODES.MULTIPLE_CHOICE) && (
                     <div className="grid grid-cols-2 gap-4 w-full">
                         {options.map((opt, i) => (
                             <button
@@ -316,7 +341,9 @@ const QuizPage = () => {
                             </button>
                         ))}
                     </div>
-                ) : (
+                )}
+
+                {(mode === GAME_MODES.INPUT) && (
                     <form onSubmit={handleInputSubmit} className="w-full">
                         <input
                             type="text"
@@ -335,6 +362,31 @@ const QuizPage = () => {
                             Check Answer
                         </button>
                     </form>
+                )}
+
+                {(mode === GAME_MODES.TIME_ATTACK) && (
+                    <div className="absolute inset-x-0 bottom-0 h-[600px] overflow-hidden pointer-events-none">
+                        {/* Bubbles Area - Pointer events allowed on buttons only */}
+                        {options.map((opt, i) => (
+                            <button
+                                key={i}
+                                onClick={() => handleAnswer(opt.romaji)}
+                                className="absolute rounded-full flex items-center justify-center shadow-lg backdrop-blur-sm pointer-events-auto transform hover:scale-110 active:scale-125 transition-transform"
+                                style={{
+                                    left: `${opt.left}%`,
+                                    width: '80px',
+                                    height: '80px',
+                                    bottom: '-100px', // Start below
+                                    background: 'rgba(255, 255, 255, 0.8)',
+                                    border: '2px solid rgba(255, 192, 203, 0.5)',
+                                    animation: `floatUp ${opt.duration}s linear infinite`,
+                                    animationDelay: `${opt.delay}s`
+                                }}
+                            >
+                                <span className="text-xl font-bold text-pink-600">{opt.romaji}</span>
+                            </button>
+                        ))}
+                    </div>
                 )}
 
             </div>
