@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { RefreshCw, Eraser, CheckCircle } from 'lucide-react';
+import useProgress from '../hooks/useProgress';
 
 const WritingCanvas = ({ char }) => {
     const canvasRef = useRef(null);
@@ -10,7 +11,9 @@ const WritingCanvas = ({ char }) => {
     const [isWrong, setIsWrong] = useState(false);
     const [score, setScore] = useState(0);
 
-    // Initialize Canvases
+    const { markMastered } = useProgress(); // Use hook
+
+
     useEffect(() => {
         const initCanvas = (canvas, isTarget = false) => {
             const ctx = canvas.getContext('2d');
@@ -119,6 +122,7 @@ const WritingCanvas = ({ char }) => {
         if (coverage > 0.35 && precision > 0.4) {
             setIsCorrect(true);
             setScore(100);
+            markMastered(char); // Trigger mastery!
         } else {
             // Failed
             setIsWrong(true);

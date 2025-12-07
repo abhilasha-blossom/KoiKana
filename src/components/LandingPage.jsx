@@ -1,8 +1,12 @@
 import React from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Flame, Flower2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import useProgress from '../hooks/useProgress';
 
 const LandingPage = () => {
+  const { streak, mastery } = useProgress();
+  const masteredCount = Object.keys(mastery).length;
+
   // Generate random petals
   const petals = Array.from({ length: 20 }).map((_, i) => ({
     id: i,
@@ -13,6 +17,12 @@ const LandingPage = () => {
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen text-center overflow-hidden bg-[#FFF0F5]">
+
+      {/* Streak Indicator */}
+      <div className="absolute top-6 right-6 z-20 flex items-center gap-2 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-sm animate-fade-in border border-orange-100">
+        <Flame className={`w-5 h-5 ${streak > 0 ? 'text-orange-500 fill-orange-500' : 'text-gray-300'}`} />
+        <span className="font-bold text-[#4A3B52]">{streak} Day Streak</span>
+      </div>
 
       {/* Morning Mist Background Orbs */}
       <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-pink-300/50 rounded-full blur-[80px] animate-blob mix-blend-multiply"></div>
@@ -35,7 +45,7 @@ const LandingPage = () => {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 max-w-2xl mx-auto flex flex-col items-center gap-10 animate-fade-in-up px-4">
+      <div className="relative z-10 max-w-2xl mx-auto flex flex-col items-center gap-10 animate-fade-in-up px-4 flex-grow justify-center">
 
         {/* Logo Container */}
         <div
@@ -98,6 +108,30 @@ const LandingPage = () => {
 
       </div>
 
+      {/* Zen Garden Footer */}
+      <div className="relative z-10 w-full bg-white/40 backdrop-blur-md border-t border-white/50 p-6 flex flex-col items-center gap-3 mt-10">
+        <h3 className="text-[#4A3B52] font-bold uppercase tracking-widest text-sm flex items-center gap-2">
+          <Flower2 className="w-4 h-4 text-pink-500" />
+          Your Zen Garden
+        </h3>
+
+        {masteredCount === 0 ? (
+          <p className="text-sm text-[#7A6B82] italic">The garden is waiting for your first bloom...</p>
+        ) : (
+          <div className="flex flex-wrap justify-center gap-2 max-w-3xl animate-fade-in">
+            {/* Render 1 flower for every mastered character */}
+            {/* Optimization: Cap visuals if too many, but for Kana (46) it's fine */}
+            {Array.from({ length: masteredCount }).map((_, i) => (
+              <div key={i} className="relative group animate-bounce-in" style={{ animationDelay: `${i * 0.1}s` }}>
+                <Flower2 className="w-6 h-6 text-pink-400 fill-pink-200 drop-shadow-sm transition-transform hover:scale-125 cursor-help" />
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="w-full h-1 bg-gradient-to-r from-transparent via-[#8B4513]/20 to-transparent rounded-full mt-2"></div>
+      </div>
+
       <style jsx>{`
         @keyframes blob {
           0% { transform: translate(0px, 0px) scale(1); }
@@ -133,6 +167,14 @@ const LandingPage = () => {
         @keyframes sway {
           0% { transform: translateX(0px) rotate(0deg); }
           100% { transform: translateX(25px) rotate(45deg); }
+        }
+        .animate-bounce-in {
+            animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            opacity: 0;
+            transform: scale(0);
+        }
+        @keyframes bounceIn {
+            to { opacity: 1; transform: scale(1); }
         }
       `}</style>
     </div>
