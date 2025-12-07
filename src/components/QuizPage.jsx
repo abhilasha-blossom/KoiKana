@@ -166,49 +166,60 @@ const QuizPage = () => {
 
     if (mode === GAME_MODES.SELECT) {
         return (
-            <div className="min-h-screen bg-[#FFF0F5] flex flex-col items-center justify-center p-6">
-                <Link to="/" className="absolute top-6 left-6 p-2 rounded-full bg-white/50 hover:bg-white transition-colors">
-                    <ArrowLeft className="text-gray-600" />
+            <div className="min-h-screen bg-[#FFF0F5] flex flex-col items-center justify-center p-6 relative overflow-hidden">
+
+                {/* Background Atmosphere */}
+                <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-pink-200/40 rounded-full blur-[100px] animate-blob mix-blend-multiply"></div>
+                <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-purple-200/40 rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply"></div>
+
+                <Link to="/" className="absolute top-6 left-6 p-3 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors z-10 shadow-sm border border-white/50">
+                    <ArrowLeft className="text-[#4A3B52]" />
                 </Link>
 
-                <h1 className="text-4xl font-bold text-[#4A3B52] mb-2">Training Dojo</h1>
-                <p className="text-[#7A6B82] mb-8">Choose your challenge</p>
+                <div className="relative z-10 flex flex-col items-center">
+                    <h1 className="text-5xl font-bold text-[#4A3B52] mb-3 drop-shadow-sm">Training Dojo</h1>
+                    <div className="h-1 w-24 bg-gradient-to-r from-pink-300 to-purple-300 rounded-full mb-8"></div>
 
-                {/* Script Selection Toggles */}
-                <div className="flex bg-white/40 p-1 rounded-full mb-10 shadow-inner">
-                    {['hiragana', 'mix', 'katakana'].map((type) => (
-                        <button
-                            key={type}
-                            onClick={() => setScriptType(type)}
-                            className={`px-6 py-2 rounded-full font-bold capitalize transition-all duration-300 ${scriptType === type
-                                ? 'bg-white text-pink-500 shadow-sm scale-105'
-                                : 'text-gray-500 hover:text-gray-700'
-                                }`}
-                        >
-                            {type === 'mix' ? 'Both' : type}
-                        </button>
-                    ))}
-                </div>
+                    {/* Script Selection Toggles - Glassmorphism */}
+                    <div className="flex bg-white/30 backdrop-blur-md p-1.5 rounded-full mb-12 shadow-sm border border-white/40">
+                        {['hiragana', 'mix', 'katakana'].map((type) => (
+                            <button
+                                key={type}
+                                onClick={() => setScriptType(type)}
+                                className={`px-8 py-3 rounded-full font-bold capitalize transition-all duration-300 ${scriptType === type
+                                    ? 'bg-white text-pink-500 shadow-md scale-105'
+                                    : 'text-gray-600 hover:text-gray-800'
+                                    }`}
+                            >
+                                {type === 'mix' ? 'Both' : type}
+                            </button>
+                        ))}
+                    </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full">
-                    {/* Mode Cards */}
-                    {[
-                        { id: GAME_MODES.MULTIPLE_CHOICE, title: "Multiple Choice", icon: "🌸", desc: "Select the correct Romaji" },
-                        { id: GAME_MODES.INPUT, title: "Input Challenge", icon: "✍️", desc: "Type the pronunciation" },
-                        { id: GAME_MODES.TIME_ATTACK, title: "Time Attack", icon: "⚡", desc: "60 seconds to score high" },
-                    ].map((m) => (
-                        <button
-                            key={m.id}
-                            onClick={() => startGame(m.id)}
-                            className="bg-white/60 hover:bg-white p-8 rounded-3xl shadow-[0_4px_20px_rgba(255,182,193,0.3)] 
-                                     hover:shadow-[0_8px_30px_rgba(255,182,193,0.6)] hover:-translate-y-2 
-                                     transition-all duration-300 flex flex-col items-center text-center gap-4 group"
-                        >
-                            <span className="text-6xl mb-2 group-hover:scale-110 transition-transform">{m.icon}</span>
-                            <h3 className="text-2xl font-bold text-[#4A3B52]">{m.title}</h3>
-                            <p className="text-gray-500">{m.desc}</p>
-                        </button>
-                    ))}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full px-4">
+                        {/* Mode Cards - Glassmorphism */}
+                        {[
+                            { id: GAME_MODES.MULTIPLE_CHOICE, title: "Multiple Choice", icon: "🌸", desc: "Select the correct Romaji", color: "from-pink-100 to-rose-50" },
+                            { id: GAME_MODES.INPUT, title: "Input Challenge", icon: "✍️", desc: "Type the pronunciation", color: "from-purple-100 to-indigo-50" },
+                            { id: GAME_MODES.TIME_ATTACK, title: "Bubble Pop", icon: "🫧", desc: "Burst bubbles to score!", color: "from-blue-100 to-cyan-50" },
+                        ].map((m) => (
+                            <button
+                                key={m.id}
+                                onClick={() => startGame(m.id)}
+                                className={`
+                                    relative overflow-hidden group p-8 rounded-[2.5rem] text-left transition-all duration-500
+                                    bg-gradient-to-br ${m.color} bg-opacity-40 backdrop-blur-md border border-white/60
+                                    hover:shadow-[0_8px_30px_rgba(255,209,220,0.4)] hover:-translate-y-2
+                                `}
+                            >
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 rounded-full blur-2xl -mr-16 -mt-16 transition-transform group-hover:scale-150"></div>
+
+                                <span className="text-6xl mb-4 block filter drop-shadow-sm group-hover:scale-110 transition-transform duration-300">{m.icon}</span>
+                                <h3 className="text-2xl font-bold text-[#4A3B52] mb-2">{m.title}</h3>
+                                <p className="text-[#7A6B82] font-medium">{m.desc}</p>
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
         );
@@ -216,25 +227,28 @@ const QuizPage = () => {
 
     if (isGameOver) {
         return (
-            <div className="min-h-screen bg-[#FFF0F5] flex flex-col items-center justify-center p-6 text-center animate-fade-in-up">
-                <div className="bg-white/80 backdrop-blur-md p-12 rounded-[3rem] shadow-xl max-w-md w-full relative overflow-hidden">
+            <div className="min-h-screen bg-[#FFF0F5] flex flex-col items-center justify-center p-6 text-center animate-fade-in-up relative overflow-hidden">
+                {/* Background Atmosphere */}
+                <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-pink-200/40 rounded-full blur-[100px] animate-blob mix-blend-multiply"></div>
+
+                <div className="bg-white/60 backdrop-blur-xl p-12 rounded-[3rem] shadow-2xl max-w-md w-full relative overflow-hidden border border-white/50">
                     <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300"></div>
 
-                    <Trophy className="w-20 h-20 text-yellow-500 mx-auto mb-6 animate-bounce" />
+                    <Trophy className="w-24 h-24 text-yellow-400 mx-auto mb-6 animate-bounce drop-shadow-md" />
                     <h2 className="text-4xl font-bold text-[#4A3B52] mb-2">Training Complete!</h2>
-                    <p className="text-gray-500 mb-8">You've honed your skills.</p>
+                    <p className="text-[#7A6B82] mb-8 font-medium">You've honed your skills.</p>
 
-                    <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-pink-500 to-purple-600 mb-8">
-                        {score} <span className="text-2xl text-gray-400 font-normal">pts</span>
+                    <div className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-pink-500 to-purple-600 mb-8 drop-shadow-sm">
+                        {score} <span className="text-3xl text-gray-400 font-medium">pts</span>
                     </div>
 
                     <div className="flex gap-4 justify-center">
-                        <Link to="/" className="px-6 py-3 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 font-bold transition-colors">
+                        <Link to="/" className="px-8 py-4 rounded-2xl bg-white/50 text-[#7A6B82] hover:bg-white font-bold transition-all shadow-sm hover:shadow-md border border-white/60">
                             Home
                         </Link>
                         <button
                             onClick={() => setMode(GAME_MODES.SELECT)}
-                            className="px-6 py-3 rounded-xl bg-pink-500 text-white hover:bg-pink-600 font-bold transition-colors flex items-center gap-2"
+                            className="px-8 py-4 rounded-2xl bg-gradient-to-r from-pink-400 to-pink-500 text-white hover:from-pink-500 hover:to-pink-600 font-bold transition-all shadow-lg hover:shadow-pink-200/50 flex items-center gap-2 transform hover:-translate-y-1"
                         >
                             <RefreshCcw className="w-5 h-5" /> Play Again
                         </button>
@@ -245,29 +259,39 @@ const QuizPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#FFF0F5] flex flex-col items-center p-6">
+        <div className="min-h-screen bg-[#FFF0F5] flex flex-col items-center p-6 relative overflow-hidden">
+
+            {/* Background Atmosphere */}
+            <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-pink-200/30 rounded-full blur-[80px] animate-blob mix-blend-multiply pointer-events-none z-0"></div>
+
             {/* Header */}
-            <div className="w-full max-w-3xl flex items-center justify-between mb-12 mt-4">
-                <button onClick={() => setMode(GAME_MODES.SELECT)} className="p-2 rounded-full hover:bg-white/50 transition-colors">
-                    <ArrowLeft className="text-gray-600" />
+            <div className="w-full max-w-3xl flex items-center justify-between mb-12 mt-4 relative z-10">
+                <button onClick={() => setMode(GAME_MODES.SELECT)} className="p-3 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors shadow-sm border border-white/50">
+                    <ArrowLeft className="text-[#4A3B52]" />
                 </button>
 
                 {mode === GAME_MODES.TIME_ATTACK && (
-                    <div className={`flex items-center gap-2 text-xl font-bold ${timeLeft < 10 ? 'text-red-500 animate-pulse' : 'text-[#4A3B52]'}`}>
+                    <div className={`flex items-center gap-2 text-2xl font-black ${timeLeft < 10 ? 'text-red-500 animate-pulse' : 'text-[#4A3B52]'} bg-white/40 backdrop-blur-md px-6 py-2 rounded-full shadow-sm`}>
                         <Clock className="w-6 h-6" /> {timeLeft}s
                     </div>
                 )}
 
-                <div className="text-xl font-bold text-pink-500 bg-white/80 px-4 py-2 rounded-full shadow-sm">
-                    Score: {score}
-                </div>
-                <div className="text-xl font-bold text-pink-500 bg-white/80 px-4 py-2 rounded-full shadow-sm">
-                    Score: {score}
+                {/* Sakura Progress Bar - Replacing simple Score */}
+                <div className="flex items-center gap-3 bg-white/40 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-white/50">
+                    <div className="flex items-center gap-1">
+                        <span className="text-2xl">🌸</span>
+                        <span className="text-2xl font-black text-pink-500">{score}</span>
+                    </div>
+                    {(mode !== GAME_MODES.TIME_ATTACK) && (
+                        <div className="h-1.5 w-24 bg-white/50 rounded-full overflow-hidden ml-2">
+                            <div className="h-full bg-pink-400 transition-all duration-500" style={{ width: `${(questionCount / 10) * 100}%` }}></div>
+                        </div>
+                    )}
                 </div>
             </div>
 
             {/* MASCOT KOI-CHAN */}
-            <div className="fixed bottom-0 right-0 md:right-10 w-40 md:w-56 pointer-events-none z-50 transition-transform duration-300">
+            <div className="fixed bottom-0 right-0 md:right-10 w-40 md:w-56 pointer-events-none z-[100] transition-transform duration-300">
 
                 <img
                     src={
@@ -284,24 +308,24 @@ const QuizPage = () => {
 
                 {/* Speech Bubble */}
                 <div className={`
-                    absolute bottom-[110%] right-[0%] bg-white px-6 py-4 rounded-3xl shadow-lg border-2 border-pink-100
+                    absolute bottom-[110%] right-[0%] bg-white/90 backdrop-blur-sm px-6 py-4 rounded-[2rem] shadow-xl border-2 border-pink-100
                     transform transition-all duration-300 origin-bottom-right w-48 text-center z-20
                     ${feedback ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-50 translate-y-4'}
                 `}>
-                    <p className="text-[#4A3B52] font-bold text-lg">{mascotMessage}</p>
+                    <p className="text-[#4A3B52] font-bold text-lg leading-tight">{mascotMessage}</p>
                     {/* Triangle pointer */}
                     <div className="absolute -bottom-2 right-8 w-4 h-4 bg-white border-b-2 border-r-2 border-pink-100 transform rotate-45"></div>
                 </div>
             </div>
 
             {/* Game Content */}
-            <div className="max-w-md w-full flex flex-col items-center gap-8">
+            <div className="max-w-md w-full flex flex-col items-center gap-8 relative z-10">
 
-                {/* Character Card */}
+                {/* Character Card - Glassmorphism */}
                 <div className="relative group perspective">
-                    <div className="w-48 h-48 sm:w-64 sm:h-64 bg-white rounded-[2rem] shadow-xl flex items-center justify-center
-                                  border-4 border-pink-100 transform transition-transform duration-500 hover:scale-105">
-                        <span className="text-8xl sm:text-9xl font-bold text-[#4A3B52] jp-font">
+                    <div className="w-48 h-48 sm:w-64 sm:h-64 bg-white/60 backdrop-blur-xl rounded-[2.5rem] shadow-[0_8px_32px_rgba(255,209,220,0.5)] flex items-center justify-center
+                                  border border-white/60 transform transition-transform duration-500 hover:scale-105">
+                        <span className="text-8xl sm:text-9xl font-bold text-[#4A3B52] jp-font drop-shadow-sm">
                             {mode === GAME_MODES.MULTIPLE_CHOICE ? currentQuestion?.romaji : currentQuestion?.char}
                         </span>
                     </div>
@@ -310,11 +334,11 @@ const QuizPage = () => {
                 {/* Feedback Indicator */}
                 <div className={`h-8 transition-opacity duration-300 ${feedback ? 'opacity-100' : 'opacity-0'}`}>
                     {feedback === 'correct' ? (
-                        <div className="flex items-center gap-2 text-green-500 font-bold text-xl animate-bounce">
+                        <div className="flex items-center gap-2 text-green-600 font-bold text-xl animate-bounce bg-green-100/80 px-4 py-1 rounded-full backdrop-blur-sm">
                             <CheckCircle /> Correct!
                         </div>
                     ) : (
-                        <div className="flex items-center gap-2 text-red-500 font-bold text-xl animate-shake">
+                        <div className="flex items-center gap-2 text-red-500 font-bold text-xl animate-shake bg-red-100/80 px-4 py-1 rounded-full backdrop-blur-sm">
                             <XCircle /> Incorrect! It was "{currentQuestion?.romaji}"
                         </div>
                     )}
@@ -329,10 +353,11 @@ const QuizPage = () => {
                                 onClick={() => handleAnswer(opt.romaji)}
                                 disabled={feedback !== null}
                                 className={`
-                                    p-6 rounded-2xl text-2xl font-bold transition-all duration-200 transform hover:-translate-y-1 active:scale-95
-                                    ${feedback && opt.romaji === currentQuestion.romaji ? 'bg-green-100 text-green-700 border-2 border-green-400' : ''}
-                                    ${feedback && feedback === 'incorrect' && opt === options.find(o => o.romaji === currentQuestion.romaji) ? 'bg-green-100 text-green-700 border-2 border-green-400' : ''}
-                                    ${!feedback ? 'bg-white/60 hover:bg-white text-gray-700 shadow-sm hover:shadow-md' : ''}
+                                    p-6 rounded-2xl text-2xl font-bold transition-all duration-300 transform hover:-translate-y-1 active:scale-95
+                                    backdrop-blur-md border border-white/50
+                                    ${feedback && opt.romaji === currentQuestion.romaji ? 'bg-green-100/90 text-green-700 border-green-400 shadow-[0_0_15px_rgba(74,222,128,0.4)]' : ''}
+                                    ${feedback && feedback === 'incorrect' && opt === options.find(o => o.romaji === currentQuestion.romaji) ? 'bg-green-100/90 text-green-700 border-green-400' : ''}
+                                    ${!feedback ? 'bg-white/40 hover:bg-white/70 text-[#4A3B52] shadow-sm hover:shadow-[0_8px_20px_rgba(255,209,220,0.4)]' : ''}
                                 `}
                             >
                                 <span className={mode === GAME_MODES.MULTIPLE_CHOICE ? "jp-font text-4xl" : ""}>
@@ -344,7 +369,7 @@ const QuizPage = () => {
                 )}
 
                 {(mode === GAME_MODES.INPUT) && (
-                    <form onSubmit={handleInputSubmit} className="w-full">
+                    <form onSubmit={handleInputSubmit} className="w-full relative">
                         <input
                             type="text"
                             value={inputAnswer}
@@ -352,12 +377,12 @@ const QuizPage = () => {
                             placeholder="Type pronunciation..."
                             disabled={feedback !== null}
                             autoFocus
-                            className="w-full p-4 text-center text-3xl font-bold text-gray-800 rounded-2xl border-2 border-transparent focus:border-pink-300 shadow-inner bg-white/80 focus:bg-white outline-none transition-all placeholder:font-normal placeholder:text-gray-400"
+                            className="w-full p-6 text-center text-3xl font-bold text-[#4A3B52] rounded-3xl border-2 border-white/50 focus:border-pink-300 shadow-inner bg-white/50 backdrop-blur-md focus:bg-white/80 outline-none transition-all placeholder:font-normal placeholder:text-gray-400/80"
                         />
                         <button
                             type="submit"
                             disabled={!inputAnswer || feedback !== null}
-                            className="w-full mt-4 bg-pink-400 text-white font-bold py-4 rounded-xl shadow-lg shadow-pink-200 hover:bg-pink-500 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full mt-6 bg-gradient-to-r from-pink-400 to-pink-500 text-white font-bold py-4 rounded-2xl shadow-[0_4px_15px_rgba(244,114,182,0.4)] hover:shadow-[0_8px_25px_rgba(244,114,182,0.5)] hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Check Answer
                         </button>
@@ -377,8 +402,9 @@ const QuizPage = () => {
                                     width: '80px',
                                     height: '80px',
                                     bottom: '-100px', // Start below
-                                    background: 'rgba(255, 255, 255, 0.8)',
-                                    border: '2px solid rgba(255, 192, 203, 0.5)',
+                                    background: 'rgba(255, 255, 255, 0.6)',
+                                    border: '2px solid rgba(255, 255, 255, 0.8)',
+                                    boxShadow: '0 4px 15px rgba(236, 72, 153, 0.15)',
                                     animation: `floatUp ${opt.duration}s linear infinite`,
                                     animationDelay: `${opt.delay}s`
                                 }}
