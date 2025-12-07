@@ -11,7 +11,7 @@
   </a>
 </p>
 
-  <img src="https://raw.githubusercontent.com/abhilasha-blossom/KoiKana/main/src/assets/koi-pond.gif" alt="Aesthetic Koi Pond" width="400" />
+  <img src="src/assets/koi-pond.gif" width="400" alt="Aesthetic Koi Pond" />
 
 **A serene, aesthetic journey into the world of Japanese Hiragana & Katakana.**  
 *Learn through emotions, storytelling, and aesthetic comfort.*
