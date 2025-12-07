@@ -11,7 +11,7 @@
   </a>
 </p>
 
-  <video src="src/assets/koi-pond.mp4" width="400" controls autoplay loop muted></video>
+  <video src="https://raw.githubusercontent.com/abhilasha-blossom/KoiKana/main/src/assets/koi-pond.mp4" width="400" controls autoplay loop muted></video>
 
 **A serene, aesthetic journey into the world of Japanese Hiragana & Katakana.**  
 *Learn through emotions, storytelling, and aesthetic comfort.*
