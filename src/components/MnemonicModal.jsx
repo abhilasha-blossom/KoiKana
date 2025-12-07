@@ -1,7 +1,10 @@
-import React from 'react';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, ChevronLeft, ChevronRight, Image as ImageIcon, PenTool } from 'lucide-react';
+import WritingCanvas from './WritingCanvas';
 
 const MnemonicModal = ({ item, onClose, onNext, onPrev }) => {
+    const [activeTab, setActiveTab] = useState('memory'); // 'memory' | 'practice'
+
     if (!item) return null;
 
     return (
@@ -18,7 +21,7 @@ const MnemonicModal = ({ item, onClose, onNext, onPrev }) => {
                 {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 p-2 rounded-full bg-gray-100/50 hover:bg-gray-200/50 text-gray-500 transition-colors"
+                    className="absolute top-4 right-4 p-2 rounded-full bg-gray-100/50 hover:bg-gray-200/50 text-gray-500 transition-colors z-20"
                 >
                     <X className="w-5 h-5" />
                 </button>
@@ -34,29 +37,56 @@ const MnemonicModal = ({ item, onClose, onNext, onPrev }) => {
                         <span className="text-xl font-medium text-gray-400 mt-1 uppercase tracking-widest">{item.romaji}</span>
                     </div>
 
-                    {/* Image Area */}
-                    <div className="relative w-full aspect-video sm:aspect-square max-h-[300px] rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-inner group">
-                        {item.image ? (
-                            <img
-                                src={item.image}
-                                alt={`Mnemonic for ${item.char}`}
-                                className="w-full h-full object-contain p-4 hover:scale-105 transition-transform duration-500"
-                            />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-300 italic">
-                                Visual memory loading... 🌸
-                            </div>
-                        )}
+                    {/* TABS */}
+                    <div className="flex p-1 bg-gray-100/80 rounded-full w-full max-w-[200px]">
+                        <button
+                            onClick={() => setActiveTab('memory')}
+                            className={`flex-1 py-1.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'memory' ? 'bg-white shadow-sm text-pink-500' : 'text-gray-400 hover:text-gray-600'}`}
+                        >
+                            <ImageIcon className="w-4 h-4" /> View
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('practice')}
+                            className={`flex-1 py-1.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 transition-all ${activeTab === 'practice' ? 'bg-white shadow-sm text-pink-500' : 'text-gray-400 hover:text-gray-600'}`}
+                        >
+                            <PenTool className="w-4 h-4" /> Draw
+                        </button>
                     </div>
 
-                    {/* Story / Mnemonic Text */}
-                    <div className="space-y-2">
-                        <h3 className="text-2xl font-bold text-gray-700 font-handwritten">
-                            "{item.mnemonic || 'Coming soon...'}"
-                        </h3>
-                        <p className="text-gray-500 text-sm">
-                            Click arrows to explore more
-                        </p>
+                    {/* MAIN CONTENT AREA */}
+                    <div className="w-full relative min-h-[300px] flex items-center justify-center">
+                        {activeTab === 'memory' ? (
+                            <div className="w-full space-y-6 animate-fade-in">
+                                {/* Image Area */}
+                                <div className="relative w-full aspect-video sm:aspect-square max-h-[300px] rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-inner group mx-auto">
+                                    {item.image ? (
+                                        <img
+                                            src={item.image}
+                                            alt={`Mnemonic for ${item.char}`}
+                                            className="w-full h-full object-contain p-4 hover:scale-105 transition-transform duration-500"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-gray-300 italic">
+                                            Visual memory loading... 🌸
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Story / Mnemonic Text */}
+                                <div className="space-y-2">
+                                    <h3 className="text-2xl font-bold text-gray-700 font-handwritten">
+                                        "{item.mnemonic || 'Coming soon...'}"
+                                    </h3>
+                                    <p className="text-gray-500 text-sm">
+                                        Click arrows to explore more
+                                    </p>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="w-full animate-fade-in">
+                                <WritingCanvas char={item.char} />
+                            </div>
+                        )}
                     </div>
 
                     {/* Navigation */}
@@ -69,9 +99,8 @@ const MnemonicModal = ({ item, onClose, onNext, onPrev }) => {
                         </button>
 
                         <div className="flex gap-1.5">
-                            <div className="w-2 h-2 rounded-full bg-pink-400"></div>
-                            <div className="w-2 h-2 rounded-full bg-gray-200"></div>
-                            <div className="w-2 h-2 rounded-full bg-gray-200"></div>
+                            <div className={`w-2 h-2 rounded-full transition-colors ${activeTab === 'memory' ? 'bg-pink-400' : 'bg-gray-200'}`}></div>
+                            <div className={`w-2 h-2 rounded-full transition-colors ${activeTab === 'practice' ? 'bg-pink-400' : 'bg-gray-200'}`}></div>
                         </div>
 
                         <button

@@ -34,8 +34,10 @@ const KanaPage = () => {
     };
 
     return (
-        <div className="min-h-screen p-6 pb-20 bg-[#FFF0F5] transition-colors duration-700">
-            {/* Background elements removed for debugging/visibility */}
+        <div className="min-h-screen p-6 pb-20 bg-[#FFF0F5] transition-colors duration-700 relative overflow-x-hidden">
+            {/* Background Atmosphere */}
+            <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-pink-200/30 rounded-full blur-[80px] animate-blob mix-blend-multiply pointer-events-none z-0"></div>
+            <div className="absolute top-[10%] left-[30%] w-[400px] h-[400px] bg-purple-200/30 rounded-full blur-[80px] animate-blob animation-delay-2000 mix-blend-multiply pointer-events-none z-0"></div>
 
             {/* Navigation */}
             <div className="relative z-10 flex flex-col items-center mb-8 max-w-5xl mx-auto gap-6 transition-all duration-500">
