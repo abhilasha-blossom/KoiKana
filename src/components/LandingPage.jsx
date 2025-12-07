@@ -2,9 +2,11 @@ import React from 'react';
 import { ArrowRight, Sparkles, Flame, Flower2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useProgress from '../hooks/useProgress';
+import useAudio from '../hooks/useAudio';
 
 const LandingPage = () => {
   const { streak, mastery } = useProgress();
+  const { playSound } = useAudio();
   const masteredCount = Object.keys(mastery).length;
 
   // Generate random petals
@@ -76,6 +78,7 @@ const LandingPage = () => {
 
           {/* Start Journey Button */}
           <Link to="/kana"
+            onMouseEnter={() => playSound('pop')}
             className="group relative px-8 py-4 bg-white/80 backdrop-blur-sm rounded-full 
                         shadow-[0_4px_20px_rgba(255,182,193,0.5)] 
                         hover:shadow-[0_8px_30px_rgba(255,182,193,0.7)] 
@@ -91,6 +94,7 @@ const LandingPage = () => {
 
           {/* Training Dojo Button */}
           <Link to="/quiz"
+            onMouseEnter={() => playSound('pop')}
             className="group relative px-8 py-4 bg-white/60 backdrop-blur-sm rounded-full 
                         shadow-[0_4px_20px_rgba(230,230,250,0.5)] 
                         hover:shadow-[0_8px_30px_rgba(230,230,250,0.7)] 

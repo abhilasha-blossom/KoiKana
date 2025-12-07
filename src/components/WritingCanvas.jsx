@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { RefreshCw, Eraser, CheckCircle } from 'lucide-react';
 import useProgress from '../hooks/useProgress';
+import useAudio from '../hooks/useAudio';
 
 const WritingCanvas = ({ char }) => {
     const canvasRef = useRef(null);
@@ -11,8 +12,8 @@ const WritingCanvas = ({ char }) => {
     const [isWrong, setIsWrong] = useState(false);
     const [score, setScore] = useState(0);
 
-    const { markMastered } = useProgress(); // Use hook
-
+    const { markMastered } = useProgress();
+    const { playSound } = useAudio();
 
     useEffect(() => {
         const initCanvas = (canvas, isTarget = false) => {
@@ -26,16 +27,17 @@ const WritingCanvas = ({ char }) => {
 
             if (isTarget) {
                 // Render the Target Character
-                ctx.font = 'bold 200px "Noto Sans JP", sans-serif'; // Must match CSS
+                const fontSize = rect.width * 0.6; // Dynamic font size
+                ctx.font = `bold ${fontSize}px "Noto Sans JP", sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillStyle = '#000000';
-                ctx.fillText(char, rect.width / 2, rect.height / 2 + 20); // Adjust Y for font baseline
+                ctx.fillText(char, rect.width / 2, rect.height / 2 + (fontSize * 0.1)); // Adjust Y based on font size
             } else {
                 // Setup Drawing Canvas
                 ctx.lineCap = 'round';
                 ctx.lineJoin = 'round';
-                ctx.lineWidth = 20; // Thicker brush for easier filling
+                ctx.lineWidth = rect.width * 0.08; // Dynamic stroke width
                 ctx.strokeStyle = '#4A3B52';
             }
         };
@@ -123,10 +125,12 @@ const WritingCanvas = ({ char }) => {
             setIsCorrect(true);
             setScore(100);
             markMastered(char); // Trigger mastery!
+            playSound('success');
         } else {
             // Failed
             setIsWrong(true);
             setScore(Math.round(coverage * 100));
+            playSound('error');
         }
     };
 
