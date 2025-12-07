@@ -60,6 +60,12 @@ const LandingPage = () => {
           <ArrowRight className="w-5 h-5 text-[#4A3B52] group-hover:translate-x-1 transition-transform z-10" />
         </Link>
 
+        {/* Training Dojo Button (Secondary) */}
+        <Link to="/quiz" className="mt-2 text-[#7A6B82] font-semibold hover:text-pink-500 transition-colors flex items-center gap-2 group">
+          <span>Enter Training Dojo</span>
+          <span className="group-hover:translate-x-1 transition-transform">⚔️</span>
+        </Link>
+
       </div>
 
       <style jsx>{`
