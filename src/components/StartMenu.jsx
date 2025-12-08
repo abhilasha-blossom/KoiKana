@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles } from 'lucide-react';
+import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower } from 'lucide-react';
 import useAudio from '../hooks/useAudio';
+import OmikujiModal from './OmikujiModal';
 
 const StartMenu = () => {
     const { playSound } = useAudio();
+    const [showFortune, setShowFortune] = useState(false);
 
     return (
         <div className="min-h-screen bg-[#FFF0F5] relative overflow-hidden flex flex-col items-center justify-center p-6 pb-20 selection:bg-pink-200">
+            {/* Omikuji Modal */}
+            {showFortune && <OmikujiModal onClose={() => setShowFortune(false)} />}
+
             {/* Soft Moving Background Decor */}
             <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-gradient-to-br from-pink-200/40 to-purple-200/40 rounded-full blur-[100px] pointer-events-none mix-blend-multiply animate-blob"></div>
             <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-gradient-to-tl from-teal-200/40 to-emerald-200/40 rounded-full blur-[100px] pointer-events-none mix-blend-multiply animate-blob animation-delay-4000"></div>
@@ -17,6 +22,17 @@ const StartMenu = () => {
             <Link to="/" className="absolute top-6 left-6 p-4 rounded-full bg-white/60 hover:bg-white/90 transition-all duration-300 backdrop-blur-md shadow-sm border border-white/50 text-[#4A3B52] z-50 hover:scale-110 group">
                 <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             </Link>
+
+            {/* Omikuji Button */}
+            <button
+                onClick={() => setShowFortune(true)}
+                className="absolute top-6 right-6 p-2 pr-4 rounded-full bg-red-50 hover:bg-red-100/80 transition-all duration-300 backdrop-blur-md shadow-sm border border-red-200 text-red-500 z-50 hover:scale-105 group flex items-center gap-2"
+            >
+                <div className="w-8 h-8 rounded-full bg-red-400 text-white flex items-center justify-center shadow-sm group-hover:rotate-12 transition-transform">
+                    <Flower className="w-5 h-5" />
+                </div>
+                <span className="font-bold text-sm hidden md:block">Daily Fortune</span>
+            </button>
 
             {/* Header */}
             <div className="text-center mb-12 relative z-10 animate-fade-in-up">
