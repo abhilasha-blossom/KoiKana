@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import useAudio from '../hooks/useAudio';
 
 // Individual Fish Component to handle local hover state
 const Fish = ({ f }) => {
     const [isHovered, setIsHovered] = useState(false);
     const videoRef = useRef(null);
+    const { playSound } = useAudio();
 
     // Speed up tail wagging on hover
     useEffect(() => {
@@ -11,7 +13,10 @@ const Fish = ({ f }) => {
             // Normal speed 1.0, Hover speed 4.0
             videoRef.current.playbackRate = isHovered ? 4.0 : 1.0;
         }
-    }, [isHovered]);
+        if (isHovered) {
+            playSound('splash'); // Gentle splash on interaction
+        }
+    }, [isHovered, playSound]);
 
     return (
         <div
@@ -64,6 +69,7 @@ const Fish = ({ f }) => {
 const KoiPond = () => {
     const [ripples, setRipples] = useState([]);
     const [fish, setFish] = useState([]);
+    const { playSound } = useAudio();
 
     // Initialize fish with random properties
     useEffect(() => {
@@ -89,6 +95,7 @@ const KoiPond = () => {
                 y: e.pageY
             };
             setRipples(prev => [...prev, ripple]);
+            playSound('splash'); // Sound of water click
             setTimeout(() => {
                 setRipples(prev => prev.filter(r => r.id !== ripple.id));
             }, 1000);
@@ -96,7 +103,7 @@ const KoiPond = () => {
 
         window.addEventListener('click', handleGlobalClick);
         return () => window.removeEventListener('click', handleGlobalClick);
-    }, []);
+    }, [playSound]);
 
     return (
         <div

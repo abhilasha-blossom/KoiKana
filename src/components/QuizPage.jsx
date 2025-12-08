@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, Clock, CheckCircle, XCircle, Trophy, RefreshCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { hiragana, katakana } from '../data/kanaData';
+import useAudio from '../hooks/useAudio';
 
 const GAME_MODES = {
     SELECT: 'select',
@@ -35,6 +36,7 @@ const BubbleGame = ({ options, onAnswer }) => {
     const requestRef = useRef();
     const bubblesRef = useRef([]); // Stores physics state { x, y, vx, vy, r, id, ref }
     const [renderBubbles, setRenderBubbles] = useState([]); // Just for initial React render
+    const { playSound } = useAudio();
 
     // Physics Constants
     const SPEED = 2.0;
@@ -186,6 +188,7 @@ const BubbleGame = ({ options, onAnswer }) => {
     }, [options]);
 
     const handleBubbleClick = (romaji, index) => {
+        playSound('pop'); // Play Sound!
         const b = bubblesRef.current[index];
         if (b && b.ref) {
             // Visual Pop
@@ -236,6 +239,7 @@ const QuizPage = () => {
     const [currentQuestion, setCurrentQuestion] = useState(null);
     const [options, setOptions] = useState([]);
     const [inputAnswer, setInputAnswer] = useState('');
+    const { playSound } = useAudio();
 
     // Feedback Logic - Seprated to prevent "Incorrect Flash"
     const [feedbackStatus, setFeedbackStatus] = useState(null); // 'correct' | 'incorrect'
@@ -335,9 +339,11 @@ const QuizPage = () => {
         if (isCorrect) {
             setScore(prev => prev + 1);
             setFeedbackStatus('correct');
+            playSound('correct'); // Play Sound!
             setMascotMessage(POSITIVE_MESSAGES[Math.floor(Math.random() * POSITIVE_MESSAGES.length)]);
         } else {
             setFeedbackStatus('incorrect');
+            playSound('incorrect'); // Play Sound!
             setMascotMessage(NEGATIVE_MESSAGES[Math.floor(Math.random() * NEGATIVE_MESSAGES.length)]);
         }
         setShowFeedback(true);
@@ -364,6 +370,7 @@ const QuizPage = () => {
     if (mode === GAME_MODES.SELECT) {
         return (
             <div className="min-h-screen bg-[#FFF0F5] flex flex-col items-center justify-center p-6 relative overflow-hidden">
+                {/* Background Atmosphere */}
                 <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-pink-200/40 rounded-full blur-[100px] animate-blob mix-blend-multiply pointer-events-none"></div>
                 <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-purple-200/40 rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply pointer-events-none"></div>
 
@@ -375,6 +382,7 @@ const QuizPage = () => {
                     <h1 className="text-5xl font-bold text-[#4A3B52] mb-3 drop-shadow-sm">Training Dojo</h1>
                     <div className="h-1 w-24 bg-gradient-to-r from-pink-300 to-purple-300 rounded-full mb-8"></div>
 
+                    {/* Script Selection Toggles - Glassmorphism */}
                     <div className="flex bg-white/30 backdrop-blur-md p-1.5 rounded-full mb-12 shadow-sm border border-white/40">
                         {['hiragana', 'mix', 'katakana'].map((type) => (
                             <button
@@ -391,6 +399,7 @@ const QuizPage = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full px-4">
+                        {/* Mode Cards - Glassmorphism */}
                         {[
                             { id: GAME_MODES.MULTIPLE_CHOICE, title: "Multiple Choice", icon: "🌸", desc: "Select the correct Romaji", color: "from-pink-100 to-rose-50" },
                             { id: GAME_MODES.INPUT, title: "Input Challenge", icon: "✍️", desc: "Type the pronunciation", color: "from-purple-100 to-indigo-50" },
@@ -420,6 +429,7 @@ const QuizPage = () => {
     if (isGameOver) {
         return (
             <div className="min-h-screen bg-[#FFF0F5] flex flex-col items-center justify-center p-6 text-center animate-fade-in-up relative overflow-hidden">
+                {/* Background Atmosphere */}
                 <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-pink-200/40 rounded-full blur-[100px] animate-blob mix-blend-multiply pointer-events-none"></div>
 
                 <div className="bg-white/60 backdrop-blur-xl p-12 rounded-[3rem] shadow-2xl max-w-md w-full relative overflow-hidden border border-white/50">
@@ -451,8 +461,10 @@ const QuizPage = () => {
 
     return (
         <div className="min-h-screen bg-[#FFF0F5] flex flex-col items-center p-6 relative overflow-hidden">
+            {/* Background Atmosphere */}
             <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-pink-200/30 rounded-full blur-[80px] animate-blob mix-blend-multiply pointer-events-none z-0"></div>
 
+            {/* Header */}
             <div className="w-full max-w-3xl flex items-center justify-between mb-12 mt-4 relative z-50">
                 <button onClick={() => setMode(GAME_MODES.SELECT)} className="p-3 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors shadow-sm border border-white/50">
                     <ArrowLeft className="text-[#4A3B52]" />
@@ -464,6 +476,7 @@ const QuizPage = () => {
                     </div>
                 )}
 
+                {/* Sakura Progress Bar - Replacing simple Score */}
                 <div className="flex items-center gap-3 bg-white/40 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-white/50">
                     <div className="flex items-center gap-1">
                         <span className="text-2xl">🌸</span>
@@ -477,6 +490,7 @@ const QuizPage = () => {
                 </div>
             </div>
 
+            {/* MASCOT KOI-CHAN */}
             <div className="fixed bottom-4 right-4 md:right-10 w-24 sm:w-40 md:w-56 pointer-events-none z-[100] transition-transform duration-300">
                 <img
                     src={
@@ -497,11 +511,15 @@ const QuizPage = () => {
                     ${showFeedback ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-50 translate-y-4'}
                 `}>
                     <p className="text-[#4A3B52] font-bold text-sm sm:text-lg leading-tight">{mascotMessage}</p>
+                    {/* Triangle pointer */}
                     <div className="absolute -bottom-2 right-8 w-4 h-4 bg-white border-b-2 border-r-2 border-pink-100 transform rotate-45"></div>
                 </div>
             </div>
 
+            {/* Game Content */}
             <div className="max-w-md w-full flex flex-col items-center gap-8 relative z-10 pb-20 md:pb-0">
+
+                {/* Character Card - Glassmorphism */}
                 <div className="relative group perspective">
                     <div className="w-40 h-40 sm:w-64 sm:h-64 bg-white/60 backdrop-blur-xl rounded-[2rem] sm:rounded-[2.5rem] shadow-[0_8px_32px_rgba(255,209,220,0.5)] flex items-center justify-center
                                   border border-white/60 transform transition-transform duration-500 hover:scale-105">
@@ -511,6 +529,7 @@ const QuizPage = () => {
                     </div>
                 </div>
 
+                {/* Feedback Indicator - FADE OUT WITHOUT FLASHING INCORRECT */}
                 <div className={`h-8 transition-opacity duration-300 ${showFeedback ? 'opacity-100' : 'opacity-0'}`}>
                     {feedbackStatus === 'correct' ? (
                         <div className="flex items-center gap-2 text-green-600 font-bold text-lg sm:text-xl animate-bounce bg-green-100/80 px-4 py-1 rounded-full backdrop-blur-sm">
@@ -523,6 +542,7 @@ const QuizPage = () => {
                     )}
                 </div>
 
+                {/* Input Area */}
                 {(mode === GAME_MODES.MULTIPLE_CHOICE) && (
                     <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full">
                         {options.map((opt, i) => (
