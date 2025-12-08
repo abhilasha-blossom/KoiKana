@@ -77,7 +77,7 @@ const LandingPage = () => {
         <div className="flex flex-col sm:flex-row gap-4 w-full justify-center items-center">
 
           {/* Start Journey Button */}
-          <Link to="/kana"
+          <Link to="/start"
             onMouseEnter={() => playSound('pop')}
             className="group relative px-8 py-4 bg-white/80 backdrop-blur-sm rounded-full 
                         shadow-[0_4px_20px_rgba(255,182,193,0.5)] 

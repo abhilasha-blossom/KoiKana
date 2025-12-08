@@ -44,10 +44,11 @@ const KanaPage = () => {
             <div className="relative z-50 p-6 pb-20">
 
                 {/* Navigation & Header */}
-                <div className="flex flex-col items-center mb-8 max-w-5xl mx-auto gap-6">
+                <div className="flex flex-col items-center mb-8 max-w-5xl mx-auto gap-6 transition-all duration-500">
 
                     <div className="w-full flex items-center justify-between">
-                        <Link to="/" className="p-3 rounded-full bg-white/50 dark:bg-slate-800/50 hover:bg-white/80 dark:hover:bg-slate-700/80 transition-colors backdrop-blur-sm shadow-sm group">
+                        {/* BACK TO START MENU INSTEAD OF HOME */}
+                        <Link to="/start" className="p-3 rounded-full bg-white/50 dark:bg-slate-800/50 hover:bg-white/80 dark:hover:bg-slate-700/80 transition-colors backdrop-blur-sm shadow-sm group">
                             <ArrowLeft className="w-6 h-6 text-gray-600 dark:text-gray-300 group-hover:scale-110 transition-transform" />
                         </Link>
 
@@ -84,7 +85,7 @@ const KanaPage = () => {
                 </div>
 
                 {/* Grid */}
-                <div className="max-w-5xl mx-auto grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-4 sm:gap-6 justify-items-center">
+                <div className="max-w-5xl mx-auto grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-4 sm:gap-6 justify-items-center animate-fade-in">
                     {data.map((item, index) => (
                         item.char ? (
                             <KanaCard
