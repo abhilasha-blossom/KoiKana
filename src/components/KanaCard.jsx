@@ -1,18 +1,27 @@
 import React from 'react';
+// import { Volume2 } from 'lucide-react';
 
 const KanaCard = ({ char, romaji, type = 'hiragana', onClick }) => {
     const isHiragana = type === 'hiragana';
 
     // Colors
-    const baseColor = isHiragana ? 'bg-pink-100' : 'bg-[#E6E6FA]'; // Lavender
-    const borderColor = isHiragana ? 'border-pink-200' : 'border-[#D8BFD8]'; // Thistle
-    const textColor = isHiragana ? 'text-pink-600' : 'text-[#9370DB]'; // Medium Purple
-    const glowColor = isHiragana ? 'shadow-pink-300' : 'shadow-purple-300';
+    const baseColor = isHiragana ? 'bg-pink-100 dark:bg-pink-900/30' : 'bg-[#E6E6FA] dark:bg-indigo-900/30'; // Lavender
+    const borderColor = isHiragana ? 'border-pink-200 dark:border-pink-700/50' : 'border-[#D8BFD8] dark:border-indigo-700/50'; // Thistle
+    const textColor = isHiragana ? 'text-pink-600 dark:text-pink-300' : 'text-[#9370DB] dark:text-indigo-300'; // Medium Purple
+    const glowColor = isHiragana ? 'shadow-pink-300 dark:shadow-pink-900' : 'shadow-purple-300 dark:shadow-indigo-900';
+
+    const handlePlayAudio = (e) => {
+        e.stopPropagation();
+        const audio = new Audio(`/sounds/${romaji}.mp3`);
+        audio.play().catch(error => {
+            console.log("Audio not found:", error);
+        });
+    };
 
     return (
         <div
             onClick={onClick}
-            className="group [perspective:1000px] w-20 h-24 sm:w-24 sm:h-28 cursor-pointer"
+            className="group [perspective:1000px] w-20 h-24 sm:w-24 sm:h-28 cursor-pointer relative"
         >
             {/* Card Inner Container - The flipper */}
             <div className={`
@@ -25,11 +34,11 @@ const KanaCard = ({ char, romaji, type = 'hiragana', onClick }) => {
                 {/* FRONT SIDE (Character) */}
                 <div className={`
                     absolute inset-0 w-full h-full [backface-visibility:hidden] rounded-2xl
-                    flex items-center justify-center
+                    flex flex-col items-center justify-center
                     ${baseColor}/60 backdrop-blur-sm border ${borderColor}
                     z-20
                 `}>
-                    <div className={`text-4xl sm:text-5xl font-bold ${textColor} jp-font drop-shadow-sm`}>
+                    <div className={`text-4xl sm:text-5xl font-bold ${textColor} jp-font drop-shadow-sm mb-1`}>
                         {char}
                     </div>
                 </div>
@@ -38,7 +47,7 @@ const KanaCard = ({ char, romaji, type = 'hiragana', onClick }) => {
                 <div className={`
                     absolute inset-0 w-full h-full [backface-visibility:hidden] rounded-2xl
                     flex items-center justify-center [transform:rotateY(180deg)]
-                    bg-white/90 border ${borderColor}
+                    bg-white/90 dark:bg-slate-800/90 border ${borderColor}
                     z-10
                 `}>
                     <div className={`text-3xl font-bold ${textColor} tracking-wider`}>
@@ -47,6 +56,20 @@ const KanaCard = ({ char, romaji, type = 'hiragana', onClick }) => {
                 </div>
 
             </div>
+
+            {/* Audio Button - Now outside the flipper so it stays visible */}
+            {/* <button
+                onClick={handlePlayAudio}
+                className={`
+                    absolute bottom-2 right-2 p-2 rounded-full 
+                    bg-white dark:bg-slate-700 shadow-md text-gray-500 dark:text-gray-300 hover:text-pink-500 dark:hover:text-pink-400
+                    transition-all duration-300 transform
+                    hover:scale-110 active:scale-95 z-30
+                `}
+                title={`Pronounce ${romaji}`}
+            >
+                <Volume2 size={16} />
+            </button> */}
         </div>
     );
 };

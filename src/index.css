@@ -146,3 +146,328 @@
 .animation-delay-4000 {
   animation-delay: 4s;
 }
+
+/* Landing Page Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fall {
+  0% {
+    top: -10%;
+    opacity: 0.8;
+  }
+
+  100% {
+    top: 110%;
+    opacity: 0;
+  }
+}
+
+@keyframes sway {
+  0% {
+    transform: translateX(0px) rotate(0deg);
+  }
+
+  100% {
+    transform: translateX(25px) rotate(45deg);
+  }
+}
+
+.animate-bounce-in {
+  animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  opacity: 0;
+  transform: scale(0);
+}
+
+@keyframes bounceIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Fish Swimming Animation */
+@keyframes swim {
+  0% {
+    transform: translateX(110vw) translateY(0) rotate(180deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  25% {
+    transform: translateX(80vw) translateY(-20px) rotate(175deg);
+  }
+
+  50% {
+    transform: translateX(20vw) translateY(20px) rotate(180deg);
+  }
+
+  75% {
+    transform: translateX(-20vw) translateY(-20px) rotate(185deg);
+  }
+
+  90% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-700px);
+    opacity: 0;
+  }
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+.animate-shake {
+  animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+@keyframes breathe {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+.animate-pulse-slow {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 10s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Landing Page Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fall {
+  0% {
+    top: -10%;
+    opacity: 0.8;
+  }
+
+  100% {
+    top: 110%;
+    opacity: 0;
+  }
+}
+
+@keyframes sway {
+  0% {
+    transform: translateX(0px) rotate(0deg);
+  }
+
+  100% {
+    transform: translateX(25px) rotate(45deg);
+  }
+}
+
+.animate-bounce-in {
+  animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  opacity: 0;
+  transform: scale(0);
+}
+
+@keyframes bounceIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Fish Swimming Animation */
+@keyframes swim {
+  0% {
+    transform: translateX(110vw) translateY(0) rotate(180deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  25% {
+    transform: translateX(80vw) translateY(-20px) rotate(175deg);
+  }
+
+  50% {
+    transform: translateX(20vw) translateY(20px) rotate(180deg);
+  }
+
+  75% {
+    transform: translateX(-20vw) translateY(-20px) rotate(185deg);
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(-50vw) translateY(0) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+@keyframes swim-reverse {
+  0% {
+    transform: translateX(-20vw) translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  25% {
+    transform: translateX(20vw) translateY(20px) rotate(5deg);
+  }
+
+  50% {
+    transform: translateX(80vw) translateY(-20px) rotate(0deg);
+  }
+
+  75% {
+    transform: translateX(120vw) translateY(20px) rotate(-5deg);
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(150vw) translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+}
+
+/* Water Ripple Animation */
+@keyframes ripple-effect {
+  0% {
+    transform: scale(0);
+    opacity: 0.8;
+    border-width: 4px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  }
+
+  100% {
+    transform: scale(4);
+    opacity: 0;
+    border-width: 0px;
+  }
+}
+
+.animate-ripple {
+  animation: ripple-effect 1s linear forwards;
+}

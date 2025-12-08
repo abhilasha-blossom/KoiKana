@@ -124,7 +124,6 @@ const LandingPage = () => {
         ) : (
           <div className="flex flex-wrap justify-center gap-2 max-w-3xl animate-fade-in">
             {/* Render 1 flower for every mastered character */}
-            {/* Optimization: Cap visuals if too many, but for Kana (46) it's fine */}
             {Array.from({ length: masteredCount }).map((_, i) => (
               <div key={i} className="relative group animate-bounce-in" style={{ animationDelay: `${i * 0.1}s` }}>
                 <Flower2 className="w-6 h-6 text-pink-400 fill-pink-200 drop-shadow-sm transition-transform hover:scale-125 cursor-help" />
@@ -135,52 +134,6 @@ const LandingPage = () => {
 
         <div className="w-full h-1 bg-gradient-to-r from-transparent via-[#8B4513]/20 to-transparent rounded-full mt-2"></div>
       </div>
-
-      <style jsx>{`
-        @keyframes blob {
-          0% { transform: translate(0px, 0px) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-          100% { transform: translate(0px, 0px) scale(1); }
-        }
-        .animate-blob {
-          animation: blob 10s infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-        @keyframes float {
-          0% { transform: translateY(0px); }
-          50% { transform: translateY(-15px); }
-          100% { transform: translateY(0px); }
-        }
-        .animate-fade-in-up {
-          animation: fadeInUp 1s ease-out forwards;
-        }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fall {
-          0% { top: -10%; opacity: 0.8; }
-          100% { top: 110%; opacity: 0; }
-        }
-        @keyframes sway {
-          0% { transform: translateX(0px) rotate(0deg); }
-          100% { transform: translateX(25px) rotate(45deg); }
-        }
-        .animate-bounce-in {
-            animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-            opacity: 0;
-            transform: scale(0);
-        }
-        @keyframes bounceIn {
-            to { opacity: 1; transform: scale(1); }
-        }
-      `}</style>
     </div>
   );
 };
