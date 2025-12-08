@@ -153,10 +153,10 @@ const StartMenu = () => {
                         </div>
                     </div>
 
-                    {/* Coming Soon Pill */}
-                    <div className="relative z-10 px-3 py-1 bg-white/60 backdrop-blur-sm text-amber-600 rounded-full text-xs font-bold border border-white/60 shadow-sm group-hover:scale-105 transition-transform">
+                    {/* Coming Soon Pill - REMOVED */}
+                    {/* <div className="relative z-10 px-3 py-1 bg-white/60 backdrop-blur-sm text-amber-600 rounded-full text-xs font-bold border border-white/60 shadow-sm group-hover:scale-105 transition-transform">
                         Soon
-                    </div>
+                    </div> */}
                 </Link>
 
             </div>
