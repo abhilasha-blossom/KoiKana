@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { RefreshCw, Eraser, CheckCircle } from 'lucide-react';
+import { RefreshCw, Eraser, CheckCircle, Wind } from 'lucide-react';
 import useProgress from '../hooks/useProgress';
 import useAudio from '../hooks/useAudio';
 
-const WritingCanvas = ({ char }) => {
+const ZenGardenCanvas = ({ char }) => {
     const canvasRef = useRef(null);
     const targetCanvasRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
@@ -14,6 +14,7 @@ const WritingCanvas = ({ char }) => {
 
     const { markMastered } = useProgress();
     const { playSound } = useAudio();
+    const lastSoundTime = useRef(0);
 
     useEffect(() => {
         const initCanvas = (canvas, isTarget = false) => {
@@ -27,18 +28,22 @@ const WritingCanvas = ({ char }) => {
 
             if (isTarget) {
                 // Render the Target Character
-                const fontSize = rect.width * 0.6; // Dynamic font size
+                const fontSize = rect.width * 0.6;
                 ctx.font = `bold ${fontSize}px "Noto Sans JP", sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillStyle = '#000000';
-                ctx.fillText(char, rect.width / 2, rect.height / 2 + (fontSize * 0.1)); // Adjust Y based on font size
+                ctx.fillText(char, rect.width / 2, rect.height / 2 + (fontSize * 0.1));
             } else {
-                // Setup Drawing Canvas
+                // Setup Rake Brush
                 ctx.lineCap = 'round';
                 ctx.lineJoin = 'round';
-                ctx.lineWidth = rect.width * 0.04; // REDUCED brush size (was 0.08)
-                ctx.strokeStyle = '#4A3B52';
+                ctx.lineWidth = rect.width * 0.12; // Thicker rake
+
+                // Rake Style: Dark Grey for depth in sand
+                ctx.strokeStyle = '#4b5563';
+                ctx.shadowBlur = 4;
+                ctx.shadowColor = 'rgba(0,0,0,0.2)';
             }
         };
 
@@ -53,9 +58,17 @@ const WritingCanvas = ({ char }) => {
 
     }, [char]);
 
+    const playRakeSound = () => {
+        const now = Date.now();
+        if (now - lastSoundTime.current > 150) { // Throttle sound
+            // We don't have a specific rake sound, so we use a subtle pop or existing sound for feedback
+            // Ideal would be a white noise burst, but 'hover' might work as a placeholder
+        }
+    };
+
     const startDrawing = (e) => {
-        if (isCorrect) return; // Disable drawing if already correct
-        setIsWrong(false); // Reset error state on new stroke
+        if (isCorrect) return;
+        setIsWrong(false);
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         const rect = canvas.getBoundingClientRect();
@@ -67,6 +80,7 @@ const WritingCanvas = ({ char }) => {
         ctx.moveTo(x, y);
         setIsDrawing(true);
         setHasDrawn(true);
+        playRakeSound();
     };
 
     const draw = (e) => {
@@ -81,6 +95,7 @@ const WritingCanvas = ({ char }) => {
 
         ctx.lineTo(x, y);
         ctx.stroke();
+        playRakeSound();
     };
 
     const validateDrawing = () => {
@@ -94,7 +109,6 @@ const WritingCanvas = ({ char }) => {
         const width = userCanvas.width;
         const height = userCanvas.height;
 
-        // Get pixel data
         const userImg = userCtx.getImageData(0, 0, width, height);
         const targetImg = targetCtx.getImageData(0, 0, width, height);
 
@@ -108,9 +122,7 @@ const WritingCanvas = ({ char }) => {
 
             if (targetAlpha > 50) {
                 targetPixels++;
-                if (userAlpha > 50) {
-                    overlapPixels++;
-                }
+                if (userAlpha > 50) overlapPixels++;
             } else if (userAlpha > 50) {
                 outsidePixels++;
             }
@@ -120,14 +132,12 @@ const WritingCanvas = ({ char }) => {
         const totalUserPixels = overlapPixels + outsidePixels;
         const precision = totalUserPixels > 0 ? (overlapPixels / totalUserPixels) : 0;
 
-        // Strictness Update
         if (coverage > 0.35 && precision > 0.4) {
             setIsCorrect(true);
             setScore(100);
-            markMastered(char); // Trigger mastery!
+            markMastered(char);
             playSound('success');
         } else {
-            // Failed
             setIsWrong(true);
             setScore(Math.round(coverage * 100));
             playSound('error');
@@ -141,13 +151,10 @@ const WritingCanvas = ({ char }) => {
     const clearCanvas = () => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
-
-        // Nuking the canvas correctly: Reset transform, clear, then restore setup
         ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset to identity matrix
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.restore(); // Restore context state
-
+        ctx.restore();
         setHasDrawn(false);
         setIsCorrect(false);
         setIsWrong(false);
@@ -157,31 +164,47 @@ const WritingCanvas = ({ char }) => {
     return (
         <div className="flex flex-col items-center w-full animate-fade-in space-y-4">
 
-            <div className={`relative w-full aspect-square max-w-[300px] rounded-3xl overflow-hidden shadow-inner border-4 transition-all duration-500 transform ${isCorrect ? 'border-green-400 scale-105 shadow-green-200' : isWrong ? 'border-red-400 shake-animation' : 'border-[#E6E6E6]'}`}>
-                {/* Background Color */}
-                <div className={`absolute inset-0 transition-colors duration-500 ${isCorrect ? 'bg-green-50' : isWrong ? 'bg-red-50' : 'bg-[#F9F7F2]'}`}></div>
+            {/* ZEN GARDEN FRAME */}
+            <div className={`
+                relative w-full aspect-square max-w-[300px] rounded-[2rem] overflow-hidden 
+                shadow-[inset_0_4px_12px_rgba(0,0,0,0.1)] border-8 border-[#D7C4BB] 
+                transition-all duration-500 transform 
+                ${isCorrect ? 'border-green-300 ring-4 ring-green-100' : isWrong ? 'border-red-300 shake-animation' : 'border-[#e5d5ce]'}
+            `}>
 
-                {/* Hidden Tracing Guide */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-                    {/* Grid Lines */}
-                    {!isCorrect && !isWrong && (
+                {/* SAND TEXTURE BACKGROUND */}
+                <div className={`
+                    absolute inset-0 transition-all duration-500 
+                    bg-[#fdfcf8]
+                    ${isCorrect ? 'bg-green-50' : ''}
+                `}
+                    style={{
+                        backgroundImage: `url('https://www.transparenttextures.com/patterns/sand-mountain.png')`,
+                        backgroundBlendMode: 'multiply'
+                    }}
+                ></div>
+
+                {/* Hidden Guide Grid */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-30">
+                    {!isCorrect && (
                         <>
-                            <div className="absolute inset-0 border-t border-b border-dashed border-red-100 top-1/2 left-0 w-full h-0"></div>
-                            <div className="absolute inset-0 border-l border-r border-dashed border-red-100 left-1/2 top-0 w-0 h-full"></div>
+                            <div className="absolute w-[90%] h-[90%] rounded-full border border-dashed border-stone-300"></div>
+                            <div className="absolute h-full w-px bg-stone-200"></div>
+                            <div className="absolute w-full h-px bg-stone-200"></div>
                         </>
                     )}
                 </div>
 
-                {/* Target Canvas */}
+                {/* Target Canvas (Ghost) */}
                 <canvas
                     ref={targetCanvasRef}
-                    className="absolute inset-0 w-full h-full opacity-20 pointer-events-none transition-opacity duration-500"
+                    className="absolute inset-0 w-full h-full opacity-10 pointer-events-none mix-blend-multiply"
                 />
 
-                {/* User Canvas */}
+                {/* User Rake Canvas */}
                 <canvas
                     ref={canvasRef}
-                    className={`absolute inset-0 w-full h-full ${isCorrect ? 'cursor-default pointer-events-none' : 'cursor-crosshair'}`}
+                    className={`absolute inset-0 w-full h-full ${isCorrect ? 'cursor-default pointer-events-none' : 'cursor-none'}`}
                     onMouseDown={startDrawing}
                     onMouseMove={draw}
                     onMouseUp={stopDrawing}
@@ -191,26 +214,33 @@ const WritingCanvas = ({ char }) => {
                     onTouchEnd={stopDrawing}
                 />
 
+                {/* Custom Cursor Indicator (The Rake Point) */}
+                {!isCorrect && !hasDrawn && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-stone-300 animate-pulse text-sm font-medium">
+                        Draw here
+                    </div>
+                )}
+
                 {/* Success Overlay */}
                 {isCorrect && (
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none animate-bounce-in">
-                        <div className="bg-white/90 backdrop-blur-sm rounded-full p-4 shadow-xl">
-                            <CheckCircle className="w-16 h-16 text-green-500" />
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none animate-bounce-in z-20">
+                        <div className="bg-white/90 backdrop-blur-md rounded-full p-6 shadow-2xl border-4 border-green-200">
+                            <Wind className="w-12 h-12 text-green-500" />
                         </div>
                     </div>
                 )}
             </div>
 
-            {/* Controls & Feedback */}
+            {/* CONTROLS */}
             <div className="flex items-center justify-between w-full max-w-[300px] h-14 px-2">
                 {!isCorrect ? (
                     <>
-                        <div className="text-sm font-medium text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                        <div className="text-sm font-bold text-stone-400 uppercase tracking-widest flex items-center gap-2">
                             {isWrong ? (
-                                <span className="text-red-500 animate-pulse font-bold">Try Again!</span>
+                                <span className="text-red-400 animate-pulse">Try Again</span>
                             ) : (
                                 <>
-                                    <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                                    <span className="w-2 h-2 rounded-full bg-stone-300"></span>
                                     Zen Mode
                                 </>
                             )}
@@ -221,16 +251,18 @@ const WritingCanvas = ({ char }) => {
                                 <>
                                     <button
                                         onClick={clearCanvas}
-                                        className="p-3 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full transition-colors"
-                                        title="Clear"
+                                        className="p-3 bg-[#efebe9] hover:bg-[#e7e1de] text-stone-500 rounded-full transition-colors shadow-sm"
+                                        title="Rake Sand (Clear)"
                                     >
                                         <Eraser className="w-5 h-5" />
                                     </button>
                                     <button
                                         onClick={validateDrawing}
-                                        className={`flex items-center gap-2 px-5 py-2.5 rounded-full transition-transform active:scale-95 shadow-lg font-bold text-sm ${isWrong ? 'bg-red-500 hover:bg-red-600 shadow-red-200 text-white' : 'bg-pink-500 hover:bg-pink-600 shadow-pink-200 text-white'}`}
+                                        className={`flex items-center gap-2 px-6 py-2.5 rounded-full transition-transform active:scale-95 shadow-md font-bold text-sm text-white
+                                            ${isWrong ? 'bg-red-400 hover:bg-red-500' : 'bg-stone-500 hover:bg-stone-600'}
+                                        `}
                                     >
-                                        <CheckCircle className="w-5 h-5" /> Check
+                                        Check
                                     </button>
                                 </>
                             )}
@@ -238,21 +270,18 @@ const WritingCanvas = ({ char }) => {
                     </>
                 ) : (
                     <div className="flex items-center justify-center w-full gap-4 animate-fade-in">
-                        <span className="text-green-500 font-bold text-xl drop-shadow-sm">Excellent!</span>
+                        <span className="text-green-600 font-bold text-lg drop-shadow-sm font-serif italic">Beautiful!</span>
                         <button
                             onClick={clearCanvas}
-                            className="flex items-center gap-2 px-4 py-2 bg-green-100 hover:bg-green-200 text-green-600 rounded-full transition-colors font-bold text-sm"
+                            className="flex items-center gap-2 px-5 py-2 bg-green-100 hover:bg-green-200 text-green-700 rounded-full transition-colors font-bold text-sm shadow-sm"
                         >
-                            <RefreshCw className="w-4 h-4" /> Again
+                            <RefreshCw className="w-4 h-4" /> New Paper
                         </button>
                     </div>
                 )}
             </div>
-
-            {/* Debug Score */}
-            <div className="text-xs text-gray-300">Accuracy: {score}%</div>
         </div>
     );
 };
 
-export default WritingCanvas;
+export default ZenGardenCanvas;

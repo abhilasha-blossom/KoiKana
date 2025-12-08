@@ -115,14 +115,33 @@ const StartMenu = () => {
                     </div>
                 </Link>
 
-                {/* 4. KANJI - Bottom Full Width */}
+                {/* 4. NAME STAMP - Bottom Left */}
+                <Link
+                    to="/name-stamp"
+                    onMouseEnter={() => playSound('pop')}
+                    className="md:col-span-2 group relative bg-white/40 backdrop-blur-xl rounded-[2.5rem] p-8 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(239,68,68,0.2)] transition-all duration-500 hover:-translate-y-2 overflow-hidden flex items-center justify-between"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-red-100/30 via-white/20 to-orange-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                    <div className="absolute -left-8 -top-8 w-32 h-32 bg-red-200/40 rounded-full blur-[50px] group-hover:scale-125 transition-transform duration-700"></div>
+
+                    <div className="relative z-10 flex items-center gap-6">
+                        <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-red-500 shadow-sm group-hover:scale-110 group-hover:rotate-12 transition-transform duration-500">
+                            <PenTool className="w-7 h-7" />
+                        </div>
+                        <div>
+                            <h3 className="text-2xl font-bold text-[#4A3B52] group-hover:text-red-600 transition-colors">Name Stamp</h3>
+                            <p className="text-[#7A6B82]">Make your Hanko 💮</p>
+                        </div>
+                    </div>
+                </Link>
+
+                {/* 5. KANJI - Bottom Right */}
                 <Link
                     to="/kanji"
                     onMouseEnter={() => playSound('pop')}
-                    className="md:col-span-4 group relative bg-white/40 backdrop-blur-xl rounded-[2.5rem] p-8 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(245,158,11,0.2)] transition-all duration-500 hover:-translate-y-2 overflow-hidden flex items-center justify-between"
+                    className="md:col-span-2 group relative bg-white/40 backdrop-blur-xl rounded-[2.5rem] p-8 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(245,158,11,0.2)] transition-all duration-500 hover:-translate-y-2 overflow-hidden flex items-center justify-between"
                 >
                     <div className="absolute inset-0 bg-gradient-to-r from-amber-100/30 via-white/20 to-orange-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-full bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-in-out"></div>
 
                     <div className="relative z-10 flex items-center gap-6">
                         <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-amber-600 shadow-sm group-hover:scale-110 transition-transform duration-500">
@@ -130,13 +149,13 @@ const StartMenu = () => {
                         </div>
                         <div>
                             <h3 className="text-2xl font-bold text-[#4A3B52] group-hover:text-amber-700 transition-colors">Kanji Module</h3>
-                            <p className="text-[#7A6B82]">Unlock the world of symbols</p>
+                            <p className="text-[#7A6B82]">Unlock the world</p>
                         </div>
                     </div>
 
                     {/* Coming Soon Pill */}
-                    <div className="relative z-10 px-5 py-2 bg-white/60 backdrop-blur-sm text-amber-600 rounded-full text-sm font-bold border border-white/60 shadow-sm group-hover:scale-105 transition-transform">
-                        Coming Soon 🐢
+                    <div className="relative z-10 px-3 py-1 bg-white/60 backdrop-blur-sm text-amber-600 rounded-full text-xs font-bold border border-white/60 shadow-sm group-hover:scale-105 transition-transform">
+                        Soon
                     </div>
                 </Link>
 
