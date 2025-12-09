@@ -5,13 +5,16 @@ import { hiragana, katakana } from '../data/kanaData';
 import useAudio from '../hooks/useAudio';
 import useProgress from '../hooks/useProgress';
 import WritingCanvas from './WritingCanvas';
+import MemoryGame from './MemoryGame';
 
 const GAME_MODES = {
     SELECT: 'select',
     MULTIPLE_CHOICE: 'multiple_choice',
     INPUT: 'input',
     TIME_ATTACK: 'time_attack',
-    WRITING: 'writing'
+    WRITING: 'writing',
+    REVIEW: 'review',
+    MATCHING: 'matching'
 };
 
 const POSITIVE_MESSAGES = [
@@ -243,7 +246,7 @@ const QuizPage = () => {
     const [options, setOptions] = useState([]);
     const [inputAnswer, setInputAnswer] = useState('');
     const { playSound } = useAudio();
-    const { addXP } = useProgress();
+    const { addXP, updateSRS, getDueItems } = useProgress();
 
     // Feedback Logic - Seprated to prevent "Incorrect Flash"
     const [feedbackStatus, setFeedbackStatus] = useState(null); // 'correct' | 'incorrect'
@@ -252,6 +255,12 @@ const QuizPage = () => {
     const [mascotMessage, setMascotMessage] = useState('');
     const [timeLeft, setTimeLeft] = useState(60);
     const [isGameOver, setIsGameOver] = useState(false);
+    const [dueItems, setDueItems] = useState([]);
+
+    // Fetch Due Items on Mount
+    useEffect(() => {
+        setDueItems(getDueItems());
+    }, []);
 
     // Combine kana based on selection
     const getKanaPool = () => {
@@ -290,15 +299,30 @@ const QuizPage = () => {
     };
 
     const generateQuestion = (activeMode = mode) => {
-        const randomItem = allKana[Math.floor(Math.random() * allKana.length)];
+        let targetPool = allKana;
+
+        // If Review Mode, filter pool to due items
+        if (activeMode === GAME_MODES.REVIEW) {
+            const dueChars = getDueItems(); // Refresh due items
+            const reviewPool = allKana.filter(k => dueChars.includes(k.char));
+            if (reviewPool.length > 0) {
+                targetPool = reviewPool;
+            } else {
+                // Fallback if no items (shouldn't happen if button is hidden, but safe guard)
+                targetPool = allKana;
+            }
+        }
+
+        const randomItem = targetPool[Math.floor(Math.random() * targetPool.length)];
         setCurrentQuestion(randomItem);
 
         setShowFeedback(false);
         setMascotMessage('');
         setInputAnswer('');
 
-        // Generate options for Multiple Choice
-        if (activeMode === GAME_MODES.MULTIPLE_CHOICE) {
+        // Generate options for Multiple Choice (Same as before)
+        if (activeMode === GAME_MODES.MULTIPLE_CHOICE || activeMode === GAME_MODES.REVIEW) {
+            // For Review, we use Multiple Choice style for now
             const wrongOptions = [];
             while (wrongOptions.length < 3) {
                 const random = allKana[Math.floor(Math.random() * allKana.length)];
@@ -340,6 +364,9 @@ const QuizPage = () => {
 
         const isCorrect = answer.trim().toLowerCase() === currentQuestion.romaji.toLowerCase();
 
+        // Update SRS Data
+        updateSRS(currentQuestion.char, isCorrect);
+
         if (isCorrect) {
             setScore(prev => prev + 1);
             addXP(10); // Award XP
@@ -355,6 +382,9 @@ const QuizPage = () => {
 
         setTimeout(() => {
             if (mode !== GAME_MODES.TIME_ATTACK) {
+                // Modified end condition for Review Mode? 
+                // For now, let's keep it 10 questions or until pool exhausted? 
+                // Simplicity: 10 questions per round.
                 if (questionCount >= 9) {
                     setIsGameOver(true);
                     addXP(50); // Award Bonus XP for completing a set
@@ -405,12 +435,38 @@ const QuizPage = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full px-4">
+                        {/* REVIEW CARD (Dynamic) */}
+                        {dueItems.length > 0 && (
+                            <button
+                                onClick={() => startGame(GAME_MODES.REVIEW)}
+                                className="
+                                    md:col-span-3 relative overflow-hidden group p-6 rounded-[2.5rem] text-left transition-all duration-500
+                                    bg-gradient-to-r from-green-100 to-emerald-50 bg-opacity-40 backdrop-blur-md border border-green-200
+                                    hover:shadow-[0_8px_30px_rgba(167,243,208,0.4)] hover:-translate-y-2
+                                    flex items-center justify-between
+                                "
+                            >
+                                <div className="z-10">
+                                    <h3 className="text-2xl font-bold text-green-800 mb-1 flex items-center gap-2">
+                                        <Clock className="w-6 h-6" /> SRS Review
+                                    </h3>
+                                    <p className="text-green-600 font-medium">
+                                        You have <span className="font-bold text-green-700">{dueItems.length}</span> items due for review!
+                                    </p>
+                                </div>
+                                <div className="bg-white/40 p-3 rounded-full animate-pulse">
+                                    <span className="text-3xl">🧠</span>
+                                </div>
+                            </button>
+                        )}
+
                         {/* Mode Cards - Glassmorphism */}
                         {[
                             { id: GAME_MODES.MULTIPLE_CHOICE, title: "Multiple Choice", icon: "🌸", desc: "Select the correct Romaji", color: "from-pink-100 to-rose-50" },
                             { id: GAME_MODES.INPUT, title: "Input Challenge", icon: "✍️", desc: "Type the pronunciation", color: "from-purple-100 to-indigo-50" },
                             { id: GAME_MODES.TIME_ATTACK, title: "Bubble Pop", icon: "🫧", desc: "Burst bubbles to score!", color: "from-blue-100 to-cyan-50" },
                             { id: GAME_MODES.WRITING, title: "Writing Challenge", icon: "🖌️", desc: "Draw the character", color: "from-orange-100 to-amber-50" },
+                            { id: GAME_MODES.MATCHING, title: "Memory Match", icon: "🧩", desc: "Find the pairs", color: "from-teal-100 to-emerald-50" },
 
                         ].map((m) => (
                             <button
@@ -610,6 +666,19 @@ const QuizPage = () => {
                         />
                         <p className="text-gray-500 text-sm">Draw the character above!</p>
                     </div>
+                )}
+
+                {(mode === GAME_MODES.MATCHING) && (
+                    <MemoryGame
+                        pool={allKana}
+                        onComplete={(bonusScore) => {
+                            setScore(prev => prev + bonusScore);
+                            addXP(bonusScore + 50);
+                            setIsGameOver(true);
+                            setMascotMessage("Memory Master! 🧠✨");
+                            playSound('success');
+                        }}
+                    />
                 )}
             </div>
         </div>
