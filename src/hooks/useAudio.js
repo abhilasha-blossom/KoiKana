@@ -81,9 +81,9 @@ const useAudio = () => {
 
             case 'hover': // High high tick
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(1200, now);
-                gainNode.gain.setValueAtTime(0.02, now); // Very quiet
-                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                osc.frequency.setValueAtTime(800, now);
+                gainNode.gain.setValueAtTime(0.005, now); // Much quieter
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
                 osc.start(now);
                 osc.stop(now + 0.05);
                 break;
