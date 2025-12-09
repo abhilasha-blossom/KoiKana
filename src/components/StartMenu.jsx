@@ -50,7 +50,7 @@ const StartMenu = () => {
             {/* BENTO BOX GRID */}
             <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-4 md:grid-rows-3 gap-3 md:gap-4 auto-rows-[minmax(140px,auto)] relative z-10 p-2 overflow-y-auto md:overflow-visible no-scrollbar h-full md:h-auto content-center">
 
-                {/* 1. LEARN KANA (Main Feature) - Top Left Big Box */}
+                {/* 1. LEARN KANA (Main Feature) - Top Left Big Box (2x2) */}
                 <Link
                     to="/kana"
                     onMouseEnter={() => playSound('pop')}
@@ -75,47 +75,45 @@ const StartMenu = () => {
                     </div>
                 </Link>
 
-                {/* 2. ABOUT JAPANESE - Top Right Wide */}
+                {/* 2. KANJI - Top Right (Moved Here) */}
                 <Link
-                    to="/about"
+                    to="/kanji"
                     onMouseEnter={() => playSound('pop')}
-                    className="md:col-span-2 group relative bg-white/40 backdrop-blur-xl rounded-[2rem] p-5 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(168,85,247,0.2)] transition-all duration-500 hover:-translate-y-1 overflow-hidden flex flex-col justify-center"
+                    className="md:col-span-2 group relative bg-white/40 backdrop-blur-xl rounded-[2rem] p-5 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(245,158,11,0.2)] transition-all duration-500 hover:-translate-y-1 overflow-hidden flex items-center justify-between"
                 >
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-100/50 via-white/20 to-indigo-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                    <div className="absolute -right-8 -top-8 w-32 h-32 bg-purple-300/40 rounded-full blur-[60px] group-hover:scale-125 transition-transform duration-700"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-amber-100/30 via-white/20 to-orange-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
                     <div className="relative z-10 flex items-center gap-4">
-                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-purple-600 shadow-sm shrink-0 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500">
-                            <BookOpen className="w-6 h-6" />
+                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-amber-600 shadow-sm group-hover:scale-110 transition-transform duration-500">
+                            <ScrollText className="w-6 h-6" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-[#4A3B52] mb-0.5 group-hover:text-purple-700 transition-colors">About Japanese</h3>
-                            <p className="text-[#7A6B82] text-sm">Understand the 3 alphabets</p>
+                            <h3 className="text-xl font-bold text-[#4A3B52] group-hover:text-amber-700 transition-colors">Kanji Module</h3>
+                            <p className="text-[#7A6B82] text-sm">Unlock the world</p>
                         </div>
                     </div>
                 </Link>
 
-                {/* 3. SPEAKING - Middle Right Wide */}
+                {/* 3. VOCABULARY - Middle Right (Moved Here) */}
                 <Link
-                    to="/speaking"
+                    to="/vocabulary"
                     onMouseEnter={() => playSound('pop')}
-                    className="md:col-span-2 group relative bg-white/40 backdrop-blur-xl rounded-[2rem] p-5 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(20,184,166,0.2)] transition-all duration-500 hover:-translate-y-1 overflow-hidden flex flex-col justify-center"
+                    className="md:col-span-2 group relative bg-white/40 backdrop-blur-xl rounded-[2rem] p-5 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(236,72,153,0.2)] transition-all duration-500 hover:-translate-y-1 overflow-hidden flex items-center justify-between"
                 >
-                    <div className="absolute inset-0 bg-gradient-to-br from-teal-100/50 via-white/20 to-emerald-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                    <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-teal-300/40 rounded-full blur-[60px] group-hover:scale-125 transition-transform duration-700"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-pink-100/30 via-white/20 to-rose-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-                    <div className="relative z-10 flex flex-row-reverse items-center justify-end gap-4 text-right w-full">
-                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-teal-600 shadow-sm shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
-                            <Mic className="w-6 h-6" />
+                    <div className="relative z-10 flex items-center gap-4">
+                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-pink-500 shadow-sm group-hover:scale-110 transition-transform duration-500">
+                            <Sparkles className="w-6 h-6" />
                         </div>
-                        <div className="flex flex-col items-end">
-                            <h3 className="text-xl font-bold text-[#4A3B52] mb-0.5 group-hover:text-teal-700 transition-colors">Speaking</h3>
-                            <p className="text-[#7A6B82] text-sm">Phrases & greetings</p>
+                        <div>
+                            <h3 className="text-xl font-bold text-[#4A3B52] group-hover:text-pink-600 transition-colors">Vocabulary</h3>
+                            <p className="text-[#7A6B82] text-sm">Expand words</p>
                         </div>
                     </div>
                 </Link>
 
-                {/* 4. NAME STAMP - Bottom Left */}
+                {/* 4. NAME STAMP - Row 3 Left */}
                 <Link
                     to="/name-stamp"
                     onMouseEnter={() => playSound('pop')}
@@ -135,45 +133,47 @@ const StartMenu = () => {
                     </div>
                 </Link>
 
-                {/* 5. KANJI - Bottom Right */}
+                {/* 5. SPEAKING - Row 3 Right (Moved Here) */}
                 <Link
-                    to="/kanji"
+                    to="/speaking"
                     onMouseEnter={() => playSound('pop')}
-                    className="md:col-span-2 group relative bg-white/40 backdrop-blur-xl rounded-[2rem] p-5 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(245,158,11,0.2)] transition-all duration-500 hover:-translate-y-1 overflow-hidden flex items-center justify-between"
+                    className="md:col-span-2 group relative bg-white/40 backdrop-blur-xl rounded-[2rem] p-5 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(20,184,166,0.2)] transition-all duration-500 hover:-translate-y-1 overflow-hidden flex flex-col justify-center"
                 >
-                    <div className="absolute inset-0 bg-gradient-to-r from-amber-100/30 via-white/20 to-orange-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-teal-100/50 via-white/20 to-emerald-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                    <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-teal-300/40 rounded-full blur-[60px] group-hover:scale-125 transition-transform duration-700"></div>
 
                     <div className="relative z-10 flex items-center gap-4">
-                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-amber-600 shadow-sm group-hover:scale-110 transition-transform duration-500">
-                            <ScrollText className="w-6 h-6" />
+                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-teal-600 shadow-sm shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
+                            <Mic className="w-6 h-6" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-[#4A3B52] group-hover:text-amber-700 transition-colors">Kanji Module</h3>
-                            <p className="text-[#7A6B82] text-sm">Unlock the world</p>
+                            <h3 className="text-xl font-bold text-[#4A3B52] mb-0.5 group-hover:text-teal-700 transition-colors">Speaking</h3>
+                            <p className="text-[#7A6B82] text-sm">Phrases & greetings</p>
                         </div>
                     </div>
                 </Link>
 
-                {/* 6. VOCABULARY - Bottom Row */}
+                {/* 6. ABOUT JAPANESE - Row 4 Left (Moved Here) */}
                 <Link
-                    to="/vocabulary"
+                    to="/about"
                     onMouseEnter={() => playSound('pop')}
-                    className="md:col-span-2 group relative bg-white/40 backdrop-blur-xl rounded-[2rem] p-5 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(236,72,153,0.2)] transition-all duration-500 hover:-translate-y-1 overflow-hidden flex items-center justify-between"
+                    className="md:col-span-2 group relative bg-white/40 backdrop-blur-xl rounded-[2rem] p-5 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(168,85,247,0.2)] transition-all duration-500 hover:-translate-y-1 overflow-hidden flex flex-col justify-center"
                 >
-                    <div className="absolute inset-0 bg-gradient-to-r from-pink-100/30 via-white/20 to-rose-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-100/50 via-white/20 to-indigo-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                    <div className="absolute -right-8 -top-8 w-32 h-32 bg-purple-300/40 rounded-full blur-[60px] group-hover:scale-125 transition-transform duration-700"></div>
 
                     <div className="relative z-10 flex items-center gap-4">
-                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-pink-500 shadow-sm group-hover:scale-110 transition-transform duration-500">
-                            <Sparkles className="w-6 h-6" />
+                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-purple-600 shadow-sm shrink-0 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-500">
+                            <BookOpen className="w-6 h-6" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-[#4A3B52] group-hover:text-pink-600 transition-colors">Vocabulary</h3>
-                            <p className="text-[#7A6B82] text-sm">Expand words</p>
+                            <h3 className="text-xl font-bold text-[#4A3B52] mb-0.5 group-hover:text-purple-700 transition-colors">About Japanese</h3>
+                            <p className="text-[#7A6B82] text-sm">Understand the 3 alphabets</p>
                         </div>
                     </div>
                 </Link>
 
-                {/* 7. THEME SHOP - Bottom Row */}
+                {/* 7. THEME SHOP - Row 4 Right */}
                 <Link
                     to="/shop"
                     onMouseEnter={() => playSound('pop')}
