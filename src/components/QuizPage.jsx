@@ -405,26 +405,26 @@ const QuizPage = () => {
 
     if (mode === GAME_MODES.SELECT) {
         return (
-            <div className="min-h-screen bg-[#FFF0F5] flex flex-col items-center justify-center p-6 relative overflow-hidden">
+            <div className="h-screen bg-[#FFF0F5] flex flex-col items-center justify-center p-4 relative overflow-hidden">
                 {/* Background Atmosphere */}
-                <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-pink-200/40 rounded-full blur-[100px] animate-blob mix-blend-multiply pointer-events-none"></div>
-                <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-purple-200/40 rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply pointer-events-none"></div>
+                <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-pink-200/40 rounded-full blur-[100px] animate-blob mix-blend-multiply pointer-events-none"></div>
+                <div className="absolute bottom-[-20%] right-[-10%] w-[400px] h-[400px] bg-purple-200/40 rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply pointer-events-none"></div>
 
-                <Link to="/" className="absolute top-6 left-6 p-3 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors z-50 shadow-sm border border-white/50">
-                    <ArrowLeft className="text-[#4A3B52]" />
+                <Link to="/" className="absolute top-4 left-4 p-2 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors z-50 shadow-sm border border-white/50">
+                    <ArrowLeft className="text-[#4A3B52] w-5 h-5" />
                 </Link>
 
-                <div className="relative z-10 flex flex-col items-center">
-                    <h1 className="text-5xl font-bold text-[#4A3B52] mb-3 drop-shadow-sm">Training Dojo</h1>
-                    <div className="h-1 w-24 bg-gradient-to-r from-pink-300 to-purple-300 rounded-full mb-8"></div>
+                <div className="relative z-10 flex flex-col items-center max-h-full w-full">
+                    <h1 className="text-3xl md:text-4xl font-bold text-[#4A3B52] mb-1 drop-shadow-sm">Training Dojo</h1>
+                    <div className="h-1 w-16 bg-gradient-to-r from-pink-300 to-purple-300 rounded-full mb-4"></div>
 
                     {/* Script Selection Toggles - Glassmorphism */}
-                    <div className="flex bg-white/30 backdrop-blur-md p-1.5 rounded-full mb-12 shadow-sm border border-white/40">
+                    <div className="flex bg-white/30 backdrop-blur-md p-1 rounded-full mb-6 shadow-sm border border-white/40 scale-90 origin-center">
                         {['hiragana', 'mix', 'katakana'].map((type) => (
                             <button
                                 key={type}
                                 onClick={() => setScriptType(type)}
-                                className={`px-8 py-3 rounded-full font-bold capitalize transition-all duration-300 ${scriptType === type
+                                className={`px-6 py-2 rounded-full font-bold capitalize transition-all duration-300 text-sm ${scriptType === type
                                     ? 'bg-white text-pink-500 shadow-md scale-105'
                                     : 'text-gray-600 hover:text-gray-800'
                                     }`}
@@ -434,54 +434,54 @@ const QuizPage = () => {
                         ))}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full px-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl w-full px-2 overflow-y-auto no-scrollbar pb-20 md:pb-0 h-full content-center">
                         {/* REVIEW CARD (Dynamic) */}
                         {dueItems.length > 0 && (
                             <button
                                 onClick={() => startGame(GAME_MODES.REVIEW)}
                                 className="
-                                    md:col-span-3 relative overflow-hidden group p-6 rounded-[2.5rem] text-left transition-all duration-500
+                                    md:col-span-3 relative overflow-hidden group p-4 rounded-3xl text-left transition-all duration-500
                                     bg-gradient-to-r from-green-100 to-emerald-50 bg-opacity-40 backdrop-blur-md border border-green-200
-                                    hover:shadow-[0_8px_30px_rgba(167,243,208,0.4)] hover:-translate-y-2
+                                    hover:shadow-[0_8px_30px_rgba(167,243,208,0.4)] hover:-translate-y-1
                                     flex items-center justify-between
                                 "
                             >
                                 <div className="z-10">
-                                    <h3 className="text-2xl font-bold text-green-800 mb-1 flex items-center gap-2">
-                                        <Clock className="w-6 h-6" /> SRS Review
+                                    <h3 className="text-xl font-bold text-green-800 mb-0.5 flex items-center gap-2">
+                                        <Clock className="w-5 h-5" /> SRS Review
                                     </h3>
-                                    <p className="text-green-600 font-medium">
-                                        You have <span className="font-bold text-green-700">{dueItems.length}</span> items due for review!
+                                    <p className="text-green-600 font-medium text-sm">
+                                        You have <span className="font-bold text-green-700">{dueItems.length}</span> items due!
                                     </p>
                                 </div>
-                                <div className="bg-white/40 p-3 rounded-full animate-pulse">
-                                    <span className="text-3xl">🧠</span>
+                                <div className="bg-white/40 p-2 rounded-full animate-pulse">
+                                    <span className="text-2xl">🧠</span>
                                 </div>
                             </button>
                         )}
 
                         {/* Mode Cards - Glassmorphism */}
                         {[
-                            { id: GAME_MODES.MULTIPLE_CHOICE, title: "Multiple Choice", icon: "🌸", desc: "Select the correct Romaji", color: "from-pink-100 to-rose-50" },
-                            { id: GAME_MODES.INPUT, title: "Input Challenge", icon: "✍️", desc: "Type the pronunciation", color: "from-purple-100 to-indigo-50" },
-                            { id: GAME_MODES.TIME_ATTACK, title: "Bubble Pop", icon: "🫧", desc: "Burst bubbles to score!", color: "from-blue-100 to-cyan-50" },
-                            { id: GAME_MODES.WRITING, title: "Writing Challenge", icon: "🖌️", desc: "Draw the character", color: "from-orange-100 to-amber-50" },
-                            { id: GAME_MODES.MATCHING, title: "Memory Match", icon: "🧩", desc: "Find the pairs", color: "from-teal-100 to-emerald-50" },
+                            { id: GAME_MODES.MULTIPLE_CHOICE, title: "Multiple Choice", icon: "🌸", desc: "Select Romaji", color: "from-pink-100 to-rose-50" },
+                            { id: GAME_MODES.INPUT, title: "Input Challenge", icon: "✍️", desc: "Type sound", color: "from-purple-100 to-indigo-50" },
+                            { id: GAME_MODES.TIME_ATTACK, title: "Bubble Pop", icon: "🫧", desc: "Burst bubbles!", color: "from-blue-100 to-cyan-50" },
+                            { id: GAME_MODES.WRITING, title: "Writing", icon: "🖌️", desc: "Draw character", color: "from-orange-100 to-amber-50" },
+                            { id: GAME_MODES.MATCHING, title: "Memory Match", icon: "🧩", desc: "Find pairs", color: "from-teal-100 to-emerald-50" },
 
                         ].map((m) => (
                             <button
                                 key={m.id}
                                 onClick={() => startGame(m.id)}
                                 className={`
-                                    relative overflow-hidden group p-8 rounded-[2.5rem] text-left transition-all duration-500
+                                    relative overflow-hidden group p-5 rounded-3xl text-left transition-all duration-500
                                     bg-gradient-to-br ${m.color} bg-opacity-40 backdrop-blur-md border border-white/60
-                                    hover:shadow-[0_8px_30px_rgba(255,209,220,0.4)] hover:-translate-y-2
+                                    hover:shadow-[0_8px_30px_rgba(255,209,220,0.4)] hover:-translate-y-1
                                 `}
                             >
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 rounded-full blur-2xl -mr-16 -mt-16 transition-transform group-hover:scale-150"></div>
-                                <span className="text-6xl mb-4 block filter drop-shadow-sm group-hover:scale-110 transition-transform duration-300">{m.icon}</span>
-                                <h3 className="text-2xl font-bold text-[#4A3B52] mb-2">{m.title}</h3>
-                                <p className="text-[#7A6B82] font-medium">{m.desc}</p>
+                                <div className="absolute top-0 right-0 w-24 h-24 bg-white/20 rounded-full blur-2xl -mr-12 -mt-12 transition-transform group-hover:scale-150"></div>
+                                <span className="text-4xl mb-2 block filter drop-shadow-sm group-hover:scale-110 transition-transform duration-300">{m.icon}</span>
+                                <h3 className="text-lg font-bold text-[#4A3B52] mb-1">{m.title}</h3>
+                                <p className="text-[#7A6B82] font-medium text-xs">{m.desc}</p>
                             </button>
                         ))}
                     </div>
@@ -492,30 +492,30 @@ const QuizPage = () => {
 
     if (isGameOver) {
         return (
-            <div className="min-h-screen bg-[#FFF0F5] flex flex-col items-center justify-center p-6 text-center animate-fade-in-up relative overflow-hidden">
+            <div className="h-screen bg-[#FFF0F5] flex flex-col items-center justify-center p-4 text-center animate-fade-in-up relative overflow-hidden">
                 {/* Background Atmosphere */}
-                <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-pink-200/40 rounded-full blur-[100px] animate-blob mix-blend-multiply pointer-events-none"></div>
+                <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-pink-200/40 rounded-full blur-[100px] animate-blob mix-blend-multiply pointer-events-none"></div>
 
-                <div className="bg-white/60 backdrop-blur-xl p-12 rounded-[3rem] shadow-2xl max-w-md w-full relative overflow-hidden border border-white/50">
+                <div className="bg-white/60 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-2xl max-w-sm w-full relative overflow-hidden border border-white/50">
                     <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300"></div>
 
-                    <Trophy className="w-24 h-24 text-yellow-400 mx-auto mb-6 animate-bounce drop-shadow-md" />
-                    <h2 className="text-4xl font-bold text-[#4A3B52] mb-2">Training Complete!</h2>
-                    <p className="text-[#7A6B82] mb-8 font-medium">You've honed your skills.</p>
+                    <Trophy className="w-16 h-16 text-yellow-400 mx-auto mb-4 animate-bounce drop-shadow-md" />
+                    <h2 className="text-3xl font-bold text-[#4A3B52] mb-1">Training Complete!</h2>
+                    <p className="text-[#7A6B82] mb-6 font-medium text-sm">You've honed your skills.</p>
 
-                    <div className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-pink-500 to-purple-600 mb-8 drop-shadow-sm">
-                        {score} <span className="text-3xl text-gray-400 font-medium">pts</span>
+                    <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-pink-500 to-purple-600 mb-6 drop-shadow-sm">
+                        {score} <span className="text-2xl text-gray-400 font-medium">pts</span>
                     </div>
 
-                    <div className="flex gap-4 justify-center">
-                        <Link to="/" className="px-8 py-4 rounded-2xl bg-white/50 text-[#7A6B82] hover:bg-white font-bold transition-all shadow-sm hover:shadow-md border border-white/60">
+                    <div className="flex gap-3 justify-center">
+                        <Link to="/" className="px-6 py-3 rounded-2xl bg-white/50 text-[#7A6B82] hover:bg-white font-bold transition-all shadow-sm hover:shadow-md border border-white/60 text-sm">
                             Home
                         </Link>
                         <button
                             onClick={() => setMode(GAME_MODES.SELECT)}
-                            className="px-8 py-4 rounded-2xl bg-gradient-to-r from-pink-400 to-pink-500 text-white hover:from-pink-500 hover:to-pink-600 font-bold transition-all shadow-lg hover:shadow-pink-200/50 flex items-center gap-2 transform hover:-translate-y-1"
+                            className="px-6 py-3 rounded-2xl bg-gradient-to-r from-pink-400 to-pink-500 text-white hover:from-pink-500 hover:to-pink-600 font-bold transition-all shadow-lg hover:shadow-pink-200/50 flex items-center gap-2 transform hover:-translate-y-1 text-sm"
                         >
-                            <RefreshCcw className="w-5 h-5" /> Play Again
+                            <RefreshCcw className="w-4 h-4" /> Play Again
                         </button>
                     </div>
                 </div>
@@ -524,30 +524,30 @@ const QuizPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#FFF0F5] flex flex-col items-center p-6 relative overflow-hidden">
+        <div className="h-screen bg-[#FFF0F5] flex flex-col items-center p-4 relative overflow-hidden">
             {/* Background Atmosphere */}
-            <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-pink-200/30 rounded-full blur-[80px] animate-blob mix-blend-multiply pointer-events-none z-0"></div>
+            <div className="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] bg-pink-200/30 rounded-full blur-[80px] animate-blob mix-blend-multiply pointer-events-none z-0"></div>
 
             {/* Header */}
-            <div className="w-full max-w-3xl flex items-center justify-between mb-12 mt-4 relative z-50">
-                <button onClick={() => setMode(GAME_MODES.SELECT)} className="p-3 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors shadow-sm border border-white/50">
-                    <ArrowLeft className="text-[#4A3B52]" />
+            <div className="w-full max-w-3xl flex items-center justify-between mb-6 mt-2 relative z-50 flex-none">
+                <button onClick={() => setMode(GAME_MODES.SELECT)} className="p-2 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors shadow-sm border border-white/50">
+                    <ArrowLeft className="text-[#4A3B52] w-5 h-5" />
                 </button>
 
                 {mode === GAME_MODES.TIME_ATTACK && (
-                    <div className={`flex items-center gap-2 text-2xl font-black ${timeLeft < 10 ? 'text-red-500 animate-pulse' : 'text-[#4A3B52]'} bg-white/40 backdrop-blur-md px-6 py-2 rounded-full shadow-sm`}>
-                        <Clock className="w-6 h-6" /> {timeLeft}s
+                    <div className={`flex items-center gap-2 text-xl font-black ${timeLeft < 10 ? 'text-red-500 animate-pulse' : 'text-[#4A3B52]'} bg-white/40 backdrop-blur-md px-4 py-1.5 rounded-full shadow-sm`}>
+                        <Clock className="w-5 h-5" /> {timeLeft}s
                     </div>
                 )}
 
                 {/* Sakura Progress Bar - Replacing simple Score */}
-                <div className="flex items-center gap-3 bg-white/40 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-white/50">
+                <div className="flex items-center gap-3 bg-white/40 backdrop-blur-md px-4 py-1.5 rounded-full shadow-sm border border-white/50">
                     <div className="flex items-center gap-1">
-                        <span className="text-2xl">🌸</span>
-                        <span className="text-2xl font-black text-pink-500">{score}</span>
+                        <span className="text-xl">🌸</span>
+                        <span className="text-xl font-black text-pink-500">{score}</span>
                     </div>
                     {(mode !== GAME_MODES.TIME_ATTACK) && (
-                        <div className="h-1.5 w-24 bg-white/50 rounded-full overflow-hidden ml-2">
+                        <div className="h-1.5 w-20 bg-white/50 rounded-full overflow-hidden ml-2">
                             <div className="h-full bg-pink-400 transition-all duration-500" style={{ width: `${(questionCount / 10) * 100}%` }}></div>
                         </div>
                     )}
@@ -555,7 +555,7 @@ const QuizPage = () => {
             </div>
 
             {/* MASCOT KOI-CHAN */}
-            <div className="fixed bottom-4 right-4 md:right-10 w-24 sm:w-40 md:w-56 pointer-events-none z-[100] transition-transform duration-300">
+            <div className="fixed bottom-2 right-2 md:right-8 w-20 sm:w-32 md:w-48 pointer-events-none z-[100] transition-transform duration-300">
                 <img
                     src={
                         feedbackStatus === 'correct' ? '/mascot/correct.png' :
@@ -570,59 +570,59 @@ const QuizPage = () => {
                 />
 
                 <div className={`
-                    absolute bottom-[110%] right-[0%] bg-white/90 backdrop-blur-sm px-4 py-2 sm:px-6 sm:py-4 rounded-[1.5rem] sm:rounded-[2rem] shadow-xl border-2 border-pink-100
-                    transform transition-all duration-300 origin-bottom-right w-32 sm:w-48 text-center z-20
+                    absolute bottom-[110%] right-[0%] bg-white/90 backdrop-blur-sm px-3 py-2 sm:px-4 sm:py-3 rounded-[1.5rem] shadow-xl border-2 border-pink-100
+                    transform transition-all duration-300 origin-bottom-right w-28 sm:w-40 text-center z-20
                     ${showFeedback ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-50 translate-y-4'}
                 `}>
-                    <p className="text-[#4A3B52] font-bold text-sm sm:text-lg leading-tight">{mascotMessage}</p>
+                    <p className="text-[#4A3B52] font-bold text-xs sm:text-sm leading-tight">{mascotMessage}</p>
                     {/* Triangle pointer */}
-                    <div className="absolute -bottom-2 right-8 w-4 h-4 bg-white border-b-2 border-r-2 border-pink-100 transform rotate-45"></div>
+                    <div className="absolute -bottom-2 right-8 w-3 h-3 bg-white border-b-2 border-r-2 border-pink-100 transform rotate-45"></div>
                 </div>
             </div>
 
             {/* Game Content */}
-            <div className="max-w-md w-full flex flex-col items-center gap-8 relative z-10 pb-20 md:pb-0">
+            <div className="max-w-md w-full flex flex-col items-center gap-4 relative z-10 pb-20 md:pb-0 h-full justify-center">
 
                 {/* Character Card - Glassmorphism */}
                 <div className="relative group perspective">
-                    <div className="w-40 h-40 sm:w-64 sm:h-64 bg-white/60 backdrop-blur-xl rounded-[2rem] sm:rounded-[2.5rem] shadow-[0_8px_32px_rgba(255,209,220,0.5)] flex items-center justify-center
+                    <div className="w-32 h-32 sm:w-48 sm:h-48 bg-white/60 backdrop-blur-xl rounded-[2rem] shadow-[0_8px_32px_rgba(255,209,220,0.5)] flex items-center justify-center
                                   border border-white/60 transform transition-transform duration-500 hover:scale-105">
-                        <span className="text-7xl sm:text-9xl font-bold text-[#4A3B52] jp-font drop-shadow-sm">
+                        <span className="text-6xl sm:text-8xl font-bold text-[#4A3B52] jp-font drop-shadow-sm">
                             {mode === GAME_MODES.MULTIPLE_CHOICE ? currentQuestion?.romaji : currentQuestion?.char}
                         </span>
                     </div>
                 </div>
 
                 {/* Feedback Indicator - FADE OUT WITHOUT FLASHING INCORRECT */}
-                <div className={`h-8 transition-opacity duration-300 ${showFeedback ? 'opacity-100' : 'opacity-0'}`}>
+                <div className={`h-6 transition-opacity duration-300 ${showFeedback ? 'opacity-100' : 'opacity-0'}`}>
                     {feedbackStatus === 'correct' ? (
-                        <div className="flex items-center gap-2 text-green-600 font-bold text-lg sm:text-xl animate-bounce bg-green-100/80 px-4 py-1 rounded-full backdrop-blur-sm">
-                            <CheckCircle /> Correct!
+                        <div className="flex items-center gap-2 text-green-600 font-bold text-base sm:text-lg animate-bounce bg-green-100/80 px-3 py-1 rounded-full backdrop-blur-sm">
+                            <CheckCircle className="w-5 h-5" /> Correct!
                         </div>
                     ) : (
-                        <div className="flex items-center gap-2 text-red-500 font-bold text-lg sm:text-xl animate-shake bg-red-100/80 px-4 py-1 rounded-full backdrop-blur-sm">
-                            <XCircle /> Incorrect! It was "{currentQuestion?.romaji}"
+                        <div className="flex items-center gap-2 text-red-500 font-bold text-base sm:text-lg animate-shake bg-red-100/80 px-3 py-1 rounded-full backdrop-blur-sm">
+                            <XCircle className="w-5 h-5" /> Incorrect! It was "{currentQuestion?.romaji}"
                         </div>
                     )}
                 </div>
 
                 {/* Input Area */}
                 {(mode === GAME_MODES.MULTIPLE_CHOICE) && (
-                    <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full">
+                    <div className="grid grid-cols-2 gap-3 w-full px-4">
                         {options.map((opt, i) => (
                             <button
                                 key={i}
                                 onClick={() => handleAnswer(opt.romaji)}
                                 disabled={showFeedback}
                                 className={`
-                                    p-4 sm:p-6 rounded-2xl text-xl sm:text-2xl font-bold transition-all duration-300 transform hover:-translate-y-1 active:scale-95
+                                    p-3 sm:p-5 rounded-2xl text-lg sm:text-2xl font-bold transition-all duration-300 transform hover:-translate-y-1 active:scale-95
                                     backdrop-blur-md border border-white/50
                                     ${showFeedback && opt.romaji === currentQuestion.romaji ? 'bg-green-100/90 text-green-700 border-green-400 shadow-[0_0_15px_rgba(74,222,128,0.4)]' : ''}
                                     ${showFeedback && feedbackStatus === 'incorrect' && opt === options.find(o => o.romaji === currentQuestion.romaji) ? 'bg-green-100/90 text-green-700 border-green-400' : ''}
                                     ${!showFeedback ? 'bg-white/40 hover:bg-white/70 text-[#4A3B52] shadow-sm hover:shadow-[0_8px_20px_rgba(255,209,220,0.4)]' : ''}
                                 `}
                             >
-                                <span className={mode === GAME_MODES.MULTIPLE_CHOICE ? "jp-font text-3xl sm:text-4xl" : ""}>
+                                <span className={mode === GAME_MODES.MULTIPLE_CHOICE ? "jp-font text-2xl sm:text-3xl" : ""}>
                                     {mode === GAME_MODES.MULTIPLE_CHOICE ? opt.char : opt.romaji}
                                 </span>
                             </button>
@@ -631,7 +631,7 @@ const QuizPage = () => {
                 )}
 
                 {(mode === GAME_MODES.INPUT) && (
-                    <form onSubmit={handleInputSubmit} className="w-full relative">
+                    <form onSubmit={handleInputSubmit} className="w-full relative px-4">
                         <input
                             type="text"
                             value={inputAnswer}
@@ -639,12 +639,12 @@ const QuizPage = () => {
                             placeholder="Type pronunciation..."
                             disabled={showFeedback}
                             autoFocus
-                            className="w-full p-4 sm:p-6 text-center text-2xl sm:text-3xl font-bold text-[#4A3B52] rounded-3xl border-2 border-white/50 focus:border-pink-300 shadow-inner bg-white/50 backdrop-blur-md focus:bg-white/80 outline-none transition-all placeholder:font-normal placeholder:text-gray-400/80"
+                            className="w-full p-4 text-center text-2xl font-bold text-[#4A3B52] rounded-3xl border-2 border-white/50 focus:border-pink-300 shadow-inner bg-white/50 backdrop-blur-md focus:bg-white/80 outline-none transition-all placeholder:font-normal placeholder:text-gray-400/80"
                         />
                         <button
                             type="submit"
                             disabled={!inputAnswer || showFeedback}
-                            className="w-full mt-6 bg-gradient-to-r from-pink-400 to-pink-500 text-white font-bold py-4 rounded-2xl shadow-[0_4px_15px_rgba(244,114,182,0.4)] hover:shadow-[0_8px_25px_rgba(244,114,182,0.5)] hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full mt-4 bg-gradient-to-r from-pink-400 to-pink-500 text-white font-bold py-3 rounded-2xl shadow-[0_4px_15px_rgba(244,114,182,0.4)] hover:shadow-[0_8px_25px_rgba(244,114,182,0.5)] hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Check Answer
                         </button>
@@ -659,12 +659,12 @@ const QuizPage = () => {
                 )}
 
                 {(mode === GAME_MODES.WRITING) && (
-                    <div className="flex flex-col items-center gap-4">
+                    <div className="flex flex-col items-center gap-2">
                         <WritingCanvas
                             char={currentQuestion?.char}
                             onComplete={() => handleAnswer(currentQuestion?.romaji)}
                         />
-                        <p className="text-gray-500 text-sm">Draw the character above!</p>
+                        <p className="text-gray-500 text-xs text-center">Draw the character above!</p>
                     </div>
                 )}
 
