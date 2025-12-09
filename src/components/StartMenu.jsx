@@ -159,6 +159,25 @@ const StartMenu = () => {
                     </div> */}
                 </Link>
 
+                {/* 6. VOCABULARY - Bottom Row */}
+                <Link
+                    to="/vocabulary"
+                    onMouseEnter={() => playSound('pop')}
+                    className="md:col-span-2 group relative bg-white/40 backdrop-blur-xl rounded-[2.5rem] p-8 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(236,72,153,0.2)] transition-all duration-500 hover:-translate-y-2 overflow-hidden flex items-center justify-between"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-pink-100/30 via-white/20 to-rose-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+
+                    <div className="relative z-10 flex items-center gap-6">
+                        <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-pink-500 shadow-sm group-hover:scale-110 transition-transform duration-500">
+                            <Sparkles className="w-7 h-7" />
+                        </div>
+                        <div>
+                            <h3 className="text-2xl font-bold text-[#4A3B52] group-hover:text-pink-600 transition-colors">Vocabulary</h3>
+                            <p className="text-[#7A6B82]">Expand your words</p>
+                        </div>
+                    </div>
+                </Link>
+
             </div>
         </div>
     );

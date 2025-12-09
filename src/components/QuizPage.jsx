@@ -3,12 +3,15 @@ import { ArrowLeft, Clock, CheckCircle, XCircle, Trophy, RefreshCcw } from 'luci
 import { Link } from 'react-router-dom';
 import { hiragana, katakana } from '../data/kanaData';
 import useAudio from '../hooks/useAudio';
+import useProgress from '../hooks/useProgress';
+import WritingCanvas from './WritingCanvas';
 
 const GAME_MODES = {
     SELECT: 'select',
     MULTIPLE_CHOICE: 'multiple_choice',
     INPUT: 'input',
-    TIME_ATTACK: 'time_attack'
+    TIME_ATTACK: 'time_attack',
+    WRITING: 'writing'
 };
 
 const POSITIVE_MESSAGES = [
@@ -240,6 +243,7 @@ const QuizPage = () => {
     const [options, setOptions] = useState([]);
     const [inputAnswer, setInputAnswer] = useState('');
     const { playSound } = useAudio();
+    const { addXP } = useProgress();
 
     // Feedback Logic - Seprated to prevent "Incorrect Flash"
     const [feedbackStatus, setFeedbackStatus] = useState(null); // 'correct' | 'incorrect'
@@ -338,6 +342,7 @@ const QuizPage = () => {
 
         if (isCorrect) {
             setScore(prev => prev + 1);
+            addXP(10); // Award XP
             setFeedbackStatus('correct');
             playSound('correct'); // Play Sound!
             setMascotMessage(POSITIVE_MESSAGES[Math.floor(Math.random() * POSITIVE_MESSAGES.length)]);
@@ -352,6 +357,7 @@ const QuizPage = () => {
             if (mode !== GAME_MODES.TIME_ATTACK) {
                 if (questionCount >= 9) {
                     setIsGameOver(true);
+                    addXP(50); // Award Bonus XP for completing a set
                 } else {
                     setQuestionCount(prev => prev + 1);
                     generateQuestion();
@@ -404,6 +410,8 @@ const QuizPage = () => {
                             { id: GAME_MODES.MULTIPLE_CHOICE, title: "Multiple Choice", icon: "🌸", desc: "Select the correct Romaji", color: "from-pink-100 to-rose-50" },
                             { id: GAME_MODES.INPUT, title: "Input Challenge", icon: "✍️", desc: "Type the pronunciation", color: "from-purple-100 to-indigo-50" },
                             { id: GAME_MODES.TIME_ATTACK, title: "Bubble Pop", icon: "🫧", desc: "Burst bubbles to score!", color: "from-blue-100 to-cyan-50" },
+                            { id: GAME_MODES.WRITING, title: "Writing Challenge", icon: "🖌️", desc: "Draw the character", color: "from-orange-100 to-amber-50" },
+
                         ].map((m) => (
                             <button
                                 key={m.id}
@@ -592,6 +600,16 @@ const QuizPage = () => {
                         options={options}
                         onAnswer={handleAnswer}
                     />
+                )}
+
+                {(mode === GAME_MODES.WRITING) && (
+                    <div className="flex flex-col items-center gap-4">
+                        <WritingCanvas
+                            char={currentQuestion?.char}
+                            onComplete={() => handleAnswer(currentQuestion?.romaji)}
+                        />
+                        <p className="text-gray-500 text-sm">Draw the character above!</p>
+                    </div>
                 )}
             </div>
         </div>

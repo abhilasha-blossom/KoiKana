@@ -5,7 +5,7 @@ import useProgress from '../hooks/useProgress';
 import useAudio from '../hooks/useAudio';
 
 const LandingPage = () => {
-  const { streak, mastery } = useProgress();
+  const { streak, mastery, xp } = useProgress();
   const { playSound } = useAudio();
   const masteredCount = Object.keys(mastery).length;
 
@@ -21,9 +21,15 @@ const LandingPage = () => {
     <div className="relative flex flex-col items-center justify-center min-h-screen text-center overflow-hidden bg-[#FFF0F5]">
 
       {/* Streak Indicator */}
-      <div className="absolute top-6 right-6 z-20 flex items-center gap-2 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-sm animate-fade-in border border-orange-100">
-        <Flame className={`w-5 h-5 ${streak > 0 ? 'text-orange-500 fill-orange-500' : 'text-gray-300'}`} />
-        <span className="font-bold text-[#4A3B52]">{streak} Day Streak</span>
+      <div className="absolute top-6 right-6 z-20 flex flex-col items-end gap-2 animate-fade-in">
+        <div className="flex items-center gap-2 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-sm border border-orange-100">
+          <Flame className={`w-5 h-5 ${streak > 0 ? 'text-orange-500 fill-orange-500' : 'text-gray-300'}`} />
+          <span className="font-bold text-[#4A3B52]">{streak} Day Streak</span>
+        </div>
+        <div className="flex items-center gap-2 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-sm border border-purple-100">
+          <Sparkles className="w-5 h-5 text-purple-500 fill-purple-200" />
+          <span className="font-bold text-[#4A3B52]">{xp} XP</span>
+        </div>
       </div>
 
       {/* Morning Mist Background Orbs */}

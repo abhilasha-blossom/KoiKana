@@ -3,7 +3,7 @@ import { RefreshCw, Eraser, CheckCircle } from 'lucide-react';
 import useProgress from '../hooks/useProgress';
 import useAudio from '../hooks/useAudio';
 
-const WritingCanvas = ({ char }) => {
+const WritingCanvas = ({ char, onComplete }) => {
     const canvasRef = useRef(null);
     const targetCanvasRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
@@ -16,34 +16,47 @@ const WritingCanvas = ({ char }) => {
     const { playSound } = useAudio();
 
     useEffect(() => {
+        const handleResize = () => {
+            if (canvasRef.current) initCanvas(canvasRef.current, false);
+            if (targetCanvasRef.current) initCanvas(targetCanvasRef.current, true);
+        };
+
         const initCanvas = (canvas, isTarget = false) => {
             const ctx = canvas.getContext('2d');
             const dpr = window.devicePixelRatio || 1;
             const rect = canvas.getBoundingClientRect();
 
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
-            ctx.scale(dpr, dpr);
+            // Only update if dimensions changed to avoid unnecessary clears
+            if (canvas.width !== rect.width * dpr || canvas.height !== rect.height * dpr) {
+                canvas.width = rect.width * dpr;
+                canvas.height = rect.height * dpr;
+                ctx.scale(dpr, dpr);
 
-            if (isTarget) {
-                // Render the Target Character
-                const fontSize = rect.width * 0.6; // Dynamic font size
-                ctx.font = `bold ${fontSize}px "Noto Sans JP", sans-serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillStyle = '#000000';
-                ctx.fillText(char, rect.width / 2, rect.height / 2 + (fontSize * 0.1)); // Adjust Y based on font size
-            } else {
-                // Setup Drawing Canvas
-                ctx.lineCap = 'round';
-                ctx.lineJoin = 'round';
-                ctx.lineWidth = rect.width * 0.04; // REDUCED brush size (was 0.08)
-                ctx.strokeStyle = '#4A3B52';
+                if (isTarget) {
+                    const fontSize = rect.width * 0.6;
+                    ctx.font = `bold ${fontSize}px "Noto Sans JP", sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#000000';
+                    ctx.fillText(char, rect.width / 2, rect.height / 2 + (fontSize * 0.1));
+                } else {
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+                    ctx.lineWidth = rect.width * 0.04;
+                    ctx.strokeStyle = '#4A3B52';
+                }
             }
         };
 
-        if (canvasRef.current) initCanvas(canvasRef.current, false);
-        if (targetCanvasRef.current) initCanvas(targetCanvasRef.current, true);
+        handleResize(); // Initial setup
+
+        const resizeObserver = new ResizeObserver(() => {
+            handleResize();
+        });
+
+        if (canvasRef.current && canvasRef.current.parentElement) {
+            resizeObserver.observe(canvasRef.current.parentElement);
+        }
 
         // Reset state on char change
         setIsCorrect(false);
@@ -51,17 +64,44 @@ const WritingCanvas = ({ char }) => {
         setHasDrawn(false);
         setScore(0);
 
+        return () => {
+            resizeObserver.disconnect();
+        };
+
     }, [char]);
 
-    const startDrawing = (e) => {
-        if (isCorrect) return; // Disable drawing if already correct
-        setIsWrong(false); // Reset error state on new stroke
+    const getCoordinates = (e) => {
         const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
         const rect = canvas.getBoundingClientRect();
 
-        const x = (e.clientX || e.touches[0].clientX) - rect.left;
-        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+        // Handle Touch Events vs Mouse Events safely
+        let clientX, clientY;
+
+        if (e.touches && e.touches.length > 0) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        } else {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        }
+
+        return {
+            x: clientX - rect.left,
+            y: clientY - rect.top
+        };
+    };
+
+    const startDrawing = (e) => {
+        if (isCorrect) return;
+        // Prevent scrolling on touch devices
+        if (e.cancelable && (e.type === 'touchstart' || e.type === 'touchmove')) {
+            e.preventDefault();
+        }
+
+        setIsWrong(false);
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        const { x, y } = getCoordinates(e);
 
         ctx.beginPath();
         ctx.moveTo(x, y);
@@ -71,13 +111,13 @@ const WritingCanvas = ({ char }) => {
 
     const draw = (e) => {
         if (!isDrawing || isCorrect) return;
+        if (e.cancelable && (e.type === 'touchstart' || e.type === 'touchmove')) {
+            e.preventDefault();
+        }
 
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
-        const rect = canvas.getBoundingClientRect();
-
-        const x = (e.clientX || e.touches[0].clientX) - rect.left;
-        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+        const { x, y } = getCoordinates(e);
 
         ctx.lineTo(x, y);
         ctx.stroke();
@@ -126,6 +166,9 @@ const WritingCanvas = ({ char }) => {
             setScore(100);
             markMastered(char); // Trigger mastery!
             playSound('success');
+            if (onComplete) {
+                setTimeout(() => onComplete(true), 1500); // 1.5s delay to show success
+            }
         } else {
             // Failed
             setIsWrong(true);
@@ -157,7 +200,7 @@ const WritingCanvas = ({ char }) => {
     return (
         <div className="flex flex-col items-center w-full animate-fade-in space-y-4">
 
-            <div className={`relative w-full aspect-square max-w-[300px] rounded-3xl overflow-hidden shadow-inner border-4 transition-all duration-500 transform ${isCorrect ? 'border-green-400 scale-105 shadow-green-200' : isWrong ? 'border-red-400 shake-animation' : 'border-[#E6E6E6]'}`}>
+            <div className={`relative w-full aspect-square max-w-[300px] rounded-3xl overflow-hidden shadow-inner border-4 transition-all duration-500 transform ${isCorrect ? 'border-green-400 scale-105 shadow-green-200' : isWrong ? 'border-red-400 shake-animation' : 'border-[#E6E6E6]'}`} style={{ touchAction: 'none' }}>
                 {/* Background Color */}
                 <div className={`absolute inset-0 transition-colors duration-500 ${isCorrect ? 'bg-green-50' : isWrong ? 'bg-red-50' : 'bg-[#F9F7F2]'}`}></div>
 
@@ -182,6 +225,7 @@ const WritingCanvas = ({ char }) => {
                 <canvas
                     ref={canvasRef}
                     className={`absolute inset-0 w-full h-full ${isCorrect ? 'cursor-default pointer-events-none' : 'cursor-crosshair'}`}
+                    style={{ touchAction: 'none' }}
                     onMouseDown={startDrawing}
                     onMouseMove={draw}
                     onMouseUp={stopDrawing}

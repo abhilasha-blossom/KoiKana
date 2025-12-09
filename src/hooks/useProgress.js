@@ -2,16 +2,19 @@ import { useState, useEffect } from 'react';
 
 const useProgress = () => {
     const [streak, setStreak] = useState(0);
+    const [xp, setXp] = useState(0); // Experience Points
     const [mastery, setMastery] = useState({}); // { 'あ': true, 'い': false, ... }
     const [lastVisit, setLastVisit] = useState(null);
 
     useEffect(() => {
         // Load data from localStorage
         const storedStreak = parseInt(localStorage.getItem('koiKana_streak') || '0');
+        const storedXp = parseInt(localStorage.getItem('koiKana_xp') || '0');
         const storedLastVisit = localStorage.getItem('koiKana_lastVisit');
         const storedMastery = JSON.parse(localStorage.getItem('koiKana_mastery') || '{}');
 
         setStreak(storedStreak);
+        setXp(storedXp);
         setLastVisit(storedLastVisit);
         setMastery(storedMastery);
 
@@ -51,7 +54,13 @@ const useProgress = () => {
         localStorage.setItem('koiKana_mastery', JSON.stringify(newMastery));
     };
 
-    return { streak, mastery, markMastered };
+    const addXP = (amount) => {
+        const newXp = xp + amount;
+        setXp(newXp);
+        localStorage.setItem('koiKana_xp', newXp);
+    };
+
+    return { streak, xp, addXP, mastery, markMastered };
 };
 
 export default useProgress;

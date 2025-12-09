@@ -8,6 +8,7 @@ import SpeakingPage from './components/SpeakingPage';
 import KanjiPage from './components/KanjiPage';
 import QuizPage from './components/QuizPage';
 import NameStampPage from './components/NameStampPage';
+import VocabularyPage from './components/VocabularyPage';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/kanji" element={<KanjiPage />} />
           <Route path="/quiz" element={<QuizPage />} />
           <Route path="/name-stamp" element={<NameStampPage />} />
+          <Route path="/vocabulary" element={<VocabularyPage />} />
         </Routes>
       </div>
     </Router>
