@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowLeft, BookOpen, Volume2, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { hiragana, katakana } from '../data/kanaData';
+import { kanjiData } from '../data/kanjiData';
 import useAudio from '../hooks/useAudio';
 
 const VocabularyPage = () => {
@@ -25,8 +26,28 @@ const VocabularyPage = () => {
             });
         };
 
+        const processKanji = () => {
+            kanjiData.forEach(k => {
+                k.examples.forEach(ex => {
+                    // Map kanji examples to match structure: 
+                    // ex has { word: "一", reading: "ichi", meaning: "one" }
+                    // We want: item.kana (Big Display), item.word (Reading), item.meaning
+                    // So: kana -> ex.word, word -> ex.reading, meaning -> ex.meaning
+                    if (!vocab.some(v => v.word === ex.reading && v.meaning === ex.meaning)) {
+                        vocab.push({
+                            kana: ex.word,       // The Kanji itself (e.g., "一")
+                            word: ex.reading,    // The reading (e.g., "ichi")
+                            meaning: ex.meaning, // The meaning
+                            type: 'Kanji'
+                        });
+                    }
+                });
+            });
+        };
+
         if (filter === 'all' || filter === 'hiragana') processKana(hiragana, 'Hiragana');
         if (filter === 'all' || filter === 'katakana') processKana(katakana, 'Katakana');
+        if (filter === 'all' || filter === 'kanji') processKanji();
 
         return vocab.filter(v =>
             v.word.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -66,7 +87,7 @@ const VocabularyPage = () => {
                     />
                 </div>
                 <div className="flex bg-white/30 backdrop-blur-md p-1 rounded-2xl">
-                    {['all', 'hiragana', 'katakana'].map(f => (
+                    {['all', 'hiragana', 'katakana', 'kanji'].map(f => (
                         <button
                             key={f}
                             onClick={() => setFilter(f)}
