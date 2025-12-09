@@ -410,7 +410,7 @@ const QuizPage = () => {
                 <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-pink-200/40 rounded-full blur-[100px] animate-blob mix-blend-multiply pointer-events-none"></div>
                 <div className="absolute bottom-[-20%] right-[-10%] w-[400px] h-[400px] bg-purple-200/40 rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply pointer-events-none"></div>
 
-                <Link to="/" className="absolute top-4 left-4 p-2 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors z-50 shadow-sm border border-white/50">
+                <Link to="/start" className="absolute top-4 left-4 p-2 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors z-50 shadow-sm border border-white/50">
                     <ArrowLeft className="text-[#4A3B52] w-5 h-5" />
                 </Link>
 
@@ -508,8 +508,8 @@ const QuizPage = () => {
                     </div>
 
                     <div className="flex gap-3 justify-center">
-                        <Link to="/" className="px-6 py-3 rounded-2xl bg-white/50 text-[#7A6B82] hover:bg-white font-bold transition-all shadow-sm hover:shadow-md border border-white/60 text-sm">
-                            Home
+                        <Link to="/start" className="px-6 py-3 rounded-2xl bg-white/50 text-[#7A6B82] hover:bg-white font-bold transition-all shadow-sm hover:shadow-md border border-white/60 text-sm">
+                            Menu
                         </Link>
                         <button
                             onClick={() => setMode(GAME_MODES.SELECT)}

@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { ArrowRight, Sparkles, Flame, Flower2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useProgress from '../hooks/useProgress';
 import useAudio from '../hooks/useAudio';
 
+
 const LandingPage = () => {
-  const { streak, mastery, xp } = useProgress();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { streak, mastery, xp, username } = useProgress();
   const { playSound } = useAudio();
   const masteredCount = Object.keys(mastery).length;
+
+
 
   // Generate random petals
   const petals = Array.from({ length: 20 }).map((_, i) => ({
@@ -16,6 +21,7 @@ const LandingPage = () => {
     animationDelay: `${Math.random() * 5}s`,
     animationDuration: `${10 + Math.random() * 10}s`,
   }));
+
 
   return (
     <div className="relative flex flex-col h-screen w-full overflow-hidden bg-[#FFF0F5] overscroll-none">
@@ -74,7 +80,11 @@ const LandingPage = () => {
         {/* Text Content */}
         <div className="space-y-2 text-center flex-shrink-0">
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-[#4A3B52] drop-shadow-sm">
-            Where Japanese feels like <span className="text-[#FF8FAB]">love</span>
+            {username ? (
+              <>Welcome back, <span className="text-[#FF8FAB]">{username}</span></>
+            ) : (
+              <>Where Japanese feels like <span className="text-[#FF8FAB]">love</span></>
+            )}
           </h1>
           <p className="text-sm md:text-lg text-[#7A6B82] max-w-lg mx-auto leading-relaxed font-medium px-4">
             Learn through emotions, storytelling, and aesthetic comfort.

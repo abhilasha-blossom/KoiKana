@@ -43,7 +43,7 @@ const VocabularyPage = () => {
 
             {/* Header */}
             <div className="w-full max-w-5xl flex items-center justify-between mb-8 relative z-10">
-                <Link to="/" className="p-3 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors shadow-sm border border-white/50">
+                <Link to="/start" className="p-3 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors shadow-sm border border-white/50">
                     <ArrowLeft className="text-[#4A3B52]" />
                 </Link>
                 <div className="flex items-center gap-2 bg-white/40 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-white/50">

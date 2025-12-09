@@ -41,7 +41,7 @@ const ShopPage = () => {
             <div className={`absolute top-[-20%] left-[-10%] w-64 h-64 md:w-[600px] md:h-[600px] ${theme.colors.blob1} rounded-full blur-[60px] md:blur-[100px] animate-blob mix-blend-multiply pointer-events-none transition-colors duration-500`}></div>
             <div className={`absolute bottom-[-20%] right-[-10%] w-64 h-64 md:w-[500px] md:h-[500px] ${theme.colors.blob2} rounded-full blur-[60px] md:blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply pointer-events-none transition-colors duration-500`}></div>
 
-            <Link to="/" className="absolute top-4 left-4 p-2 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors z-50 shadow-sm border border-white/50">
+            <Link to="/start" className="absolute top-4 left-4 p-2 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors z-50 shadow-sm border border-white/50">
                 <ArrowLeft className={`${theme.colors.primary} w-5 h-5`} />
             </Link>
 

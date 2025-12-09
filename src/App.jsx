@@ -12,14 +12,22 @@ import VocabularyPage from './components/VocabularyPage';
 import ShopPage from './components/ShopPage';
 import { ThemeProvider } from './context/ThemeContext';
 
+import SignInPage from './components/SignInPage';
+import LoadingScreen from './components/LoadingScreen';
+
+// ... imports
+
 function App() {
   return (
     <ThemeProvider>
       <Router>
         <div className="min-h-screen bg-[#FDF6E3] font-sans text-gray-800">
           <Routes>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<SignInPage />} />
+            <Route path="/loading" element={<LoadingScreen />} />
+            <Route path="/home" element={<LandingPage />} />
             <Route path="/start" element={<StartMenu />} />
+            {/* ... other routes ... */}
             <Route path="/kana" element={<KanaPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/speaking" element={<SpeakingPage />} />
