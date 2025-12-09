@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { ArrowLeft, BookOpen, Star, Sparkles, HelpCircle, ChevronDown, MoveRight, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 
 const AboutPage = () => {
     const navigate = useNavigate();
+    const { theme } = useTheme();
     // Accordion state for FAQ
     const [openFaq, setOpenFaq] = useState(0);
     // Modal state for Script Details
@@ -146,24 +148,26 @@ const AboutPage = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-[#FFF0F5] relative overflow-x-hidden p-6 pb-20 selection:bg-pink-200">
+        <div className={`min-h-screen ${theme.colors.bg} relative overflow-x-hidden p-6 pb-20 selection:bg-pink-200 transition-colors duration-500`}>
             {/* Soft Background Decor */}
-            <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-gradient-to-br from-pink-200/40 to-purple-200/40 rounded-full blur-[120px] pointer-events-none mix-blend-multiply animate-pulse-slow"></div>
-            <div className="absolute top-[20%] left-[-10%] w-[400px] h-[400px] bg-orange-100/40 rounded-full blur-[100px] pointer-events-none mix-blend-multiply"></div>
-
-            {/* Back Button */}
-            <Link to="/start" className="absolute top-6 left-6 p-4 rounded-full bg-white/60 hover:bg-white/90 transition-all duration-300 backdrop-blur-md shadow-sm border border-white/50 text-[#4A3B52] z-40 hover:scale-110 group sticky">
-                <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            </Link>
+            <div className={`absolute top-[-10%] right-[-5%] w-[500px] h-[500px] ${theme.colors.blob1} rounded-full blur-[120px] pointer-events-none mix-blend-multiply animate-pulse-slow`}></div>
+            <div className={`absolute top-[20%] left-[-10%] w-[400px] h-[400px] ${theme.colors.blob2} rounded-full blur-[100px] pointer-events-none mix-blend-multiply`}></div>
 
             <div className="max-w-4xl mx-auto pt-10 relative z-10">
+
+                {/* Back Button (Now inside container) */}
+                <div className="mb-8">
+                    <Link to="/start" className="inline-flex p-3 rounded-full bg-white/60 hover:bg-white/90 transition-all duration-300 backdrop-blur-md shadow-sm border border-white/50 text-[#4A3B52] z-40 hover:scale-110 group sticky">
+                        <ArrowLeft className={`w-5 h-5 group-hover:-translate-x-1 transition-transform ${theme.colors.primary}`} />
+                    </Link>
+                </div>
 
                 {/* HERO SECTION */}
                 <div className="text-center mb-16 animate-fade-in-up">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/60 border border-white/50 backdrop-blur-sm text-sm font-medium text-pink-500 mb-6 shadow-sm">
                         <Sparkles className="w-3 h-3" /> The Secret Logic
                     </div>
-                    <h1 className="text-4xl md:text-6xl font-black text-[#4A3B52] mb-6 drop-shadow-sm leading-tight">
+                    <h1 className={`text-4xl md:text-6xl font-black ${theme.colors.primary} mb-6 drop-shadow-sm leading-tight`}>
                         Japanese is a <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">Trio of Scripts</span>
                     </h1>
                     <p className="text-lg text-[#7A6B82] max-w-xl mx-auto leading-relaxed">

@@ -11,36 +11,34 @@ import NameStampPage from './components/NameStampPage';
 import VocabularyPage from './components/VocabularyPage';
 import ShopPage from './components/ShopPage';
 import { ThemeProvider } from './context/ThemeContext';
+import { SettingsProvider } from './contexts/SettingsContext';
 
 import SignInPage from './components/SignInPage';
-import LoadingScreen from './components/LoadingScreen';
 import BackgroundMusic from './components/BackgroundMusic';
-
-// ... imports
 
 function App() {
   return (
     <ThemeProvider>
-      <Router>
-        <div className="min-h-screen bg-[#FDF6E3] font-sans text-gray-800">
-          <BackgroundMusic />
-          <Routes>
-            <Route path="/" element={<SignInPage />} />
-            <Route path="/loading" element={<LoadingScreen />} />
-            <Route path="/home" element={<LandingPage />} />
-            <Route path="/start" element={<StartMenu />} />
-            {/* ... other routes ... */}
-            <Route path="/kana" element={<KanaPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/speaking" element={<SpeakingPage />} />
-            <Route path="/kanji" element={<KanjiPage />} />
-            <Route path="/quiz" element={<QuizPage />} />
-            <Route path="/name-stamp" element={<NameStampPage />} />
-            <Route path="/vocabulary" element={<VocabularyPage />} />
-            <Route path="/shop" element={<ShopPage />} />
-          </Routes>
-        </div>
-      </Router>
+      <SettingsProvider>
+        <Router>
+          <div className="min-h-screen bg-[#FDF6E3] font-sans text-gray-800 transition-colors duration-500">
+            <BackgroundMusic />
+            <Routes>
+              <Route path="/" element={<SignInPage />} />
+              <Route path="/home" element={<LandingPage />} />
+              <Route path="/start" element={<StartMenu />} />
+              <Route path="/kana" element={<KanaPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/speaking" element={<SpeakingPage />} />
+              <Route path="/kanji" element={<KanjiPage />} />
+              <Route path="/quiz" element={<QuizPage />} />
+              <Route path="/name-stamp" element={<NameStampPage />} />
+              <Route path="/vocabulary" element={<VocabularyPage />} />
+              <Route path="/shop" element={<ShopPage />} />
+            </Routes>
+          </div>
+        </Router>
+      </SettingsProvider>
     </ThemeProvider>
   );
 }

@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower, Palette } from 'lucide-react';
+import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower, Palette, Settings } from 'lucide-react';
 import useAudio from '../hooks/useAudio';
 import OmikujiModal from './OmikujiModal';
+import SettingsModal from './SettingsModal';
+import { useTheme } from '../context/ThemeContext';
 
 const StartMenu = () => {
     const { playSound } = useAudio();
+    const { theme } = useTheme();
     const [showFortune, setShowFortune] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
 
     return (
         <div className="h-screen bg-[#FFF0F5] relative overflow-hidden flex flex-col items-center justify-center p-4 selection:bg-pink-200">
             {/* Omikuji Modal */}
             {showFortune && <OmikujiModal onClose={() => setShowFortune(false)} />}
+            {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
 
             {/* Soft Moving Background Decor */}
             <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-gradient-to-br from-pink-200/40 to-purple-200/40 rounded-full blur-[100px] pointer-events-none mix-blend-multiply animate-blob"></div>
@@ -24,22 +29,31 @@ const StartMenu = () => {
             </Link>
 
             {/* Omikuji Button */}
-            <button
-                onClick={() => setShowFortune(true)}
-                className="absolute top-4 right-4 p-1.5 pr-3 rounded-full bg-red-50 hover:bg-red-100/80 transition-all duration-300 backdrop-blur-md shadow-sm border border-red-200 text-red-500 z-50 hover:scale-105 group flex items-center gap-2"
-            >
-                <div className="w-7 h-7 rounded-full bg-red-400 text-white flex items-center justify-center shadow-sm group-hover:rotate-12 transition-transform">
-                    <Flower className="w-4 h-4" />
-                </div>
-                <span className="font-bold text-xs hidden md:block">Daily Fortune</span>
-            </button>
+            <div className="absolute top-4 right-4 flex items-center gap-3 z-50">
+                <button
+                    onClick={() => setShowSettings(true)}
+                    className="p-3 rounded-full bg-white/60 hover:bg-white/90 transition-all duration-300 backdrop-blur-md shadow-sm border border-white/50 text-[#4A3B52] hover:scale-110 group"
+                >
+                    <Settings className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" />
+                </button>
+
+                <button
+                    onClick={() => setShowFortune(true)}
+                    className="p-1.5 pr-3 rounded-full bg-red-50 hover:bg-red-100/80 transition-all duration-300 backdrop-blur-md shadow-sm border border-red-200 text-red-500 hover:scale-105 group flex items-center gap-2"
+                >
+                    <div className="w-7 h-7 rounded-full bg-red-400 text-white flex items-center justify-center shadow-sm group-hover:rotate-12 transition-transform">
+                        <Flower className="w-4 h-4" />
+                    </div>
+                    <span className="font-bold text-xs hidden md:block">Daily Fortune</span>
+                </button>
+            </div>
 
             {/* Header */}
             <div className="text-center mb-6 relative z-10 animate-fade-in-up flex-shrink-0">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/60 border border-white/50 backdrop-blur-sm text-xs font-medium text-pink-500 mb-2 shadow-sm">
                     <Sparkles className="w-3 h-3" /> Select a Module
                 </div>
-                <h1 className="text-3xl md:text-5xl font-black text-[#4A3B52] mb-1 drop-shadow-sm tracking-tight leading-tight">
+                <h1 className={`text-3xl md:text-5xl font-black ${theme.colors.primary} mb-1 drop-shadow-sm tracking-tight leading-tight`}>
                     Choose Your Path
                 </h1>
                 <p className="text-[#7A6B82] text-sm md:text-base font-medium max-w-lg mx-auto">
@@ -65,7 +79,7 @@ const StartMenu = () => {
                         <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-pink-500 shadow-sm mb-4 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
                             <PenTool className="w-6 h-6" />
                         </div>
-                        <h2 className="text-3xl md:text-4xl font-black text-[#4A3B52] mb-2 leading-[1.1] tracking-tight">Master <br /> <span className="text-pink-500">Kana</span></h2>
+                        <h2 className={`text-3xl md:text-4xl font-black ${theme.colors.primary} mb-2 leading-[1.1] tracking-tight`}>Master <br /> <span className="text-pink-500">Kana</span></h2>
                         <p className="text-[#7A6B82] font-medium text-sm md:text-base max-w-[200px] leading-relaxed">Hiragana & Katakana.</p>
                     </div>
 
@@ -88,7 +102,7 @@ const StartMenu = () => {
                             <ScrollText className="w-6 h-6" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-[#4A3B52] group-hover:text-amber-700 transition-colors">Kanji Module</h3>
+                            <h3 className={`text-xl font-bold ${theme.colors.primary} group-hover:text-amber-700 transition-colors`}>Kanji Module</h3>
                             <p className="text-[#7A6B82] text-sm">Unlock the world</p>
                         </div>
                     </div>
@@ -107,7 +121,7 @@ const StartMenu = () => {
                             <Sparkles className="w-6 h-6" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-[#4A3B52] group-hover:text-pink-600 transition-colors">Vocabulary</h3>
+                            <h3 className={`text-xl font-bold ${theme.colors.primary} group-hover:text-pink-600 transition-colors`}>Vocabulary</h3>
                             <p className="text-[#7A6B82] text-sm">Expand words</p>
                         </div>
                     </div>
@@ -127,7 +141,7 @@ const StartMenu = () => {
                             <PenTool className="w-6 h-6" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-[#4A3B52] group-hover:text-red-600 transition-colors">Name Stamp</h3>
+                            <h3 className={`text-xl font-bold ${theme.colors.primary} group-hover:text-red-600 transition-colors`}>Name Stamp</h3>
                             <p className="text-[#7A6B82] text-sm">Make your Hanko 💮</p>
                         </div>
                     </div>
@@ -147,7 +161,7 @@ const StartMenu = () => {
                             <Mic className="w-6 h-6" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-[#4A3B52] mb-0.5 group-hover:text-teal-700 transition-colors">Speaking</h3>
+                            <h3 className={`text-xl font-bold ${theme.colors.primary} mb-0.5 group-hover:text-teal-700 transition-colors`}>Speaking</h3>
                             <p className="text-[#7A6B82] text-sm">Phrases & greetings</p>
                         </div>
                     </div>
@@ -167,7 +181,7 @@ const StartMenu = () => {
                             <BookOpen className="w-6 h-6" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-[#4A3B52] mb-0.5 group-hover:text-purple-700 transition-colors">About Japanese</h3>
+                            <h3 className={`text-xl font-bold ${theme.colors.primary} mb-0.5 group-hover:text-purple-700 transition-colors`}>About Japanese</h3>
                             <p className="text-[#7A6B82] text-sm">Understand the 3 alphabets</p>
                         </div>
                     </div>
@@ -186,7 +200,7 @@ const StartMenu = () => {
                             <Palette className="w-6 h-6" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-[#4A3B52] group-hover:text-green-600 transition-colors">Theme Shop</h3>
+                            <h3 className={`text-xl font-bold ${theme.colors.primary} group-hover:text-green-600 transition-colors`}>Theme Shop</h3>
                             <p className="text-[#7A6B82] text-sm">Customize look 🎨</p>
                         </div>
                     </div>

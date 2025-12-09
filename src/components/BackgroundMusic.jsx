@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Music, Volume2, VolumeX } from 'lucide-react';
+import { useSettings } from '../contexts/SettingsContext';
 
 const BackgroundMusic = () => {
     const location = useLocation();
     const audioRef = useRef(new Audio());
     const [isMuted, setIsMuted] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [volume, setVolume] = useState(0.4); // Default volume 40%
+    const { musicVolume } = useSettings();
     const [currentTrack, setCurrentTrack] = useState(null);
 
     // Track Definitions
@@ -48,7 +49,7 @@ const BackgroundMusic = () => {
         if (newSrc) {
             audio.src = newSrc;
             audio.loop = true;
-            audio.volume = isMuted ? 0 : volume;
+            audio.volume = isMuted ? 0 : musicVolume;
 
             // Attempt to play
             // Browser might block this if no interaction yet, but we'll try.
@@ -73,7 +74,7 @@ const BackgroundMusic = () => {
         const newState = !isMuted;
         setIsMuted(newState);
         if (audioRef.current) {
-            audioRef.current.volume = newState ? 0 : volume;
+            audioRef.current.volume = newState ? 0 : musicVolume;
         }
     };
 
@@ -91,6 +92,13 @@ const BackgroundMusic = () => {
         return () => window.removeEventListener('click', unlockAudio);
     }, [currentTrack, isMuted]);
 
+
+    // React to volume changes from Settings
+    useEffect(() => {
+        if (audioRef.current && !isMuted) {
+            audioRef.current.volume = musicVolume;
+        }
+    }, [musicVolume, isMuted]);
 
     // Don't render controls if in silent mode (optional, but keep for unmuting?)
     // Actually, user might want to force music even in study modes later, 

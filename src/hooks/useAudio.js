@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useSettings } from '../contexts/SettingsContext';
 
 // Singleton AudioContext to prevent browser limit exhaustion (usually max 6)
 let globalAudioContext = null;
@@ -14,6 +15,8 @@ const getGlobalContext = () => {
 };
 
 const useAudio = () => {
+    const { sfxVolume } = useSettings();
+
     const playSound = useCallback((type) => {
         const ctx = getGlobalContext();
         if (!ctx) return;
@@ -36,7 +39,7 @@ const useAudio = () => {
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(800, now);
                 osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
-                gainNode.gain.setValueAtTime(0.3, now);
+                gainNode.gain.setValueAtTime(0.3 * sfxVolume, now);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
                 osc.start(now);
                 osc.stop(now + 0.1);
@@ -46,7 +49,7 @@ const useAudio = () => {
                 osc.type = 'triangle';
                 osc.frequency.setValueAtTime(150, now);
                 osc.frequency.exponentialRampToValueAtTime(50, now + 0.3);
-                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.setValueAtTime(0.2 * sfxVolume, now);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
                 osc.start(now);
                 osc.stop(now + 0.3);
@@ -62,7 +65,7 @@ const useAudio = () => {
                     o.type = 'sine';
                     o.frequency.value = freq;
                     g.gain.setValueAtTime(0, now);
-                    g.gain.linearRampToValueAtTime(0.1, now + i * 0.05 + 0.05);
+                    g.gain.linearRampToValueAtTime(0.1 * sfxVolume, now + i * 0.05 + 0.05);
                     g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.05 + 0.5);
                     o.start(now + i * 0.05);
                     o.stop(now + i * 0.05 + 0.5);
@@ -73,7 +76,7 @@ const useAudio = () => {
                 osc.type = 'sawtooth';
                 osc.frequency.setValueAtTime(150, now);
                 osc.frequency.linearRampToValueAtTime(100, now + 0.3);
-                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.setValueAtTime(0.1 * sfxVolume, now);
                 gainNode.gain.linearRampToValueAtTime(0.01, now + 0.3);
                 osc.start(now);
                 osc.stop(now + 0.3);
@@ -82,7 +85,7 @@ const useAudio = () => {
             case 'hover': // High high tick
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(800, now);
-                gainNode.gain.setValueAtTime(0.005, now); // Much quieter
+                gainNode.gain.setValueAtTime(0.005 * sfxVolume, now); // Much quieter
                 gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
                 osc.start(now);
                 osc.stop(now + 0.05);

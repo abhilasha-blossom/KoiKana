@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { hiragana, katakana } from '../data/kanaData';
 import useAudio from '../hooks/useAudio';
 import useProgress from '../hooks/useProgress';
+import { useTheme } from '../context/ThemeContext';
 import WritingCanvas from './WritingCanvas';
 import MemoryGame from './MemoryGame';
 
@@ -247,6 +248,7 @@ const QuizPage = () => {
     const [inputAnswer, setInputAnswer] = useState('');
     const { playSound } = useAudio();
     const { addXP, updateSRS, getDueItems } = useProgress();
+    const { theme } = useTheme();
 
     // Feedback Logic - Seprated to prevent "Incorrect Flash"
     const [feedbackStatus, setFeedbackStatus] = useState(null); // 'correct' | 'incorrect'
@@ -405,17 +407,17 @@ const QuizPage = () => {
 
     if (mode === GAME_MODES.SELECT) {
         return (
-            <div className="h-screen bg-[#FFF0F5] flex flex-col items-center justify-center p-4 relative overflow-hidden">
+            <div className={`h-screen ${theme.colors.bg} flex flex-col items-center justify-center p-4 relative overflow-hidden transition-colors duration-500`}>
                 {/* Background Atmosphere */}
-                <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-pink-200/40 rounded-full blur-[100px] animate-blob mix-blend-multiply pointer-events-none"></div>
-                <div className="absolute bottom-[-20%] right-[-10%] w-[400px] h-[400px] bg-purple-200/40 rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply pointer-events-none"></div>
+                <div className={`absolute top-[-20%] left-[-10%] w-[500px] h-[500px] ${theme.colors.blob1} rounded-full blur-[100px] animate-blob mix-blend-multiply pointer-events-none`}></div>
+                <div className={`absolute bottom-[-20%] right-[-10%] w-[400px] h-[400px] ${theme.colors.blob2} rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply pointer-events-none`}></div>
 
                 <Link to="/start" className="absolute top-4 left-4 p-2 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors z-50 shadow-sm border border-white/50">
-                    <ArrowLeft className="text-[#4A3B52] w-5 h-5" />
+                    <ArrowLeft className={`${theme.colors.primary} w-5 h-5`} />
                 </Link>
 
                 <div className="relative z-10 flex flex-col items-center max-h-full w-full">
-                    <h1 className="text-3xl md:text-4xl font-bold text-[#4A3B52] mb-1 drop-shadow-sm">Training Dojo</h1>
+                    <h1 className={`text-3xl md:text-4xl font-bold ${theme.colors.primary} mb-1 drop-shadow-sm`}>Training Dojo</h1>
                     <div className="h-1 w-16 bg-gradient-to-r from-pink-300 to-purple-300 rounded-full mb-4"></div>
 
                     {/* Script Selection Toggles - Glassmorphism */}
@@ -425,7 +427,7 @@ const QuizPage = () => {
                                 key={type}
                                 onClick={() => setScriptType(type)}
                                 className={`px-6 py-2 rounded-full font-bold capitalize transition-all duration-300 text-sm ${scriptType === type
-                                    ? 'bg-white text-pink-500 shadow-md scale-105'
+                                    ? `bg-white ${theme.colors.accent} shadow-md scale-105`
                                     : 'text-gray-600 hover:text-gray-800'
                                     }`}
                             >
@@ -492,15 +494,15 @@ const QuizPage = () => {
 
     if (isGameOver) {
         return (
-            <div className="h-screen bg-[#FFF0F5] flex flex-col items-center justify-center p-4 text-center animate-fade-in-up relative overflow-hidden">
+            <div className={`h-screen ${theme.colors.bg} flex flex-col items-center justify-center p-4 text-center animate-fade-in-up relative overflow-hidden transition-colors duration-500`}>
                 {/* Background Atmosphere */}
-                <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-pink-200/40 rounded-full blur-[100px] animate-blob mix-blend-multiply pointer-events-none"></div>
+                <div className={`absolute top-[-20%] right-[-10%] w-[500px] h-[500px] ${theme.colors.blob1} rounded-full blur-[100px] animate-blob mix-blend-multiply pointer-events-none`}></div>
 
                 <div className="bg-white/60 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-2xl max-w-sm w-full relative overflow-hidden border border-white/50">
                     <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300"></div>
 
                     <Trophy className="w-16 h-16 text-yellow-400 mx-auto mb-4 animate-bounce drop-shadow-md" />
-                    <h2 className="text-3xl font-bold text-[#4A3B52] mb-1">Training Complete!</h2>
+                    <h2 className={`text-3xl font-bold ${theme.colors.primary} mb-1`}>Training Complete!</h2>
                     <p className="text-[#7A6B82] mb-6 font-medium text-sm">You've honed your skills.</p>
 
                     <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-pink-500 to-purple-600 mb-6 drop-shadow-sm">
@@ -508,12 +510,15 @@ const QuizPage = () => {
                     </div>
 
                     <div className="flex gap-3 justify-center">
-                        <Link to="/start" className="px-6 py-3 rounded-2xl bg-white/50 text-[#7A6B82] hover:bg-white font-bold transition-all shadow-sm hover:shadow-md border border-white/60 text-sm">
-                            Menu
-                        </Link>
                         <button
                             onClick={() => setMode(GAME_MODES.SELECT)}
-                            className="px-6 py-3 rounded-2xl bg-gradient-to-r from-pink-400 to-pink-500 text-white hover:from-pink-500 hover:to-pink-600 font-bold transition-all shadow-lg hover:shadow-pink-200/50 flex items-center gap-2 transform hover:-translate-y-1 text-sm"
+                            className="px-6 py-3 rounded-2xl bg-white/50 text-[#7A6B82] hover:bg-white font-bold transition-all shadow-sm hover:shadow-md border border-white/60 text-sm"
+                        >
+                            Dojo Menu
+                        </button>
+                        <button
+                            onClick={() => startGame(mode)} // Restart SAME mode
+                            className={`px-6 py-3 rounded-2xl bg-gradient-to-r ${theme.colors.button} text-white font-bold transition-all shadow-lg hover:shadow-pink-200/50 flex items-center gap-2 transform hover:-translate-y-1 text-sm`}
                         >
                             <RefreshCcw className="w-4 h-4" /> Play Again
                         </button>
@@ -524,14 +529,14 @@ const QuizPage = () => {
     }
 
     return (
-        <div className="h-screen bg-[#FFF0F5] flex flex-col items-center p-4 relative overflow-hidden">
+        <div className={`h-screen ${theme.colors.bg} flex flex-col items-center p-4 relative overflow-hidden transition-colors duration-500`}>
             {/* Background Atmosphere */}
-            <div className="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] bg-pink-200/30 rounded-full blur-[80px] animate-blob mix-blend-multiply pointer-events-none z-0"></div>
+            <div className={`absolute top-[-10%] left-[-10%] w-[400px] h-[400px] ${theme.colors.blob1} rounded-full blur-[80px] animate-blob mix-blend-multiply pointer-events-none z-0`}></div>
 
             {/* Header */}
             <div className="w-full max-w-3xl flex items-center justify-between mb-6 mt-2 relative z-50 flex-none">
                 <button onClick={() => setMode(GAME_MODES.SELECT)} className="p-2 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors shadow-sm border border-white/50">
-                    <ArrowLeft className="text-[#4A3B52] w-5 h-5" />
+                    <ArrowLeft className={`${theme.colors.primary} w-5 h-5`} />
                 </button>
 
                 {mode === GAME_MODES.TIME_ATTACK && (
