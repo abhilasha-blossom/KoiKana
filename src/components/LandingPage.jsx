@@ -33,9 +33,9 @@ const LandingPage = () => {
       </div>
 
       {/* Morning Mist Background Orbs */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-pink-300/50 rounded-full blur-[80px] animate-blob mix-blend-multiply"></div>
-      <div className="absolute top-[20%] right-[-10%] w-[400px] h-[400px] bg-purple-300/50 rounded-full blur-[80px] animate-blob animation-delay-2000 mix-blend-multiply"></div>
-      <div className="absolute bottom-[-10%] left-[20%] w-[600px] h-[600px] bg-orange-200/50 rounded-full blur-[100px] animate-blob animation-delay-4000 mix-blend-multiply"></div>
+      <div className="absolute top-[-10%] left-[-10%] w-64 h-64 md:w-[500px] md:h-[500px] bg-pink-300/50 rounded-full blur-[60px] md:blur-[80px] animate-blob mix-blend-multiply"></div>
+      <div className="absolute top-[20%] right-[-10%] w-48 h-48 md:w-[400px] md:h-[400px] bg-purple-300/50 rounded-full blur-[60px] md:blur-[80px] animate-blob animation-delay-2000 mix-blend-multiply"></div>
+      <div className="absolute bottom-[-10%] left-[20%] w-72 h-72 md:w-[600px] md:h-[600px] bg-orange-200/50 rounded-full blur-[80px] md:blur-[100px] animate-blob animation-delay-4000 mix-blend-multiply"></div>
 
       {/* Sakura Rain */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">

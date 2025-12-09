@@ -200,7 +200,7 @@ const WritingCanvas = ({ char, onComplete }) => {
     return (
         <div className="flex flex-col items-center w-full animate-fade-in space-y-4">
 
-            <div className={`relative w-full aspect-square max-w-[300px] rounded-3xl overflow-hidden shadow-inner border-4 transition-all duration-500 transform ${isCorrect ? 'border-green-400 scale-105 shadow-green-200' : isWrong ? 'border-red-400 shake-animation' : 'border-[#E6E6E6]'}`} style={{ touchAction: 'none' }}>
+            <div className={`relative w-[90vw] h-[90vw] md:w-[380px] md:h-[380px] max-w-[380px] rounded-3xl overflow-hidden shadow-inner border-4 transition-all duration-500 transform ${isCorrect ? 'border-green-400 scale-105 shadow-green-200' : isWrong ? 'border-red-400 shake-animation' : 'border-[#E6E6E6]'}`} style={{ touchAction: 'none' }}>
                 {/* Background Color */}
                 <div className={`absolute inset-0 transition-colors duration-500 ${isCorrect ? 'bg-green-50' : isWrong ? 'bg-red-50' : 'bg-[#F9F7F2]'}`}></div>
 
@@ -246,7 +246,7 @@ const WritingCanvas = ({ char, onComplete }) => {
             </div>
 
             {/* Controls & Feedback */}
-            <div className="flex items-center justify-between w-full max-w-[300px] h-14 px-2">
+            <div className="flex items-center justify-between w-[90vw] md:w-[380px] max-w-[380px] h-14 px-2">
                 {!isCorrect ? (
                     <>
                         <div className="text-sm font-medium text-gray-400 uppercase tracking-widest flex items-center gap-2">
