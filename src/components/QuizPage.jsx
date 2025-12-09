@@ -314,7 +314,7 @@ const QuizPage = () => {
             // Add Correct Answer
             newBubbles.push({
                 ...randomItem,
-                id: 'correct'
+                id: `correct-${Date.now()}`
             });
 
             // Add Distractors
@@ -323,7 +323,7 @@ const QuizPage = () => {
                 if (random.char !== randomItem.char && !newBubbles.some(b => b.char === random.char)) {
                     newBubbles.push({
                         ...random,
-                        id: `wrong-${newBubbles.length}`
+                        id: `wrong-${newBubbles.length}-${Date.now()}`
                     });
                 }
             }
