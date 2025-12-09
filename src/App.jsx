@@ -14,6 +14,7 @@ import { ThemeProvider } from './context/ThemeContext';
 
 import SignInPage from './components/SignInPage';
 import LoadingScreen from './components/LoadingScreen';
+import BackgroundMusic from './components/BackgroundMusic';
 
 // ... imports
 
@@ -22,6 +23,7 @@ function App() {
     <ThemeProvider>
       <Router>
         <div className="min-h-screen bg-[#FDF6E3] font-sans text-gray-800">
+          <BackgroundMusic />
           <Routes>
             <Route path="/" element={<SignInPage />} />
             <Route path="/loading" element={<LoadingScreen />} />
