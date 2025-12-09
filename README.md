@@ -81,7 +81,7 @@ npm run dev
 
 <div align="center">
 
-### Made with 💖 and 🍵
+### Made with 💖 and 🍵 by Abhilasha 🌸
 *May your learning journey be as peaceful as a koi pond.*
 
 </div>
