@@ -55,6 +55,7 @@ const useAudio = () => {
                 osc.stop(now + 0.3);
                 break;
 
+            case 'success': // Alias for correct, or distinct positive sound
             case 'correct': { // Chime (Major Arpeggio)
                 const frequencies = [523.25, 659.25, 783.99, 1046.50]; // C Major
                 frequencies.forEach((freq, i) => {
@@ -72,6 +73,16 @@ const useAudio = () => {
                 });
                 break;
             }
+
+            case 'click': // Standard UI click
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.05);
+                gainNode.gain.setValueAtTime(0.1 * sfxVolume, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+                break;
 
             case 'incorrect': // Soft Error Buzz
                 osc.type = 'sawtooth';

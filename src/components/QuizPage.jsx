@@ -260,6 +260,7 @@ const QuizPage = () => {
     const [timeLeft, setTimeLeft] = useState(60);
     const [isGameOver, setIsGameOver] = useState(false);
     const [dueItems, setDueItems] = useState([]);
+    const [isFlipped, setIsFlipped] = useState(false);
 
     // Fetch Due Items on Mount
     useEffect(() => {
@@ -322,7 +323,10 @@ const QuizPage = () => {
 
         setShowFeedback(false);
         setMascotMessage('');
+        setShowFeedback(false);
+        setMascotMessage('');
         setInputAnswer('');
+        setIsFlipped(false);
 
         // Generate options for Multiple Choice (Same as before)
         if (activeMode === GAME_MODES.MULTIPLE_CHOICE || activeMode === GAME_MODES.REVIEW) {
@@ -591,14 +595,78 @@ const QuizPage = () => {
             {/* Game Content */}
             <div className="max-w-md w-full flex flex-col items-center gap-4 relative z-10 pb-20 md:pb-0 h-full justify-center">
 
-                {/* Character Card - Glassmorphism (Hidden for Memory Game & Ninja) */}
-                {mode !== GAME_MODES.MATCHING && mode !== GAME_MODES.NINJA && (
+                {/* Character Card - Glassmorphism (Hidden for Memory Game & Ninja & Review) */}
+                {mode !== GAME_MODES.MATCHING && mode !== GAME_MODES.NINJA && mode !== GAME_MODES.REVIEW && (
                     <div className="relative group perspective">
                         <div className="w-32 h-32 sm:w-48 sm:h-48 bg-white/60 backdrop-blur-xl rounded-[2rem] shadow-[0_8px_32px_rgba(255,209,220,0.5)] flex items-center justify-center
                                     border border-white/60 transform transition-transform duration-500 hover:scale-105">
                             <span className="text-6xl sm:text-8xl font-bold text-[#4A3B52] jp-font drop-shadow-sm">
                                 {mode === GAME_MODES.MULTIPLE_CHOICE ? currentQuestion?.romaji : currentQuestion?.char}
                             </span>
+                        </div>
+                    </div>
+                )}
+
+                {/* SRS FLASHCARD MODE */}
+                {mode === GAME_MODES.REVIEW && (
+                    <div className="w-full max-w-sm perspective-1000">
+                        <div
+                            onClick={() => setIsFlipped(!isFlipped)}
+                            className={`w-full aspect-[3/4] rounded-[2rem] relative preserve-3d transition-transform duration-700 cursor-pointer ${isFlipped ? 'rotate-y-180' : ''}`}
+                            style={{ transformStyle: 'preserve-3d', transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
+                        >
+                            {/* FRONT */}
+                            <div className="absolute inset-0 backface-hidden bg-white/60 backdrop-blur-xl rounded-[2rem] shadow-xl border border-white/60 flex flex-col items-center justify-center p-8">
+                                <span className="text-9xl font-bold text-[#4A3B52] jp-font drop-shadow-sm mb-4">
+                                    {currentQuestion?.char}
+                                </span>
+                                <p className="text-pink-400 font-bold bg-white/50 px-4 py-1 rounded-full text-sm">Tap to Flip</p>
+                            </div>
+
+                            {/* BACK */}
+                            <div className="absolute inset-0 backface-hidden bg-white/90 backdrop-blur-xl rounded-[2rem] shadow-xl border border-pink-200 flex flex-col items-center justify-center p-6 text-center"
+                                style={{ transform: 'rotateY(180deg)', backfaceVisibility: 'hidden' }}>
+                                <div className="text-6xl font-bold text-[#4A3B52] jp-font mb-2">
+                                    {currentQuestion?.char}
+                                </div>
+                                <div className="text-4xl font-black text-pink-500 mb-6">{currentQuestion?.romaji}</div>
+
+                                {currentQuestion?.image ? (
+                                    <img src={currentQuestion.image} alt="Mnemonic" className="w-32 h-32 object-contain mb-4 rounded-xl border-2 border-white shadow-sm bg-white" />
+                                ) : (
+                                    <div className="w-32 h-32 bg-pink-100 rounded-xl flex items-center justify-center mb-4 text-pink-300">
+                                        <span className="text-4xl">🌸</span>
+                                    </div>
+                                )}
+                                <p className="text-[#4A3B52] text-sm font-medium italic">"{currentQuestion?.mnemonic || "No mnemonic available"}"</p>
+                            </div>
+                        </div>
+
+                        {/* CONTROLS */}
+                        <div className="flex gap-3 mt-8 justify-center h-16">
+                            {!isFlipped ? (
+                                <button
+                                    onClick={() => setIsFlipped(true)}
+                                    className="w-full h-full bg-indigo-500 text-white rounded-2xl font-bold shadow-lg shadow-indigo-200 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
+                                >
+                                    Reveal Answer 👀
+                                </button>
+                            ) : (
+                                <>
+                                    <button
+                                        onClick={() => handleAnswer("WRONG")} // Force wrong
+                                        className="flex-1 h-full bg-slate-400 text-white rounded-2xl font-bold shadow-lg shadow-slate-200 hover:bg-slate-500 transition-all active:scale-95"
+                                    >
+                                        Forgot 😓
+                                    </button>
+                                    <button
+                                        onClick={() => handleAnswer(currentQuestion.romaji)} // Correct
+                                        className="flex-1 h-full bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-2xl font-bold shadow-lg shadow-pink-200 hover:scale-105 transition-all active:scale-95 flex items-center justify-center gap-2"
+                                    >
+                                        Got it! 🌟
+                                    </button>
+                                </>
+                            )}
                         </div>
                     </div>
                 )}
@@ -693,12 +761,45 @@ const QuizPage = () => {
 
                 {(mode === GAME_MODES.NINJA) && (
                     <div className="w-full h-[600px] shadow-2xl rounded-xl overflow-hidden border-4 border-slate-800">
-                        <NinjaGame onExit={() => setMode(GAME_MODES.SELECT)} />
+                        <ErrorBoundary>
+                            <NinjaGame onExit={() => setMode(GAME_MODES.SELECT)} />
+                        </ErrorBoundary>
                     </div>
                 )}
             </div>
         </div>
     );
 };
+
+class ErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false, error: null };
+    }
+
+    static getDerivedStateFromError(error) {
+        return { hasError: true, error };
+    }
+
+    componentDidCatch(error, errorInfo) {
+        console.error("NinjaGame Crash:", error, errorInfo);
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return (
+                <div className="p-6 bg-red-100 text-red-800 h-full flex flex-col items-center justify-center text-center">
+                    <h2 className="text-xl font-bold mb-2">Something went wrong.</h2>
+                    <pre className="text-xs bg-white p-2 rounded border border-red-300 max-w-full overflow-auto text-left">
+                        {this.state.error && this.state.error.toString()}
+                    </pre>
+                    <button onClick={() => this.setState({ hasError: false })} className="mt-4 px-4 py-2 bg-red-500 text-white rounded">Retry</button>
+                </div>
+            );
+        }
+
+        return this.props.children;
+    }
+}
 
 export default QuizPage;
