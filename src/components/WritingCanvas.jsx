@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { RefreshCw, Eraser, CheckCircle } from 'lucide-react';
+import { RefreshCw, Eraser, CheckCircle, Eye, EyeOff, Play } from 'lucide-react';
 import useProgress from '../hooks/useProgress';
 import useAudio from '../hooks/useAudio';
+import StrokeOrder from './StrokeOrder';
 
 const WritingCanvas = ({ char, onComplete }) => {
     const canvasRef = useRef(null);
@@ -11,6 +12,7 @@ const WritingCanvas = ({ char, onComplete }) => {
     const [isCorrect, setIsCorrect] = useState(false);
     const [isWrong, setIsWrong] = useState(false);
     const [score, setScore] = useState(0);
+    const [showGuide, setShowGuide] = useState(false);
 
     const { markMastered } = useProgress();
     const { playSound } = useAudio();
@@ -63,6 +65,7 @@ const WritingCanvas = ({ char, onComplete }) => {
         setIsWrong(false);
         setHasDrawn(false);
         setScore(0);
+        setShowGuide(false);
 
         return () => {
             resizeObserver.disconnect();
@@ -243,12 +246,31 @@ const WritingCanvas = ({ char, onComplete }) => {
                         </div>
                     </div>
                 )}
+                {/* Stroke Order Guide Overlay */}
+                {showGuide && (
+                    <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center opacity-70">
+                        <StrokeOrder
+                            char={char}
+                            className="w-full h-full text-indigo-900"
+                            animate={true}
+                        />
+                    </div>
+                )}
             </div>
 
             {/* Controls & Feedback */}
             <div className="flex items-center justify-between w-[90vw] md:w-[380px] max-w-[380px] h-14 px-2">
                 {!isCorrect ? (
                     <>
+                        {/* Guide Toggle */}
+                        <button
+                            onClick={() => setShowGuide(!showGuide)}
+                            className={`p-3 rounded-full transition-colors ${showGuide ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 hover:bg-gray-200 text-gray-600'}`}
+                            title={showGuide ? "Hide Stroke Order" : "Show Stroke Order"}
+                        >
+                            {showGuide ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
+
                         <div className="text-sm font-medium text-gray-400 uppercase tracking-widest flex items-center gap-2">
                             {isWrong ? (
                                 <span className="text-red-500 animate-pulse font-bold">Try Again!</span>

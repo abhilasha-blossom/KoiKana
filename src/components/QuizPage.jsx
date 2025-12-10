@@ -7,6 +7,7 @@ import useProgress from '../hooks/useProgress';
 import { useTheme } from '../context/ThemeContext';
 import WritingCanvas from './WritingCanvas';
 import MemoryGame from './MemoryGame';
+import NinjaGame from './NinjaGame';
 
 const GAME_MODES = {
     SELECT: 'select',
@@ -15,7 +16,8 @@ const GAME_MODES = {
     TIME_ATTACK: 'time_attack',
     WRITING: 'writing',
     REVIEW: 'review',
-    MATCHING: 'matching'
+    MATCHING: 'matching',
+    NINJA: 'ninja'
 };
 
 const POSITIVE_MESSAGES = [
@@ -469,6 +471,7 @@ const QuizPage = () => {
                             { id: GAME_MODES.TIME_ATTACK, title: "Bubble Pop", icon: "🫧", desc: "Burst bubbles!", color: "from-blue-100 to-cyan-50" },
                             { id: GAME_MODES.WRITING, title: "Writing", icon: "🖌️", desc: "Draw character", color: "from-orange-100 to-amber-50" },
                             { id: GAME_MODES.MATCHING, title: "Memory Match", icon: "🧩", desc: "Find pairs", color: "from-teal-100 to-emerald-50" },
+                            { id: GAME_MODES.NINJA, title: "Kana Ninja", icon: "🥷", desc: "Type fast!", color: "from-rose-100 to-red-50" },
 
                         ].map((m) => (
                             <button
@@ -588,8 +591,8 @@ const QuizPage = () => {
             {/* Game Content */}
             <div className="max-w-md w-full flex flex-col items-center gap-4 relative z-10 pb-20 md:pb-0 h-full justify-center">
 
-                {/* Character Card - Glassmorphism (Hidden for Memory Game) */}
-                {mode !== GAME_MODES.MATCHING && (
+                {/* Character Card - Glassmorphism (Hidden for Memory Game & Ninja) */}
+                {mode !== GAME_MODES.MATCHING && mode !== GAME_MODES.NINJA && (
                     <div className="relative group perspective">
                         <div className="w-32 h-32 sm:w-48 sm:h-48 bg-white/60 backdrop-blur-xl rounded-[2rem] shadow-[0_8px_32px_rgba(255,209,220,0.5)] flex items-center justify-center
                                     border border-white/60 transform transition-transform duration-500 hover:scale-105">
@@ -686,6 +689,12 @@ const QuizPage = () => {
                             playSound('success');
                         }}
                     />
+                )}
+
+                {(mode === GAME_MODES.NINJA) && (
+                    <div className="w-full h-[600px] shadow-2xl rounded-xl overflow-hidden border-4 border-slate-800">
+                        <NinjaGame onExit={() => setMode(GAME_MODES.SELECT)} />
+                    </div>
                 )}
             </div>
         </div>
