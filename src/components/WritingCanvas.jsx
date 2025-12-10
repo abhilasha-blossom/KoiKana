@@ -17,6 +17,17 @@ const WritingCanvas = ({ char, onComplete }) => {
     const { markMastered } = useProgress();
     const { playSound } = useAudio();
 
+    // Reset state when char changes (render-time update pattern)
+    const [prevChar, setPrevChar] = useState(char);
+    if (char !== prevChar) {
+        setPrevChar(char);
+        setIsCorrect(false);
+        setIsWrong(false);
+        setHasDrawn(false);
+        setScore(0);
+        setShowGuide(false);
+    }
+
     useEffect(() => {
         const handleResize = () => {
             if (canvasRef.current) initCanvas(canvasRef.current, false);
@@ -60,12 +71,8 @@ const WritingCanvas = ({ char, onComplete }) => {
             resizeObserver.observe(canvasRef.current.parentElement);
         }
 
-        // Reset state on char change
-        setIsCorrect(false);
-        setIsWrong(false);
-        setHasDrawn(false);
-        setScore(0);
-        setShowGuide(false);
+        // Reset state section moved to render-time check
+
 
         return () => {
             resizeObserver.disconnect();

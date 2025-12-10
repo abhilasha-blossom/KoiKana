@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { X, Trophy, Play, RefreshCw } from 'lucide-react';
 import useAudio from '../hooks/useAudio';
 import { hiragana, katakana } from '../data/kanaData';

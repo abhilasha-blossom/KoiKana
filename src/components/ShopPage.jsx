@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import useProgress from '../hooks/useProgress';
 import { ArrowLeft, Lock, Check, Palette } from 'lucide-react';
@@ -11,13 +11,13 @@ const ShopPage = () => {
     const { playSound } = useAudio();
 
     const [previewThemeId, setPreviewThemeId] = useState(currentThemeId);
+    const [prevCurrentThemeId, setPrevCurrentThemeId] = useState(currentThemeId);
 
-    // Initial effect to set preview to current or default if undefined
-    useEffect(() => {
-        if (currentThemeId) {
-            setPreviewThemeId(currentThemeId);
-        }
-    }, [currentThemeId]);
+    // Sync preview with current theme changes (render-time)
+    if (currentThemeId !== prevCurrentThemeId) {
+        setPrevCurrentThemeId(currentThemeId);
+        setPreviewThemeId(currentThemeId);
+    }
 
     const activePreviewTheme = availableThemes[previewThemeId] || theme;
 

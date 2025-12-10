@@ -1,26 +1,30 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowRight, Sparkles, Flame, Flower2 } from 'lucide-react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import useProgress from '../hooks/useProgress';
 import useAudio from '../hooks/useAudio';
 
 
 const LandingPage = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  // const navigate = useNavigate(); // Unused
+  // const location = useLocation(); // Unused
   const { streak, mastery, xp, username } = useProgress();
   const { playSound } = useAudio();
   const masteredCount = Object.keys(mastery).length;
 
 
 
-  // Generate random petals
-  const petals = Array.from({ length: 20 }).map((_, i) => ({
-    id: i,
-    left: `${Math.random() * 100}%`,
-    animationDelay: `${Math.random() * 5}s`,
-    animationDuration: `${10 + Math.random() * 10}s`,
-  }));
+  const [petals, setPetals] = useState([]);
+
+  useEffect(() => {
+    const generatedPetals = Array.from({ length: 20 }).map((_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      animationDelay: `${Math.random() * 5}s`,
+      animationDuration: `${10 + Math.random() * 10}s`,
+    }));
+    setPetals(generatedPetals); // eslint-disable-line react-hooks/set-state-in-effect
+  }, []);
 
 
   return (

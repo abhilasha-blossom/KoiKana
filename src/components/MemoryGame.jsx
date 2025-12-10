@@ -4,14 +4,7 @@ import { CheckCircle, Heart, Star } from 'lucide-react';
 
 const MemoryGame = ({ pool, onComplete }) => {
     const { playSound } = useAudio();
-    const [cards, setCards] = useState([]);
-    const [flipped, setFlipped] = useState([]); // [index1, index2]
-    const [matched, setMatched] = useState([]); // [id1, id2, ...]
-    const [disabled, setDisabled] = useState(false);
-    const [gridSize, setGridSize] = useState(4); // 4x4 grid usually good
-
-    // Initialize Game
-    useEffect(() => {
+    const [cards] = useState(() => {
         // Select 8 pairs for 16 cards (or 6 for 12, etc.)
         const numPairs = 8; // 16 cards total (4x4 grid)
         const shuffledPool = [...pool].sort(() => Math.random() - 0.5).slice(0, numPairs);
@@ -38,10 +31,12 @@ const MemoryGame = ({ pool, onComplete }) => {
         });
 
         // Shuffle Deck
-        setCards(deck.sort(() => Math.random() - 0.5));
-        setMatched([]);
-        setFlipped([]);
-    }, [pool]);
+        return deck.sort(() => Math.random() - 0.5);
+    });
+
+    const [flipped, setFlipped] = useState([]); // [index1, index2]
+    const [matched, setMatched] = useState([]); // [id1, id2, ...]
+    const [disabled, setDisabled] = useState(false);
 
     // Handle Click
     const handleClick = (index) => {
@@ -83,7 +78,7 @@ const MemoryGame = ({ pool, onComplete }) => {
             // Won!
             onComplete(matched.length * 10); // Score based on matches
         }
-    }, [matched, cards]);
+    }, [matched, cards, onComplete]);
 
     return (
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 sm:gap-4 w-full max-w-2xl">

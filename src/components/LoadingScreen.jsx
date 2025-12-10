@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useProgress from '../hooks/useProgress';
+// import useProgress from '../hooks/useProgress'; // Unused
 
 const LoadingScreen = ({ onComplete }) => {
     const navigate = useNavigate();
-    const { username } = useProgress();
+    // const { username } = useProgress(); // Unused
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
@@ -30,7 +30,7 @@ const LoadingScreen = ({ onComplete }) => {
             clearTimeout(timer);
             clearInterval(interval);
         };
-    }, [navigate]);
+    }, [navigate]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className="h-screen w-full bg-[#FAFAF9] flex flex-col items-center justify-center relative overflow-hidden cursor-none selection:bg-none">

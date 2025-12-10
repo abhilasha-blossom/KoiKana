@@ -18,27 +18,6 @@ const BackgroundMusic = () => {
         PEACEFUL: '/music/peaceful.mp3',
     };
 
-    // 1. Determine Track based on Route
-    useEffect(() => {
-        const path = location.pathname;
-        let newTrack = null;
-
-        if (path === '/') {
-            // Sign In / Torii Gate -> Traditional
-            newTrack = TRACKS.TRADITIONAL;
-        } else if (path === '/kana' || path === '/speaking' || path === '/loading') {
-            // Study Modes / Voiceover Pages -> Silence
-            newTrack = null;
-        } else {
-            // Home, Shop, Quiz, etc -> Peaceful
-            newTrack = TRACKS.PEACEFUL;
-        }
-
-        if (newTrack !== currentTrack) {
-            handleTrackChange(newTrack);
-        }
-    }, [location.pathname]);
-
     // 2. Handle Track Switching
     const handleTrackChange = (newSrc) => {
         const audio = audioRef.current;
@@ -68,6 +47,27 @@ const BackgroundMusic = () => {
             setIsPlaying(false);
         }
     };
+
+    // 1. Determine Track based on Route (Now after handleTrackChange is defined)
+    useEffect(() => {
+        const path = location.pathname;
+        let newTrack = null;
+
+        if (path === '/') {
+            // Sign In / Torii Gate -> Traditional
+            newTrack = TRACKS.TRADITIONAL;
+        } else if (path === '/kana' || path === '/speaking' || path === '/loading') {
+            // Study Modes / Voiceover Pages -> Silence
+            newTrack = null;
+        } else {
+            // Home, Shop, Quiz, etc -> Peaceful
+            newTrack = TRACKS.PEACEFUL;
+        }
+
+        if (newTrack !== currentTrack) {
+            handleTrackChange(newTrack);
+        }
+    }, [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // 3. Handle Mute Toggle
     const toggleMute = () => {

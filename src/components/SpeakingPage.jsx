@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ArrowLeft, Mic, Volume2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useAudio from '../hooks/useAudio';

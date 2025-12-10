@@ -83,7 +83,7 @@ const KoiPond = () => {
             delay: `${Math.random() * -20}s`,
             opacity: 0.8 + Math.random() * 0.2
         }));
-        setFish(initialFish);
+        setFish(initialFish); // eslint-disable-line react-hooks/set-state-in-effect
     }, []);
 
     // Global click listener for ripples

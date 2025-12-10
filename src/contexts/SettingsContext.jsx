@@ -1,4 +1,4 @@
-
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const SettingsContext = createContext();
@@ -34,23 +34,7 @@ export const SettingsProvider = ({ children }) => {
 
     // Reset Progress Function
     const resetProgress = () => {
-        // List all keys related to game progress
-        const keysToRemove = [
-            'koiInfo_musicVol', // Optional: reset settings too? Maybe keep them.
-            'koiInfo_sfxVol',
-            // Add other app-specific keys here as we find them
-            // For now, let's assume we might clear specific ones or all
-            // But clearing ALL might define "reset app" better
-            // 'gameState', 'highScores', 'unlockedItems' etc.
-        ];
-
-        // Actually, safer to clear specific known keys or use a prefix.
-        // For this app, let's look at what we use. 
-        // We know we use 'koiInfo_...' for settings.
-        // Other components might use their own. 
-        // Let's clear everything *except* what we want to keep, or just clear all.
         // "Reset Progress" usually implies everything.
-
         localStorage.clear();
 
         // Re-initialize defaults if needed, or just reload page

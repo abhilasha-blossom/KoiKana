@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import React, { createContext, useContext, useState } from 'react';
 
 const ThemeContext = createContext();
 
@@ -58,14 +59,10 @@ export const THEMES = {
 };
 
 export const ThemeProvider = ({ children }) => {
-    const [currentThemeId, setCurrentThemeId] = useState('default');
-
-    useEffect(() => {
+    const [currentThemeId, setCurrentThemeId] = useState(() => {
         const storedTheme = localStorage.getItem('koiKana_theme');
-        if (storedTheme && THEMES[storedTheme]) {
-            setCurrentThemeId(storedTheme);
-        }
-    }, []);
+        return (storedTheme && THEMES[storedTheme]) ? storedTheme : 'default';
+    });
 
     const setTheme = (themeId) => {
         if (THEMES[themeId]) {

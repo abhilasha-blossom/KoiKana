@@ -10,13 +10,7 @@ const KanaCard = ({ char, romaji, type = 'hiragana', onClick }) => {
     const textColor = isHiragana ? 'text-pink-600 dark:text-pink-300' : 'text-[#9370DB] dark:text-indigo-300'; // Medium Purple
     const glowColor = isHiragana ? 'shadow-pink-300 dark:shadow-pink-900' : 'shadow-purple-300 dark:shadow-indigo-900';
 
-    const handlePlayAudio = (e) => {
-        e.stopPropagation();
-        const audio = new Audio(`/sounds/${romaji}.mp3`);
-        audio.play().catch(error => {
-            console.log("Audio not found:", error);
-        });
-    };
+    // Audio handler was removed as the button is currently hidden/unused.
 
     return (
         <div

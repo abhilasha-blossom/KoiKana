@@ -3,9 +3,6 @@ import hiraganaData from '../data/allHiragana.json';
 import katakanaData from '../data/allKatakana.json';
 
 const StrokeOrder = ({ char, className = "w-24 h-24", animate = true }) => {
-    const [paths, setPaths] = useState([]);
-
-    // Find the character data
     const charData = useMemo(() => {
         const code = char.charCodeAt(0);
         // Check Hiragana range (approx)
@@ -19,10 +16,8 @@ const StrokeOrder = ({ char, className = "w-24 h-24", animate = true }) => {
         return null;
     }, [char]);
 
-    useEffect(() => {
-        if (!charData) return;
-        // Parse strokes
-        setPaths(charData.strokes.map(s => s.value));
+    const paths = useMemo(() => {
+        return charData ? charData.strokes.map(s => s.value) : [];
     }, [charData]);
 
     if (!charData) return null;

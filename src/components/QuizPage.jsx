@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { ArrowLeft, Clock, CheckCircle, XCircle, Trophy, RefreshCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { hiragana, katakana } from '../data/kanaData';
@@ -58,7 +58,7 @@ const BubbleGame = ({ options, onAnswer }) => {
         if (!containerRef.current) return;
         const { width, height } = containerRef.current.getBoundingClientRect();
 
-        const newBubbles = options.map((opt, i) => {
+        const newBubbles = options.map((opt) => {
             // Find non-overlapping position
             let x, y, safe = false;
             let attempts = 0;
@@ -261,23 +261,16 @@ const QuizPage = () => {
     const [mascotMessage, setMascotMessage] = useState('');
     const [timeLeft, setTimeLeft] = useState(60);
     const [isGameOver, setIsGameOver] = useState(false);
-    const [dueItems, setDueItems] = useState([]);
+    const [dueItems] = useState(() => getDueItems());
     const [isFlipped, setIsFlipped] = useState(false);
 
-    // Fetch Due Items on Mount
-    useEffect(() => {
-        setDueItems(getDueItems());
-    }, []);
-
     // Combine kana based on selection
-    const getKanaPool = () => {
+    const allKana = useMemo(() => {
         let pool = [];
         if (scriptType === 'hiragana' || scriptType === 'mix') pool = [...pool, ...hiragana];
         if (scriptType === 'katakana' || scriptType === 'mix') pool = [...pool, ...katakana];
         return pool.filter(k => k.char);
-    };
-
-    const allKana = getKanaPool();
+    }, [scriptType]);
 
     // Timer for Time Attack
     useEffect(() => {

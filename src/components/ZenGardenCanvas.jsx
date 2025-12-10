@@ -10,11 +10,19 @@ const ZenGardenCanvas = ({ char }) => {
     const [hasDrawn, setHasDrawn] = useState(false);
     const [isCorrect, setIsCorrect] = useState(false);
     const [isWrong, setIsWrong] = useState(false);
-    const [score, setScore] = useState(0);
 
     const { markMastered } = useProgress();
     const { playSound } = useAudio();
     const lastSoundTime = useRef(0);
+
+    // Reset state on char change (render-time)
+    const [prevChar, setPrevChar] = useState(char);
+    if (char !== prevChar) {
+        setPrevChar(char);
+        setIsCorrect(false);
+        setIsWrong(false);
+        setHasDrawn(false);
+    }
 
     useEffect(() => {
         const initCanvas = (canvas, isTarget = false) => {
@@ -49,12 +57,6 @@ const ZenGardenCanvas = ({ char }) => {
 
         if (canvasRef.current) initCanvas(canvasRef.current, false);
         if (targetCanvasRef.current) initCanvas(targetCanvasRef.current, true);
-
-        // Reset state on char change
-        setIsCorrect(false);
-        setIsWrong(false);
-        setHasDrawn(false);
-        setScore(0);
 
     }, [char]);
 
@@ -134,12 +136,10 @@ const ZenGardenCanvas = ({ char }) => {
 
         if (coverage > 0.35 && precision > 0.4) {
             setIsCorrect(true);
-            setScore(100);
             markMastered(char);
             playSound('success');
         } else {
             setIsWrong(true);
-            setScore(Math.round(coverage * 100));
             playSound('error');
         }
     };
@@ -158,7 +158,6 @@ const ZenGardenCanvas = ({ char }) => {
         setHasDrawn(false);
         setIsCorrect(false);
         setIsWrong(false);
-        setScore(0);
     };
 
     return (

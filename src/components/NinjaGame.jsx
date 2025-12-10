@@ -9,13 +9,23 @@ const SPAWN_RATE = 2000; // ms
 
 const NinjaGame = ({ onExit }) => {
     const [isPlaying, setIsPlaying] = useState(false);
+    const { playSound } = useAudio();
     const [score, setScore] = useState(0);
     const [lives, setLives] = useState(3);
     const [enemies, setEnemies] = useState([]);
 
     const [inputValue, setInputValue] = useState("");
     const [gameOver, setGameOver] = useState(false);
-    const [highScores, setHighScores] = useState([]);
+    const [highScores, setHighScores] = useState(() => {
+        try {
+            const saved = localStorage.getItem('koikana_ninja_scores');
+            return saved ? JSON.parse(saved) : [];
+        } catch (e) {
+            console.error("Failed to load scores:", e);
+            localStorage.removeItem('koikana_ninja_scores');
+            return [];
+        }
+    });
 
     // Focus Management
     const inputRef = useRef(null);
@@ -40,18 +50,9 @@ const NinjaGame = ({ onExit }) => {
         inputRef.current?.focus();
     };
 
-    // Load High Scores
+    // Load High Scores Effect (Logging only now)
     useEffect(() => {
-        try {
-            console.log("Ninja Game Mounted. Data checks:", { h: kData.hiragana?.length, k: kData.katakana?.length });
-            const saved = localStorage.getItem('koikana_ninja_scores');
-            if (saved) {
-                setHighScores(JSON.parse(saved));
-            }
-        } catch (e) {
-            console.error("Failed to load scores:", e);
-            localStorage.removeItem('koikana_ninja_scores'); // Clear corrupt data
-        }
+        console.log("Ninja Game Mounted. Data checks:", { h: kData.hiragana?.length, k: kData.katakana?.length });
     }, []);
 
     const saveHighScore = (finalScore) => {
