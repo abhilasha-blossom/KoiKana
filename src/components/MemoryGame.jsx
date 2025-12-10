@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useAudio from '../hooks/useAudio';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, Heart, Star } from 'lucide-react';
 
 const MemoryGame = ({ pool, onComplete }) => {
     const { playSound } = useAudio();
@@ -13,7 +13,7 @@ const MemoryGame = ({ pool, onComplete }) => {
     // Initialize Game
     useEffect(() => {
         // Select 8 pairs for 16 cards (or 6 for 12, etc.)
-        const numPairs = 6; // 12 cards total, fits nicely on mobile/desktop
+        const numPairs = 8; // 16 cards total (4x4 grid)
         const shuffledPool = [...pool].sort(() => Math.random() - 0.5).slice(0, numPairs);
 
         // Create pairs: One Kana, One Romaji
@@ -104,34 +104,38 @@ const MemoryGame = ({ pool, onComplete }) => {
                             `}
                             style={{ transformStyle: 'preserve-3d' }}
                         >
-                            {/* Front (Cover) - Visible initially */}
+                            {/* Front (Cover) - CONCEPT C: CUTE POP */}
                             <div
-                                className="absolute inset-0 z-10 bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 rounded-2xl flex items-center justify-center border-[3px] border-white/40 shadow-lg overflow-hidden group-hover:brightness-110 transition-all"
+                                className="absolute inset-0 z-10 bg-gradient-to-br from-[#FFDEE9] to-[#B5FFFC] rounded-[1.5rem] flex items-center justify-center shadow-[0_4px_15px_rgba(255,182,193,0.4)] border-4 border-white overflow-hidden group-hover:scale-105 transition-all"
                                 style={{ backfaceVisibility: 'hidden' }}
                             >
-                                <div className="absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
-                                <span className="text-4xl text-white drop-shadow-md transform group-hover:scale-125 transition-transform duration-300">🌸</span>
+                                {/* Floating Background Elements */}
+                                <div className="absolute top-2 left-2 text-white/60 animate-bounce-in delay-100"><Heart className="w-4 h-4 fill-white" /></div>
+                                <div className="absolute bottom-3 right-3 text-white/60 animate-bounce-in delay-300"><Star className="w-5 h-5 fill-white" /></div>
+                                <div className="absolute top-1/2 right-2 text-white/40"><div className="w-2 h-2 bg-white rounded-full"></div></div>
+
+                                <span className="text-5xl text-white drop-shadow-sm transform group-hover:scale-125 group-hover:rotate-12 transition-transform duration-300">🌸</span>
                             </div>
 
-                            {/* Back (Content) - Hidden initially, visible when flipped */}
+                            {/* Back (Content) - CONCEPT C: CUTE POP */}
                             <div
                                 className={`
                                     absolute inset-0
-                                    bg-white/95 backdrop-blur-md rounded-2xl flex items-center justify-center
-                                    border-[3px] ${matched.includes(card.pairId) ? 'border-green-400 bg-green-50' : 'border-indigo-100'}
-                                    shadow-lg overflow-hidden
+                                    bg-white/95 backdrop-blur-xl rounded-[1.5rem] flex items-center justify-center
+                                    border-4 ${matched.includes(card.pairId) ? 'border-[#B5FFFC] bg-green-50' : 'border-[#FFDEE9]'}
+                                    shadow-md overflow-hidden
                                 `}
                                 style={{
                                     backfaceVisibility: 'hidden',
                                     transform: 'rotateY(180deg)'
                                 }}
                             >
-                                <span className={`font-black text-[#4A3B52] drop-shadow-sm select-none ${card.type === 'kana' ? 'text-5xl jp-font' : 'text-2xl'}`}>
+                                <span className={`font-black text-[#5D4E6D] select-none ${card.type === 'kana' ? 'text-5xl jp-font' : 'text-2xl font-bold tracking-wider'}`}>
                                     {card.content}
                                 </span>
                                 {matched.includes(card.pairId) && (
-                                    <div className="absolute inset-0 flex items-center justify-center text-green-500/40 animate-pulse bg-green-100/20 backdrop-blur-[1px]">
-                                        <CheckCircle className="w-16 h-16 drop-shadow-lg" />
+                                    <div className="absolute inset-0 flex items-center justify-center text-[#B5FFFC] animate-scale-in drop-shadow-md">
+                                        <CheckCircle className="w-16 h-16 fill-green-400 text-white" />
                                     </div>
                                 )}
                             </div>

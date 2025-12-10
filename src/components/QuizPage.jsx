@@ -588,15 +588,17 @@ const QuizPage = () => {
             {/* Game Content */}
             <div className="max-w-md w-full flex flex-col items-center gap-4 relative z-10 pb-20 md:pb-0 h-full justify-center">
 
-                {/* Character Card - Glassmorphism */}
-                <div className="relative group perspective">
-                    <div className="w-32 h-32 sm:w-48 sm:h-48 bg-white/60 backdrop-blur-xl rounded-[2rem] shadow-[0_8px_32px_rgba(255,209,220,0.5)] flex items-center justify-center
-                                  border border-white/60 transform transition-transform duration-500 hover:scale-105">
-                        <span className="text-6xl sm:text-8xl font-bold text-[#4A3B52] jp-font drop-shadow-sm">
-                            {mode === GAME_MODES.MULTIPLE_CHOICE ? currentQuestion?.romaji : currentQuestion?.char}
-                        </span>
+                {/* Character Card - Glassmorphism (Hidden for Memory Game) */}
+                {mode !== GAME_MODES.MATCHING && (
+                    <div className="relative group perspective">
+                        <div className="w-32 h-32 sm:w-48 sm:h-48 bg-white/60 backdrop-blur-xl rounded-[2rem] shadow-[0_8px_32px_rgba(255,209,220,0.5)] flex items-center justify-center
+                                    border border-white/60 transform transition-transform duration-500 hover:scale-105">
+                            <span className="text-6xl sm:text-8xl font-bold text-[#4A3B52] jp-font drop-shadow-sm">
+                                {mode === GAME_MODES.MULTIPLE_CHOICE ? currentQuestion?.romaji : currentQuestion?.char}
+                            </span>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {/* Feedback Indicator - FADE OUT WITHOUT FLASHING INCORRECT */}
                 <div className={`h-6 transition-opacity duration-300 ${showFeedback ? 'opacity-100' : 'opacity-0'}`}>
