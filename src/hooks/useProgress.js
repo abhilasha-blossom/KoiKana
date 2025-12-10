@@ -1,87 +1,78 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+
+// Helper for safe JSON parsing
+const safeParse = (key, fallback) => {
+    try {
+        const item = localStorage.getItem(key);
+        return item ? JSON.parse(item) : fallback;
+    } catch (e) {
+        console.error(`Error parsing ${key}:`, e);
+        return fallback;
+    }
+};
 
 const useProgress = () => {
-    const [streak, setStreak] = useState(0);
-    const [xp, setXp] = useState(0); // Experience Points
-    const [mastery, setMastery] = useState({}); // { 'あ': true, 'い': false, ... }
-    const [lastVisit, setLastVisit] = useState(null);
-
-    // SRS System: { char: { interval: number (days), nextReview: timestamp, streak: number } }
-    const [srsData, setSRSData] = useState({});
-    const [unlockedThemes, setUnlockedThemes] = useState(['default']);
-    const [username, setUsername] = useState(null);
-
-    useEffect(() => {
+    // Lazy initialization for all state variables
+    const [streak] = useState(() => {
         try {
-            // Load data from localStorage with safety checks
             const storedStreak = parseInt(localStorage.getItem('koiKana_streak') || '0');
-            const storedXp = parseInt(localStorage.getItem('koiKana_xp') || '0');
             const storedLastVisit = localStorage.getItem('koiKana_lastVisit');
-            const storedName = localStorage.getItem('koiKana_username');
-
-            // Safe JSON parsing helper
-            const safeParse = (key, fallback) => {
-                try {
-                    const item = localStorage.getItem(key);
-                    return item ? JSON.parse(item) : fallback;
-                } catch (e) {
-                    console.error(`Error parsing ${key}:`, e);
-                    return fallback;
-                }
-            };
-
-            const storedMastery = safeParse('koiKana_mastery', {});
-            const storedSRS = safeParse('koiKana_srs', {});
-            const storedUnlockedThemes = safeParse('koiKana_unlockedThemes', ['default']);
-
-            setStreak(isNaN(storedStreak) ? 0 : storedStreak);
-            setXp(isNaN(storedXp) ? 0 : storedXp);
-            setLastVisit(storedLastVisit);
-            setMastery(storedMastery);
-            setSRSData(storedSRS);
-            if (storedName) setUsername(storedName);
-            setUnlockedThemes(storedUnlockedThemes);
-
-            // Daily Streak Logic
             const today = new Date().toDateString();
+
             if (storedLastVisit !== today) {
                 if (storedLastVisit) {
                     const yesterday = new Date();
                     yesterday.setDate(yesterday.getDate() - 1);
+
                     if (storedLastVisit === yesterday.toDateString()) {
+                        // Consecutive day
                         const newStreak = (isNaN(storedStreak) ? 0 : storedStreak) + 1;
-                        setStreak(newStreak);
                         localStorage.setItem('koiKana_streak', newStreak);
+                        localStorage.setItem('koiKana_lastVisit', today);
+                        return newStreak;
                     } else {
-                        // Streak broken
+                        // Check if streak broken (more than 1 day gap)
                         const last = new Date(storedLastVisit);
                         const diffTime = Math.abs(new Date() - last);
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
                         if (diffDays > 1) {
-                            setStreak(1);
+                            // Reset streak
                             localStorage.setItem('koiKana_streak', 1);
+                            localStorage.setItem('koiKana_lastVisit', today);
+                            return 1;
                         } else {
+                            // Should be covered by yesterday check, but fallback to increment if strictly < 2 days but not "yesterday" string match (edge cases)
                             const newStreak = (isNaN(storedStreak) ? 0 : storedStreak) + 1;
-                            setStreak(newStreak);
                             localStorage.setItem('koiKana_streak', newStreak);
+                            localStorage.setItem('koiKana_lastVisit', today);
+                            return newStreak;
                         }
                     }
                 } else {
-                    setStreak(1);
+                    // First visit ever (or cleared)
                     localStorage.setItem('koiKana_streak', 1);
+                    localStorage.setItem('koiKana_lastVisit', today);
+                    return 1;
                 }
-                setLastVisit(today);
-                localStorage.setItem('koiKana_lastVisit', today);
             }
+            // Same day, return stored
+            return isNaN(storedStreak) ? 0 : storedStreak;
         } catch (err) {
-            console.error("Critical error loading progress:", err);
-            // Fallback to safe defaults to prevent white screen
-            setStreak(0);
-            setXp(0);
-            setMastery({});
+            console.error("Error initializing streak:", err);
+            return 0;
         }
-    }, []);
+    });
+
+    const [xp, setXp] = useState(() => {
+        const storedXp = parseInt(localStorage.getItem('koiKana_xp') || '0');
+        return isNaN(storedXp) ? 0 : storedXp;
+    });
+
+    const [mastery, setMastery] = useState(() => safeParse('koiKana_mastery', {}));
+    const [srsData, setSRSData] = useState(() => safeParse('koiKana_srs', {}));
+    const [unlockedThemes, setUnlockedThemes] = useState(() => safeParse('koiKana_unlockedThemes', ['default']));
+    const [username, setUsername] = useState(() => localStorage.getItem('koiKana_username'));
 
     const markMastered = (char) => {
         const newMastery = { ...mastery, [char]: true };

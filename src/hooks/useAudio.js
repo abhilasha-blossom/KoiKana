@@ -55,7 +55,7 @@ const useAudio = () => {
                 osc.stop(now + 0.3);
                 break;
 
-            case 'correct': // Chime (Major Arpeggio)
+            case 'correct': { // Chime (Major Arpeggio)
                 const frequencies = [523.25, 659.25, 783.99, 1046.50]; // C Major
                 frequencies.forEach((freq, i) => {
                     const o = ctx.createOscillator();
@@ -71,6 +71,7 @@ const useAudio = () => {
                     o.stop(now + i * 0.05 + 0.5);
                 });
                 break;
+            }
 
             case 'incorrect': // Soft Error Buzz
                 osc.type = 'sawtooth';
@@ -94,7 +95,7 @@ const useAudio = () => {
             default:
                 break;
         }
-    }, []);
+    }, [sfxVolume]);
 
     return { playSound };
 };

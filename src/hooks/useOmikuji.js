@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const FORTUNES = [
     { type: 'Daikichi', label: 'Great Luck', color: 'text-red-500', desc: 'A perfect day for learning!', icon: '🌸' },
@@ -8,23 +8,27 @@ const FORTUNES = [
 ];
 
 const useOmikuji = () => {
-    const [hasDrawn, setHasDrawn] = useState(false);
-    const [fortune, setFortune] = useState(null);
+    const [hasDrawn, setHasDrawn] = useState(() => {
+        const today = new Date().toDateString();
+        const storedDate = localStorage.getItem('omikuji_date');
+        const storedFortune = localStorage.getItem('omikuji_result');
+        return storedDate === today && !!storedFortune;
+    });
 
-    useEffect(() => {
+    const [fortune, setFortune] = useState(() => {
         const today = new Date().toDateString();
         const storedDate = localStorage.getItem('omikuji_date');
         const storedFortune = localStorage.getItem('omikuji_result');
 
         if (storedDate === today && storedFortune) {
-            setHasDrawn(true);
-            setFortune(JSON.parse(storedFortune));
-        } else {
-            // New day, reset
-            setHasDrawn(false);
-            setFortune(null);
+            try {
+                return JSON.parse(storedFortune);
+            } catch {
+                return null;
+            }
         }
-    }, []);
+        return null;
+    });
 
     const drawFortune = () => {
         if (hasDrawn) return fortune;
