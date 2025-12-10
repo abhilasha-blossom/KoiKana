@@ -153,13 +153,14 @@ const AboutPage = () => {
             <div className={`absolute top-[-10%] right-[-5%] w-[500px] h-[500px] ${theme.colors.blob1} rounded-full blur-[120px] pointer-events-none mix-blend-multiply animate-pulse-slow`}></div>
             <div className={`absolute top-[20%] left-[-10%] w-[400px] h-[400px] ${theme.colors.blob2} rounded-full blur-[100px] pointer-events-none mix-blend-multiply`}></div>
 
-            <div className="max-w-4xl mx-auto pt-10 relative z-10">
-
-                {/* Back Button (Now inside container) */}
-                <div className="mb-8">
-                    <Link to="/start" className="inline-flex p-3 rounded-full bg-white/60 hover:bg-white/90 transition-all duration-300 backdrop-blur-md shadow-sm border border-white/50 text-[#4A3B52] z-40 hover:scale-110 group sticky">
-                        <ArrowLeft className={`w-5 h-5 group-hover:-translate-x-1 transition-transform ${theme.colors.primary}`} />
-                    </Link>
+            <div className="max-w-5xl mx-auto pt-10 relative z-10">
+                {/* Navigation & Header - Matching KanaPage */}
+                <div className="flex flex-col items-center mb-8 gap-6 transition-all duration-500">
+                    <div className="w-full flex items-center justify-between px-4 sm:px-0">
+                        <Link to="/start" className="p-3 rounded-full bg-white/60 hover:bg-white/90 transition-all duration-300 backdrop-blur-md shadow-sm border border-white/50 text-[#4A3B52] z-40 hover:scale-110 group sticky top-4">
+                            <ArrowLeft className={`w-5 h-5 group-hover:-translate-x-1 transition-transform ${theme.colors.primary}`} />
+                        </Link>
+                    </div>
                 </div>
 
                 {/* HERO SECTION */}

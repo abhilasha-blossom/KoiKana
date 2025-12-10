@@ -41,12 +41,16 @@ const ShopPage = () => {
             <div className={`absolute top-[-20%] left-[-10%] w-64 h-64 md:w-[600px] md:h-[600px] ${theme.colors.blob1} rounded-full blur-[60px] md:blur-[100px] animate-blob mix-blend-multiply pointer-events-none transition-colors duration-500`}></div>
             <div className={`absolute bottom-[-20%] right-[-10%] w-64 h-64 md:w-[500px] md:h-[500px] ${theme.colors.blob2} rounded-full blur-[60px] md:blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply pointer-events-none transition-colors duration-500`}></div>
 
-            <Link to="/start" className="absolute top-4 left-4 p-2 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors z-50 shadow-sm border border-white/50">
-                <ArrowLeft className={`${theme.colors.primary} w-5 h-5`} />
-            </Link>
-
             <div className="relative z-10 flex flex-col items-center w-full max-w-6xl h-full">
-                <div className="flex-none text-center mb-4">
+                {/* Header with Back Button integrated */}
+                <div className="flex-none w-full flex flex-col items-center mb-4 relative">
+                    {/* Back Button positioned relative to container */}
+                    <div className="w-full flex justify-start mb-2 px-2 lg:px-0">
+                        <Link to="/start" className="p-2 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors shadow-sm border border-white/50 z-50">
+                            <ArrowLeft className={`${theme.colors.primary} w-5 h-5`} />
+                        </Link>
+                    </div>
+
                     <h1 className={`text-3xl font-bold ${theme.colors.primary} mb-1 drop-shadow-sm flex items-center justify-center gap-2`}>
                         <Palette className="w-6 h-6" /> Theme Shop
                     </h1>
