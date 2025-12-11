@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower2, Palette, Settings, Coffee, Feather } from 'lucide-react';
+import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower2, Palette, Settings, Coffee, Feather, Quote } from 'lucide-react';
 import useAudio from '../hooks/useAudio';
 import OmikujiModal from './OmikujiModal';
 import SettingsModal from './SettingsModal';
+import KanaGuideModal from './KanaGuideModal';
 import { useTheme } from '../context/ThemeContext';
 
 const StartMenu = () => {
@@ -11,12 +12,15 @@ const StartMenu = () => {
     const { theme } = useTheme();
     const [showFortune, setShowFortune] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [showGuide, setShowGuide] = useState(false);
 
     return (
         <div className="h-screen bg-[#FFF0F5] relative overflow-hidden flex flex-col items-center justify-center p-4 selection:bg-pink-200">
             {/* Omikuji Modal */}
+            {/* Omikuji Modal */}
             {showFortune && <OmikujiModal onClose={() => setShowFortune(false)} />}
             {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
+            {showGuide && <KanaGuideModal onClose={() => setShowGuide(false)} />}
 
             {/* Soft Moving Background Decor */}
             <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-gradient-to-br from-pink-200/40 to-purple-200/40 rounded-full blur-[100px] pointer-events-none mix-blend-multiply animate-blob"></div>
@@ -106,9 +110,30 @@ const StartMenu = () => {
                             <p className="text-[#7A6B82] text-sm">Unlock the world</p>
                         </div>
                     </div>
+
                 </Link>
 
-                {/* 3. VOCABULARY - Middle Right (Moved Here) */}
+                {/* 3. SPECIAL KANA MARKS - Top Right (New Section) */}
+                <button
+                    onClick={() => setShowGuide(true)}
+                    onMouseEnter={() => playSound('pop')}
+                    className="md:col-span-2 group relative bg-white/40 backdrop-blur-xl rounded-[2rem] p-5 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(236,72,153,0.2)] transition-all duration-500 hover:-translate-y-1 overflow-hidden flex items-center justify-between text-left"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-pink-100/30 via-white/20 to-purple-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+
+                    <div className="relative z-10 flex items-center gap-4">
+                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-pink-500 shadow-sm group-hover:scale-110 transition-transform duration-500 relative">
+                            <span className="absolute top-1 right-1 w-2 h-2 bg-pink-400 rounded-full animate-ping"></span>
+                            <Quote className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <h3 className={`text-xl font-bold ${theme.colors.primary} group-hover:text-pink-600 transition-colors`}>Special Marks</h3>
+                            <p className="text-[#7A6B82] text-sm">Dakuten & more ✨</p>
+                        </div>
+                    </div>
+                </button>
+
+                {/* 4. VOCABULARY - Middle Right (Moved Here) */}
                 <Link
                     to="/vocabulary"
                     onMouseEnter={() => playSound('pop')}

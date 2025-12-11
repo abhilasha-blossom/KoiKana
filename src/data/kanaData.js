@@ -129,3 +129,144 @@ export const katakana = [
     { char: 'ヲ', romaji: 'wo', type: 'gojuon', mnemonic: 'Wolf howling', examples: [] }, // Usually only grammatical particle
     { char: 'ン', romaji: 'n', type: 'gojuon', mnemonic: 'Night (one eye closed)', examples: [{ word: 'Pain', meaning: 'Pineapple', kana: 'パイン' }] }
 ];
+
+// --- DAKUTEN (Voiced) ---
+export const hiraganaDakuten = [
+    { char: 'が', romaji: 'ga', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ぎ', romaji: 'gi', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ぐ', romaji: 'gu', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'げ', romaji: 'ge', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ご', romaji: 'go', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ざ', romaji: 'za', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'じ', romaji: 'ji', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ず', romaji: 'zu', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ぜ', romaji: 'ze', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ぞ', romaji: 'zo', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'だ', romaji: 'da', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ぢ', romaji: 'ji', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'づ', romaji: 'zu', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'で', romaji: 'de', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ど', romaji: 'do', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ば', romaji: 'ba', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'び', romaji: 'bi', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ぶ', romaji: 'bu', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'べ', romaji: 'be', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ぼ', romaji: 'bo', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+];
+
+export const katakanaDakuten = [
+    { char: 'ガ', romaji: 'ga', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ギ', romaji: 'gi', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'グ', romaji: 'gu', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ゲ', romaji: 'ge', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ゴ', romaji: 'go', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ザ', romaji: 'za', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ジ', romaji: 'ji', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ズ', romaji: 'zu', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ゼ', romaji: 'ze', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ゾ', romaji: 'zo', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ダ', romaji: 'da', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ヂ', romaji: 'ji', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ヅ', romaji: 'zu', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'デ', romaji: 'de', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ド', romaji: 'do', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'バ', romaji: 'ba', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ビ', romaji: 'bi', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ブ', romaji: 'bu', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ベ', romaji: 'be', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ボ', romaji: 'bo', type: 'dakuten', mnemonic: '', image: '', examples: [] },
+];
+
+// --- HANDAKUTEN (P-Series) ---
+export const hiraganaHandakuten = [
+    { char: 'ぱ', romaji: 'pa', type: 'handakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ぴ', romaji: 'pi', type: 'handakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ぷ', romaji: 'pu', type: 'handakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ぺ', romaji: 'pe', type: 'handakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ぽ', romaji: 'po', type: 'handakuten', mnemonic: '', image: '', examples: [] },
+];
+
+export const katakanaHandakuten = [
+    { char: 'パ', romaji: 'pa', type: 'handakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ピ', romaji: 'pi', type: 'handakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'プ', romaji: 'pu', type: 'handakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ペ', romaji: 'pe', type: 'handakuten', mnemonic: '', image: '', examples: [] },
+    { char: 'ポ', romaji: 'po', type: 'handakuten', mnemonic: '', image: '', examples: [] },
+];
+
+// --- YOON (Combinations) ---
+// Simplified list for now (Main ones)
+export const hiraganaYoon = [
+    { char: 'きゃ', romaji: 'kya', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'きゅ', romaji: 'kyu', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'きょ', romaji: 'kyo', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'しゃ', romaji: 'sha', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'しゅ', romaji: 'shu', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'しょ', romaji: 'sho', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ちゃ', romaji: 'cha', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ちゅ', romaji: 'chu', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ちょ', romaji: 'cho', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'にゃ', romaji: 'nya', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'にゅ', romaji: 'nyu', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'にょ', romaji: 'nyo', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ひゃ', romaji: 'hya', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ひゅ', romaji: 'hyu', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ひょ', romaji: 'hyo', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'みゃ', romaji: 'mya', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'みゅ', romaji: 'myu', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'みょ', romaji: 'myo', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'りゃ', romaji: 'rya', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'りゅ', romaji: 'ryu', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'りょ', romaji: 'ryo', type: 'yoon', mnemonic: '', image: '', examples: [] },
+];
+
+export const katakanaYoon = [
+    { char: 'キャ', romaji: 'kya', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'キュ', romaji: 'kyu', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'キョ', romaji: 'kyo', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'シャ', romaji: 'sha', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'シュ', romaji: 'shu', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ショ', romaji: 'sho', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'チャ', romaji: 'cha', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'チュ', romaji: 'chu', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'チョ', romaji: 'cho', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ニャ', romaji: 'nya', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ニュ', romaji: 'nyu', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ニョ', romaji: 'nyo', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ヒャ', romaji: 'hya', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ヒゅ', romaji: 'hyu', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ヒョ', romaji: 'hyo', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ミャ', romaji: 'mya', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ミュ', romaji: 'myu', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'ミョ', romaji: 'myo', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'リャ', romaji: 'rya', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'リュ', romaji: 'ryu', type: 'yoon', mnemonic: '', image: '', examples: [] },
+    { char: 'リョ', romaji: 'ryo', type: 'yoon', mnemonic: '', image: '', examples: [] },
+];
+
+// Helper to get specific groups
+export const getKanaGroup = (groupName, script = 'hiragana') => {
+    const isKatakana = script === 'katakana';
+    const source = isKatakana ? katakana : hiragana;
+    const dakutenSource = isKatakana ? katakanaDakuten : hiraganaDakuten;
+    const handakutenSource = isKatakana ? katakanaHandakuten : hiraganaHandakuten;
+    const yoonSource = isKatakana ? katakanaYoon : hiraganaYoon;
+
+    switch (groupName) {
+        case 'vowels': return source.slice(0, 5);
+        case 'kSeries': return source.slice(5, 10);
+        case 'sSeries': return source.slice(10, 15);
+        case 'tSeries': return source.slice(15, 20);
+        case 'nSeries': return source.slice(20, 25);
+        case 'hSeries': return source.slice(25, 30);
+        case 'mSeries': return source.slice(30, 35);
+        case 'ySeries': return source.slice(35, 38);
+        case 'rSeries': return source.slice(38, 43);
+        case 'wSeries': return source.slice(43, 46);
+        case 'dakuten': return dakutenSource;
+        case 'handakuten': return handakutenSource;
+        case 'yoon': return yoonSource;
+        default: return [];
+    }
+};
+

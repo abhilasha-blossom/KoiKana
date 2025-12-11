@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { ArrowLeft, Clock, CheckCircle, XCircle, Trophy, RefreshCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { hiragana, katakana } from '../data/kanaData';
+import { hiragana, katakana, getKanaGroup } from '../data/kanaData';
 import useAudio from '../hooks/useAudio';
 import useProgress from '../hooks/useProgress';
 import { useTheme } from '../context/ThemeContext';
@@ -264,13 +264,58 @@ const QuizPage = () => {
     const [dueItems] = useState(() => getDueItems());
     const [isFlipped, setIsFlipped] = useState(false);
 
+    // Custom Mode State
+    const [isCustomMode, setIsCustomMode] = useState(false);
+    const [selectedGroups, setSelectedGroups] = useState({
+        vowels: true, kSeries: false, sSeries: false, tSeries: false, nSeries: false,
+        hSeries: false, mSeries: false, ySeries: false, rSeries: false, wSeries: false,
+        dakuten: false, handakuten: false, yoon: false
+    });
+
+    const KANA_GROUPS = [
+        { id: 'vowels', label: 'Vowels (A-O)' },
+        { id: 'kSeries', label: 'K-Series (Ka-Ko)' },
+        { id: 'sSeries', label: 'S-Series (Sa-So)' },
+        { id: 'tSeries', label: 'T-Series (Ta-To)' },
+        { id: 'nSeries', label: 'N-Series (Na-No)' },
+        { id: 'hSeries', label: 'H-Series (Ha-Ho)' },
+        { id: 'mSeries', label: 'M-Series (Ma-Mo)' },
+        { id: 'ySeries', label: 'Y-Series (Ya-Yo)' },
+        { id: 'rSeries', label: 'R-Series (Ra-Ro)' },
+        { id: 'wSeries', label: 'W-Series (Wa-Wo)' },
+        { id: 'dakuten', label: 'Dakuten (Ga/Za...)' },
+        { id: 'handakuten', label: 'Handakuten (Pa...)' },
+        { id: 'yoon', label: 'Combo (Kya...)' },
+    ];
+
     // Combine kana based on selection
     const allKana = useMemo(() => {
         let pool = [];
-        if (scriptType === 'hiragana' || scriptType === 'mix') pool = [...pool, ...hiragana];
-        if (scriptType === 'katakana' || scriptType === 'mix') pool = [...pool, ...katakana];
+
+        if (isCustomMode) {
+            // Custom Grouping Logic
+            const activeGroups = Object.keys(selectedGroups).filter(key => selectedGroups[key]);
+
+            // Safety: If no groups selected, avoid empty pool (maybe fallback to vowels?)
+            if (activeGroups.length === 0) return [];
+
+            activeGroups.forEach(group => {
+                if (scriptType === 'hiragana' || scriptType === 'mix') {
+                    pool = [...pool, ...getKanaGroup(group, 'hiragana')];
+                }
+                if (scriptType === 'katakana' || scriptType === 'mix') {
+                    pool = [...pool, ...getKanaGroup(group, 'katakana')];
+                }
+            });
+        } else {
+            // Standard Logic
+            if (scriptType === 'hiragana' || scriptType === 'mix') pool = [...pool, ...hiragana];
+            if (scriptType === 'katakana' || scriptType === 'mix') pool = [...pool, ...katakana];
+        }
+
+        // Remove empty placeholders if any (though getKanaGroup returns valid arrays) and filter logic
         return pool.filter(k => k.char);
-    }, [scriptType]);
+    }, [scriptType, isCustomMode, selectedGroups]);
 
     // Timer for Time Attack
     useEffect(() => {
@@ -290,6 +335,10 @@ const QuizPage = () => {
     }, [mode, isGameOver, timeLeft]);
 
     const startGame = (selectedMode) => {
+        if (allKana.length === 0) {
+            alert("Please select at least one kana group!");
+            return;
+        }
         setMode(selectedMode);
         setScore(0);
         setQuestionCount(0);
@@ -435,6 +484,47 @@ const QuizPage = () => {
                                 {type === 'mix' ? 'Both' : type}
                             </button>
                         ))}
+                    </div>
+
+                    {/* CUSTOM MODE TOGGLE */}
+                    <div className="w-full max-w-4xl px-4 py-2 mb-4 flex flex-col items-center">
+                        <button
+                            onClick={() => setIsCustomMode(!isCustomMode)}
+                            className={`
+                                flex items-center gap-2 px-6 py-2 rounded-full font-bold text-sm transition-all mb-4
+                                ${isCustomMode
+                                    ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-lg scale-105'
+                                    : 'bg-white/40 text-gray-600 hover:bg-white/60'}
+                            `}
+                        >
+                            <span>{isCustomMode ? '✨ Custom Practice ON' : '⚙️ Custom Practice OFF'}</span>
+                        </button>
+
+                        {/* SELECTION GRID (Visible only if Custom Mode is ON) */}
+                        <div className={`
+                            w-full flex flex-wrap justify-center gap-2 transition-all duration-500 overflow-hidden
+                            ${isCustomMode ? 'max-h-[1000px] opacity-100 mb-6' : 'max-h-0 opacity-0'}
+                        `}>
+                            {KANA_GROUPS.map((group) => (
+                                <button
+                                    key={group.id}
+                                    onClick={() => setSelectedGroups(prev => ({ ...prev, [group.id]: !prev[group.id] }))}
+                                    className={`
+                                        p-2 px-3 rounded-xl text-xs sm:text-sm font-bold border transition-all flex items-center gap-2
+                                        ${selectedGroups[group.id]
+                                            ? 'bg-indigo-100 border-indigo-300 text-indigo-700 shadow-sm'
+                                            : 'bg-white/30 border-white/40 text-gray-500 hover:bg-white/50'}
+                                    `}
+                                >
+                                    <div className="flex items-center gap-2 justify-center">
+                                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${selectedGroups[group.id] ? 'bg-indigo-500 border-indigo-500' : 'border-gray-400'}`}>
+                                            {selectedGroups[group.id] && <CheckCircle className="w-3 h-3 text-white" />}
+                                        </div>
+                                        {group.label}
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl w-full px-2 overflow-y-auto no-scrollbar pb-20 md:pb-0 h-full content-center">
