@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { ArrowLeft, Clock, CheckCircle, XCircle, Trophy, RefreshCcw } from 'lucide-react';
+import { ArrowLeft, Clock, CheckCircle, XCircle, Trophy, RefreshCcw, Star, Zap, Brain, PenTool, Hash, Ghost, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { hiragana, katakana, getKanaGroup } from '../data/kanaData';
 import useAudio from '../hooks/useAudio';
@@ -456,129 +456,182 @@ const QuizPage = () => {
     };
 
     if (mode === GAME_MODES.SELECT) {
+
+        // --- NEW CATEGORIZED CONFIGURATION ---
+        const ARCADE_MODES = [
+            { id: GAME_MODES.TIME_ATTACK, title: "Bubble Pop", icon: "🫧", desc: "Burst stats!", color: "cyan" },
+            { id: GAME_MODES.NINJA, title: "Kana Ninja", icon: "🥷", desc: "Speed Type", color: "rose" },
+            { id: GAME_MODES.SLICE, title: "Kana Slice", icon: "🏮", desc: "Swipe fast", color: "amber" },
+        ];
+
+        const DRILL_MODES = [
+            { id: GAME_MODES.MULTIPLE_CHOICE, title: "Quick Pick", icon: "🌸", desc: "Choose Correct", color: "pink" },
+            { id: GAME_MODES.INPUT, title: "Input Dojo", icon: "✍️", desc: "Type answers", color: "indigo" },
+            { id: GAME_MODES.WRITING, title: "Calligraphy", icon: "🖌️", desc: "Draw Kana", color: "purple" },
+            { id: GAME_MODES.MATCHING, title: "Memory", icon: "🧩", desc: "Find Pairs", color: "teal" },
+        ];
+
+        const renderModeCard = (m, isArcade = false) => {
+            // Dynamic Colors for Orbs
+            const colorMap = {
+                pink: 'from-pink-300 to-rose-300 shadow-pink-100',
+                amber: 'from-amber-300 to-orange-300 shadow-amber-100',
+                rose: 'from-rose-300 to-red-300 shadow-rose-100',
+                teal: 'from-teal-300 to-emerald-300 shadow-teal-100',
+                indigo: 'from-indigo-300 to-blue-300 shadow-indigo-100',
+                purple: 'from-purple-300 to-violet-300 shadow-purple-100',
+                cyan: 'from-cyan-300 to-blue-300 shadow-cyan-100',
+            };
+            const gradient = colorMap[m.color] || colorMap.pink;
+
+            return (
+                <button
+                    key={m.id}
+                    onClick={() => startGame(m.id)}
+                    onMouseEnter={() => playSound('pop')}
+                    className={`
+                        relative group overflow-hidden rounded-[2rem] text-left transition-all duration-300
+                        bg-white/60 backdrop-blur-xl border border-white/60 shadow-sm hover:shadow-xl hover:-translate-y-1
+                        ${isArcade ? 'p-5 flex flex-col justify-between aspect-[1.4/1]' : 'p-4 flex flex-col justify-between aspect-square'}
+                    `}
+                >
+                    {/* Hover Gradient */}
+                    <div className="absolute inset-0 bg-white/40 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                    {/* ORB ANIMATION */}
+                    <div className={`absolute -right-6 -bottom-6 ${isArcade ? 'w-32 h-32' : 'w-24 h-24'} rounded-full blur-[40px] opacity-20 group-hover:opacity-40 transition-all duration-500 bg-gradient-to-br ${gradient} group-hover:scale-125`}></div>
+
+                    <div className="relative z-10">
+                        <span className={`${isArcade ? 'text-4xl' : 'text-3xl'} mb-3 block filter drop-shadow-sm group-hover:scale-110 transition-transform duration-300`}>{m.icon}</span>
+                        <h3 className={`font-bold text-[#4A3B52] leading-tight ${isArcade ? 'text-lg' : 'text-base'}`}>{m.title}</h3>
+                        <p className="text-[#7A6B82] font-medium text-xs mt-0.5">{m.desc}</p>
+                    </div>
+
+                    {/* Play Icon (Optional hint) */}
+                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-2 group-hover:translate-x-0">
+                        {/* Simple chevron or dot could go here */}
+                    </div>
+                </button>
+            );
+        };
+
         return (
-            <div className={`h-screen ${theme.colors.bg} flex flex-col items-center justify-center p-4 relative overflow-hidden transition-colors duration-500`}>
+            <div className={`h-screen ${theme.colors.bg} flex flex-col items-center p-4 relative overflow-hidden transition-colors duration-500`}>
                 {/* Background Atmosphere */}
                 <div className={`absolute top-[-20%] left-[-10%] w-[500px] h-[500px] ${theme.colors.blob1} rounded-full blur-[100px] animate-blob mix-blend-multiply pointer-events-none`}></div>
                 <div className={`absolute bottom-[-20%] right-[-10%] w-[400px] h-[400px] ${theme.colors.blob2} rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-multiply pointer-events-none`}></div>
 
-                <Link to="/start" className="absolute top-4 left-4 p-2 rounded-full bg-white/40 backdrop-blur-md hover:bg-white/60 transition-colors z-50 shadow-sm border border-white/50">
-                    <ArrowLeft className={`${theme.colors.primary} w-5 h-5`} />
+                <Link to="/start" className="absolute top-4 left-4 p-3 rounded-full bg-white/60 backdrop-blur-md hover:bg-white/90 transition-all z-50 shadow-sm border border-white/50 group">
+                    <ArrowLeft className={`${theme.colors.primary} w-5 h-5 group-hover:-translate-x-1 transition-transform`} />
                 </Link>
 
-                <div className="relative z-10 flex flex-col items-center max-h-full w-full">
-                    <h1 className={`text-3xl md:text-4xl font-bold ${theme.colors.primary} mb-1 drop-shadow-sm`}>Training Dojo</h1>
-                    <div className="h-1 w-16 bg-gradient-to-r from-pink-300 to-purple-300 rounded-full mb-4"></div>
+                <div className="w-full max-w-4xl h-full flex flex-col relative z-10 pt-16 pb-4">
 
-                    {/* Script Selection Toggles - Glassmorphism */}
-                    <div className="flex bg-white/30 backdrop-blur-md p-1 rounded-full mb-6 shadow-sm border border-white/40 scale-90 origin-center">
-                        {['hiragana', 'mix', 'katakana'].map((type) => (
-                            <button
-                                key={type}
-                                onClick={() => setScriptType(type)}
-                                className={`px-6 py-2 rounded-full font-bold capitalize transition-all duration-300 text-sm ${scriptType === type
-                                    ? `bg-white ${theme.colors.accent} shadow-md scale-105`
-                                    : 'text-gray-600 hover:text-gray-800'
-                                    }`}
-                            >
-                                {type === 'mix' ? 'Both' : type}
-                            </button>
-                        ))}
-                    </div>
-
-                    {/* CUSTOM MODE TOGGLE */}
-                    <div className="w-full max-w-4xl px-4 py-2 mb-4 flex flex-col items-center">
-                        <button
-                            onClick={() => setIsCustomMode(!isCustomMode)}
-                            className={`
-                                flex items-center gap-2 px-6 py-2 rounded-full font-bold text-sm transition-all mb-4
-                                ${isCustomMode
-                                    ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-lg scale-105'
-                                    : 'bg-white/40 text-gray-600 hover:bg-white/60'}
-                            `}
-                        >
-                            <span>{isCustomMode ? '✨ Custom Practice ON' : '⚙️ Custom Practice OFF'}</span>
-                        </button>
-
-                        {/* SELECTION GRID (Visible only if Custom Mode is ON) */}
-                        <div className={`
-                            w-full flex flex-wrap justify-center gap-2 transition-all duration-500 overflow-hidden
-                            ${isCustomMode ? 'max-h-[1000px] opacity-100 mb-6' : 'max-h-0 opacity-0'}
-                        `}>
-                            {KANA_GROUPS.map((group) => (
+                    {/* Header */}
+                    <div className="text-center mb-6 flex-shrink-0">
+                        <h1 className={`text-4xl font-black ${theme.colors.primary} drop-shadow-sm`}>Training Dojo</h1>
+                        <div className="flex bg-white/40 backdrop-blur-md p-1 rounded-full mt-4 shadow-sm border border-white/40 inline-flex">
+                            {['hiragana', 'mix', 'katakana'].map((type) => (
                                 <button
-                                    key={group.id}
-                                    onClick={() => setSelectedGroups(prev => ({ ...prev, [group.id]: !prev[group.id] }))}
-                                    className={`
-                                        p-2 px-3 rounded-xl text-xs sm:text-sm font-bold border transition-all flex items-center gap-2
-                                        ${selectedGroups[group.id]
-                                            ? 'bg-indigo-100 border-indigo-300 text-indigo-700 shadow-sm'
-                                            : 'bg-white/30 border-white/40 text-gray-500 hover:bg-white/50'}
-                                    `}
+                                    key={type}
+                                    onClick={() => setScriptType(type)}
+                                    className={`px-6 py-2 rounded-full font-bold capitalize transition-all duration-300 text-sm ${scriptType === type
+                                        ? `bg-white ${theme.colors.accent} shadow-md scale-105`
+                                        : 'text-gray-600 hover:text-gray-800'
+                                        }`}
                                 >
-                                    <div className="flex items-center gap-2 justify-center">
-                                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${selectedGroups[group.id] ? 'bg-indigo-500 border-indigo-500' : 'border-gray-400'}`}>
-                                            {selectedGroups[group.id] && <CheckCircle className="w-3 h-3 text-white" />}
-                                        </div>
-                                        {group.label}
-                                    </div>
+                                    {type === 'mix' ? 'Both' : type}
                                 </button>
                             ))}
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl w-full px-2 overflow-y-auto no-scrollbar pb-20 md:pb-0 h-full content-center">
-                        {/* REVIEW CARD (Dynamic) */}
-                        {dueItems.length > 0 && (
+                    <div className="flex-grow overflow-y-auto no-scrollbar pb-20 px-2 space-y-8">
+
+                        {/* 1. HERO REVIEW SECTION */}
+                        {dueItems.length > 0 ? (
                             <button
                                 onClick={() => startGame(GAME_MODES.REVIEW)}
-                                className="
-                                    md:col-span-3 relative overflow-hidden group p-4 rounded-3xl text-left transition-all duration-500
-                                    bg-gradient-to-r from-green-100 to-emerald-50 bg-opacity-40 backdrop-blur-md border border-green-200
-                                    hover:shadow-[0_8px_30px_rgba(167,243,208,0.4)] hover:-translate-y-1
-                                    flex items-center justify-between
-                                "
+                                onMouseEnter={() => playSound('pop')}
+                                className="w-full relative overflow-hidden group p-6 rounded-[2.5rem] text-left transition-all duration-500
+                                    bg-gradient-to-br from-green-50 to-emerald-50 hover:to-white border border-green-100
+                                    hover:shadow-xl hover:-translate-y-1 flex items-center justify-between"
                             >
+                                <div className="absolute -right-10 -bottom-10 w-64 h-64 rounded-full blur-[60px] opacity-30 bg-green-300 group-hover:scale-125 transition-transform"></div>
+
                                 <div className="z-10">
-                                    <h3 className="text-xl font-bold text-green-800 mb-0.5 flex items-center gap-2">
-                                        <Clock className="w-5 h-5" /> SRS Review
-                                    </h3>
-                                    <p className="text-green-600 font-medium text-sm">
-                                        You have <span className="font-bold text-green-700">{dueItems.length}</span> items due!
+                                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold mb-2">
+                                        <Clock className="w-3 h-3" /> SRS Available
+                                    </div>
+                                    <h3 className="text-2xl font-black text-green-800 mb-1">Daily Review</h3>
+                                    <p className="text-green-600 font-medium">
+                                        You have <span className="font-bold text-green-700 text-lg">{dueItems.length}</span> items to review!
                                     </p>
                                 </div>
-                                <div className="bg-white/40 p-2 rounded-full animate-pulse">
-                                    <span className="text-2xl">🧠</span>
+                                <div className="z-10 bg-white/60 p-4 rounded-full shadow-sm backdrop-blur-sm group-hover:bg-white transition-colors">
+                                    <span className="text-3xl">🧠</span>
                                 </div>
                             </button>
+                        ) : (
+                            <div className="w-full p-6 rounded-[2.5rem] bg-white/40 border border-white/50 text-center relative overflow-hidden">
+                                <p className="text-gray-500 font-medium">🎉 All caught up! No reviews due right now.</p>
+                            </div>
                         )}
 
-                        {/* Mode Cards - Glassmorphism */}
-                        {[
-                            { id: GAME_MODES.MULTIPLE_CHOICE, title: "Multiple Choice", icon: "🌸", desc: "Select Romaji", color: "from-pink-100 to-rose-50" },
-                            { id: GAME_MODES.INPUT, title: "Input Challenge", icon: "✍️", desc: "Type sound", color: "from-purple-100 to-indigo-50" },
-                            { id: GAME_MODES.TIME_ATTACK, title: "Bubble Pop", icon: "🫧", desc: "Burst bubbles!", color: "from-blue-100 to-cyan-50" },
-                            { id: GAME_MODES.WRITING, title: "Writing", icon: "🖌️", desc: "Draw character", color: "from-orange-100 to-amber-50" },
-                            { id: GAME_MODES.MATCHING, title: "Memory Match", icon: "🧩", desc: "Find pairs", color: "from-teal-100 to-emerald-50" },
-                            { id: GAME_MODES.NINJA, title: "Kana Ninja", icon: "🥷", desc: "Type fast!", color: "from-rose-100 to-red-50" },
-                            { id: GAME_MODES.SLICE, title: "Kana Slice", icon: "🏮", desc: "Swipe Lanterns!", color: "from-orange-100 to-amber-50" },
+                        {/* 2. ARCADE ZONE */}
+                        <div>
+                            <h2 className="text-xl font-bold text-[#4A3B52] mb-3 flex items-center gap-2">
+                                <Zap className="w-5 h-5 text-amber-500" /> Arcade Zone
+                            </h2>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                {ARCADE_MODES.map(m => renderModeCard(m, true))}
+                            </div>
+                        </div>
 
-                        ].map((m) => (
+                        {/* 3. SKILL DRILLS */}
+                        <div>
+                            <h2 className="text-xl font-bold text-[#4A3B52] mb-3 flex items-center gap-2">
+                                <Brain className="w-5 h-5 text-indigo-500" /> Skill Drills
+                            </h2>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                {DRILL_MODES.map(m => renderModeCard(m, false))}
+                            </div>
+                        </div>
+
+                        {/* CUSTOM MODE TOGGLE (Simplified) */}
+                        <div className="flex justify-center mt-4">
                             <button
-                                key={m.id}
-                                onClick={() => startGame(m.id)}
-                                className={`
-                                    relative overflow-hidden group p-5 rounded-3xl text-left transition-all duration-500
-                                    bg-gradient-to-br ${m.color} bg-opacity-40 backdrop-blur-md border border-white/60
-                                    hover:shadow-[0_8px_30px_rgba(255,209,220,0.4)] hover:-translate-y-1
-                                `}
+                                onClick={() => setIsCustomMode(!isCustomMode)}
+                                className={`text-xs font-bold px-4 py-2 rounded-full transition-all flex items-center gap-2 border ${isCustomMode ? 'bg-indigo-100 text-indigo-600 border-indigo-200' : 'bg-white/30 text-gray-400 border-transparent hover:bg-white/50'}`}
                             >
-                                <div className="absolute top-0 right-0 w-24 h-24 bg-white/20 rounded-full blur-2xl -mr-12 -mt-12 transition-transform group-hover:scale-150"></div>
-                                <span className="text-4xl mb-2 block filter drop-shadow-sm group-hover:scale-110 transition-transform duration-300">{m.icon}</span>
-                                <h3 className="text-lg font-bold text-[#4A3B52] mb-1">{m.title}</h3>
-                                <p className="text-[#7A6B82] font-medium text-xs">{m.desc}</p>
+                                <Settings className="w-3 h-3" /> {isCustomMode ? 'Custom Settings Active' : 'Advanced Settings'}
                             </button>
-                        ))}
+                        </div>
+
+                        {/* CUSTOM SETTINGS PANEL */}
+                        {isCustomMode && (
+                            <div className="mt-4 p-4 bg-white/50 backdrop-blur-md rounded-3xl border border-white/60 animate-fade-in-up">
+                                <h3 className="text-sm font-bold text-gray-600 mb-3 text-center">Select Kana Groups</h3>
+                                <div className="flex flex-wrap justify-center gap-2">
+                                    {KANA_GROUPS.map((group) => (
+                                        <button
+                                            key={group.id}
+                                            onClick={() => setSelectedGroups(prev => ({ ...prev, [group.id]: !prev[group.id] }))}
+                                            className={`
+                                                px-3 py-1.5 rounded-lg text-xs font-bold border transition-all flex items-center gap-2
+                                                ${selectedGroups[group.id]
+                                                    ? 'bg-indigo-500 text-white border-indigo-600 shadow-md'
+                                                    : 'bg-white border-gray-200 text-gray-400 hover:border-indigo-300'}
+                                            `}
+                                        >
+                                            {selectedGroups[group.id] && <CheckCircle className="w-3 h-3" />}
+                                            {group.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
                     </div>
                 </div>
             </div>
@@ -679,7 +732,7 @@ const QuizPage = () => {
             </div>
 
             {/* Game Content */}
-            <div className="max-w-md w-full flex flex-col items-center gap-4 relative z-10 pb-20 md:pb-0 h-full justify-center">
+            <div className="max-w-4xl w-full flex flex-col items-center gap-4 relative z-10 pb-20 md:pb-0 h-full justify-center">
 
                 {/* Character Card - Glassmorphism (Hidden for Memory Game & Ninja & Review & Slice) */}
                 {mode !== GAME_MODES.MATCHING && mode !== GAME_MODES.NINJA && mode !== GAME_MODES.REVIEW && mode !== GAME_MODES.SLICE && (
@@ -757,6 +810,35 @@ const QuizPage = () => {
                     </div>
                 )}
 
+                {/* GAME COMPONENTS */}
+                {mode === GAME_MODES.TIME_ATTACK && (
+                    <BubbleGame options={options} onAnswer={handleAnswer} />
+                )}
+
+                {mode === GAME_MODES.MATCHING && (
+                    <MemoryGame pool={allKana} onComplete={() => handleAnswer('MATCH_COMPLETE')} theme={theme} />
+                )}
+
+                {mode === GAME_MODES.NINJA && (
+                    <NinjaGame onExit={() => setMode(GAME_MODES.SELECT)} />
+                )}
+
+                {mode === GAME_MODES.SLICE && (
+                    <KanaSlice onExit={() => setMode(GAME_MODES.SELECT)} scriptType={scriptType} />
+                )}
+
+                {mode === GAME_MODES.WRITING && currentQuestion && (
+                    <div className="w-full max-w-sm">
+                        <WritingCanvas
+                            char={currentQuestion.char}
+                            onComplete={() => handleAnswer(currentQuestion.romaji)}
+                        />
+                        <div className="text-center mt-4">
+                            <p className="text-[#7A6B82] font-bold">Draw: <span className="text-xl text-pink-500">{currentQuestion.romaji}</span></p>
+                        </div>
+                    </div>
+                )}
+
                 {/* Feedback Indicator - FADE OUT WITHOUT FLASHING INCORRECT */}
                 <div className={`h-6 transition-opacity duration-300 ${showFeedback ? 'opacity-100' : 'opacity-0'}`}>
                     {feedbackStatus === 'correct' ? (
@@ -800,103 +882,19 @@ const QuizPage = () => {
                             type="text"
                             value={inputAnswer}
                             onChange={(e) => setInputAnswer(e.target.value)}
-                            placeholder="Type pronunciation..."
-                            disabled={showFeedback}
+                            placeholder="Type Romaji..."
+                            className="w-full p-4 rounded-2xl bg-white/60 backdrop-blur-md border border-white/50 text-center text-xl font-bold text-[#4A3B52] focus:outline-none focus:ring-4 focus:ring-pink-200 shadow-inner"
                             autoFocus
-                            className="w-full p-4 text-center text-2xl font-bold text-[#4A3B52] rounded-3xl border-2 border-white/50 focus:border-pink-300 shadow-inner bg-white/50 backdrop-blur-md focus:bg-white/80 outline-none transition-all placeholder:font-normal placeholder:text-gray-400/80"
                         />
-                        <button
-                            type="submit"
-                            disabled={!inputAnswer || showFeedback}
-                            className="w-full mt-4 bg-gradient-to-r from-pink-400 to-pink-500 text-white font-bold py-3 rounded-2xl shadow-[0_4px_15px_rgba(244,114,182,0.4)] hover:shadow-[0_8px_25px_rgba(244,114,182,0.5)] hover:-translate-y-0.5 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            Check Answer
+                        <button type="submit" className="absolute right-6 top-1/2 -translate-y-1/2 p-2 bg-pink-500 rounded-xl text-white shadow-md hover:bg-pink-600 transition-colors">
+                            <ArrowLeft className="w-5 h-5 rotate-180" />
                         </button>
                     </form>
                 )}
 
-                {(mode === GAME_MODES.TIME_ATTACK) && (
-                    <BubbleGame
-                        options={options}
-                        onAnswer={handleAnswer}
-                    />
-                )}
-
-                {(mode === GAME_MODES.WRITING) && (
-                    <div className="flex flex-col items-center gap-2">
-                        <WritingCanvas
-                            char={currentQuestion?.char}
-                            onComplete={() => handleAnswer(currentQuestion?.romaji)}
-                        />
-                        <p className="text-gray-500 text-xs text-center">Draw the character above!</p>
-                    </div>
-                )}
-
-                {(mode === GAME_MODES.MATCHING) && (
-                    <MemoryGame
-                        pool={allKana}
-                        onComplete={(bonusScore) => {
-                            setScore(prev => prev + bonusScore);
-                            addXP(bonusScore + 50);
-                            setIsGameOver(true);
-                            setMascotMessage("Memory Master! 🧠✨");
-                            playSound('success');
-                        }}
-                    />
-                )}
-
-                {(mode === GAME_MODES.NINJA) && (
-                    <div className="w-full h-[600px] shadow-2xl rounded-xl overflow-hidden border-4 border-slate-800">
-                        <ErrorBoundary>
-                            <NinjaGame onExit={() => setMode(GAME_MODES.SELECT)} />
-                        </ErrorBoundary>
-                    </div>
-                )}
-
-                {(mode === GAME_MODES.SLICE) && (
-                    <div className="w-full h-[600px] shadow-2xl rounded-xl overflow-hidden border-4 border-slate-900 relative">
-                        <ErrorBoundary>
-                            <KanaSlice
-                                onExit={() => setMode(GAME_MODES.SELECT)}
-                                scriptType={scriptType === 'mix' ? 'mix' : scriptType}
-                            />
-                        </ErrorBoundary>
-                    </div>
-                )}
             </div>
         </div>
     );
 };
-
-class ErrorBoundary extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { hasError: false, error: null };
-    }
-
-    static getDerivedStateFromError(error) {
-        return { hasError: true, error };
-    }
-
-    componentDidCatch(error, errorInfo) {
-        console.error("NinjaGame Crash:", error, errorInfo);
-    }
-
-    render() {
-        if (this.state.hasError) {
-            return (
-                <div className="p-6 bg-red-100 text-red-800 h-full flex flex-col items-center justify-center text-center">
-                    <h2 className="text-xl font-bold mb-2">Something went wrong.</h2>
-                    <pre className="text-xs bg-white p-2 rounded border border-red-300 max-w-full overflow-auto text-left">
-                        {this.state.error && this.state.error.toString()}
-                    </pre>
-                    <button onClick={() => this.setState({ hasError: false })} className="mt-4 px-4 py-2 bg-red-500 text-white rounded">Retry</button>
-                </div>
-            );
-        }
-
-        return this.props.children;
-    }
-}
 
 export default QuizPage;
