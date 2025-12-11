@@ -32,7 +32,7 @@ const SignInPage = () => {
     };
 
     return (
-        <div className="h-screen w-full bg-[#FAFAF9] relative overflow-hidden flex flex-col items-center justify-center font-sans">
+        <div className="min-h-screen w-full bg-[#FAFAF9] relative overflow-x-hidden flex flex-col items-center justify-center font-sans py-10 selection:bg-pink-200">
             {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
 
             {/* --- ATMOSPHERE: PASTEL SUNSET PATH --- */}
@@ -69,7 +69,7 @@ const SignInPage = () => {
             {/* --- ILLUSTRATION LAYER --- */}
             <div className="relative z-10 w-full max-w-6xl h-full flex flex-col items-center justify-center">
 
-                <div className="relative w-full flex justify-center items-center">
+                <div className="relative w-full flex flex-col justify-center items-center">
                     <svg viewBox="0 0 800 500" className="w-full h-auto drop-shadow-2xl">
                         <defs>
                             <linearGradient id="gateRed" x1="0" y1="0" x2="1" y2="0">
@@ -126,8 +126,8 @@ const SignInPage = () => {
                     </svg>
 
                     {/* --- ACTIONS CONTAINER --- */}
-                    {/* Positioned lower than before to clear the gate base completely */}
-                    <div className="absolute bottom-0 translate-y-[45%] w-full flex justify-center z-50">
+                    {/* Positioned relatively now to ensure it stacks properly on small screens */}
+                    <div className="relative w-full flex justify-center z-50 px-4 -mt-20 md:-mt-32">
                         <div className="bg-white/90 backdrop-blur-xl p-6 rounded-3xl shadow-[0_0_50px_rgba(255,182,193,0.4)] border border-pink-100 w-full max-w-sm text-center transform hover:-translate-y-1 transition-all duration-500">
 
                             {!showGuestInput ? (

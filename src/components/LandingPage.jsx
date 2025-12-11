@@ -57,7 +57,7 @@ const LandingPage = () => {
   const isLoggedIn = !!user || !!username;
 
   return (
-    <div className="relative flex flex-col h-screen w-full overflow-hidden bg-[#FFF0F5] overscroll-none">
+    <div className="relative flex flex-col min-h-screen w-full overflow-x-hidden bg-[#FFF0F5] overscroll-none selection:bg-pink-200">
 
       {showProfileModal && <ProfileEditModal onClose={() => setShowProfileModal(false)} />}
 
@@ -129,8 +129,8 @@ const LandingPage = () => {
         ))}
       </div>
 
-      {/* Spacer for top content (balance) */}
-      <div className="flex-none h-24 pointer-events-none"></div>
+      {/* Spacer for top content (balance) - Reduced for better mobile fit */}
+      <div className="flex-none h-16 pointer-events-none"></div>
 
       {/* Main Content */}
       <div className="relative z-10 flex-grow flex flex-col items-center justify-center gap-4 px-4 min-h-0">
