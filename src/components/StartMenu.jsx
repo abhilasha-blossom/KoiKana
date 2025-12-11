@@ -88,7 +88,7 @@ const StartMenu = () => {
             icon: BookOpen,
             color: 'indigo',
             to: '/about',
-            full: true // 4x1 (Full Width)
+            wide: true // Changed from full to wide to fit below Kanji/Vocab
         },
 
         // CREATE CATEGORY
