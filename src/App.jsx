@@ -18,6 +18,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { SettingsProvider } from './contexts/SettingsContext';
 
 import SignInPage from './components/SignInPage';
+import UpdatePasswordPage from './components/UpdatePasswordPage';
 import BackgroundMusic from './components/BackgroundMusic';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
             <BackgroundMusic />
             <Routes>
               <Route path="/" element={<SignInPage />} />
+              <Route path="/update-password" element={<UpdatePasswordPage />} />
               <Route path="/home" element={<LandingPage />} />
               <Route path="/start" element={<StartMenu />} />
               <Route path="/kana" element={<KanaPage />} />
