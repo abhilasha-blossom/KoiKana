@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower2, Palette, Settings, Coffee, Feather, Quote } from 'lucide-react';
+import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower2, Palette, Settings, Coffee, Feather, Quote, User } from 'lucide-react';
 import useAudio from '../hooks/useAudio';
 import OmikujiModal from './OmikujiModal';
 import SettingsModal from './SettingsModal';
 import KanaGuideModal from './KanaGuideModal';
+import AuthModal from './AuthModal';
+import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 
 const StartMenu = () => {
@@ -13,14 +15,16 @@ const StartMenu = () => {
     const [showFortune, setShowFortune] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const [showGuide, setShowGuide] = useState(false);
+    const [showAuth, setShowAuth] = useState(false);
+    const { user } = useAuth();
 
     return (
         <div className="h-screen bg-[#FFF0F5] relative overflow-hidden flex flex-col items-center justify-center p-4 selection:bg-pink-200">
             {/* Omikuji Modal */}
-            {/* Omikuji Modal */}
             {showFortune && <OmikujiModal onClose={() => setShowFortune(false)} />}
             {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
             {showGuide && <KanaGuideModal onClose={() => setShowGuide(false)} />}
+            {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
 
             {/* Soft Moving Background Decor */}
             <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-gradient-to-br from-pink-200/40 to-purple-200/40 rounded-full blur-[100px] pointer-events-none mix-blend-multiply animate-blob"></div>
@@ -34,6 +38,19 @@ const StartMenu = () => {
 
             {/* Omikuji Button */}
             <div className="absolute top-4 right-4 flex items-center gap-3 z-50">
+                <button
+                    onClick={() => setShowAuth(true)}
+                    className="p-3 rounded-full bg-white/60 hover:bg-white/90 transition-all duration-300 backdrop-blur-md shadow-sm border border-white/50 text-[#4A3B52] hover:scale-110 group relative"
+                >
+                    {user ? (
+                        <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-pink-400 to-purple-400 text-white flex items-center justify-center text-xs font-bold">
+                            {user.email[0].toUpperCase()}
+                        </div>
+                    ) : (
+                        <User className="w-5 h-5 group-hover:text-pink-500 transition-colors" />
+                    )}
+                </button>
+
                 <button
                     onClick={() => setShowSettings(true)}
                     className="p-3 rounded-full bg-white/60 hover:bg-white/90 transition-all duration-300 backdrop-blur-md shadow-sm border border-white/50 text-[#4A3B52] hover:scale-110 group"

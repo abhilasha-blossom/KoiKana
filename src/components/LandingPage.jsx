@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowRight, Sparkles, Flame, Flower2 } from 'lucide-react';
+import { ArrowRight, Sparkles, Flame, Flower2, Edit2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useProgress from '../hooks/useProgress';
 import useAudio from '../hooks/useAudio';
 
 
 const LandingPage = () => {
-  // const navigate = useNavigate(); // Unused
-  // const location = useLocation(); // Unused
-  const { streak, mastery, xp, username } = useProgress();
+  const { streak, mastery, xp, username, updateUsername } = useProgress();
   const { playSound } = useAudio();
   const masteredCount = Object.keys(mastery).length;
 
-
-
   const [petals, setPetals] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [tempName, setTempName] = useState(username || '');
+
+  useEffect(() => {
+    setTempName(username || '');
+  }, [username]);
 
   useEffect(() => {
     const generatedPetals = Array.from({ length: 20 }).map((_, i) => ({
@@ -23,9 +25,20 @@ const LandingPage = () => {
       animationDelay: `${Math.random() * 5}s`,
       animationDuration: `${10 + Math.random() * 10}s`,
     }));
-    setPetals(generatedPetals); // eslint-disable-line react-hooks/set-state-in-effect
+    setPetals(generatedPetals);
   }, []);
 
+  const handleNameSubmit = (e) => {
+    e.preventDefault();
+    if (tempName.trim()) {
+      updateUsername(tempName.trim());
+      setIsEditing(false);
+      playSound('correct');
+    } else {
+      setIsEditing(false); // Revert if empty
+      setTempName(username || '');
+    }
+  };
 
   return (
     <div className="relative flex flex-col h-screen w-full overflow-hidden bg-[#FFF0F5] overscroll-none">
@@ -83,12 +96,37 @@ const LandingPage = () => {
 
         {/* Text Content */}
         <div className="space-y-2 text-center flex-shrink-0">
-          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-[#4A3B52] drop-shadow-sm">
-            {username ? (
-              <>Welcome back, <span className="text-[#FF8FAB]">{username}</span></>
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-[#4A3B52] drop-shadow-sm flex items-center justify-center gap-2">
+
+            {isEditing ? (
+              <form onSubmit={handleNameSubmit} className="flex items-center">
+                <input
+                  type="text"
+                  value={tempName}
+                  onChange={(e) => setTempName(e.target.value)}
+                  className="bg-white/50 border-b-2 border-pink-400 text-center focus:outline-none text-[#FF8FAB] px-2 py-1 rounded w-64 md:w-80 font-bold"
+                  autoFocus
+                  onBlur={handleNameSubmit}
+                />
+              </form>
             ) : (
-              <>Where Japanese feels like <span className="text-[#FF8FAB]">love</span></>
+              username ? (
+                <>
+                  Welcome back,
+                  <span
+                    onClick={() => { setTempName(username); setIsEditing(true); }}
+                    className="text-[#FF8FAB] cursor-pointer hover:underline decoration-pink-300 underline-offset-4 decoration-2 flex items-center gap-2 group relative"
+                    title="Click to edit nickname"
+                  >
+                    {username}
+                    <Edit2 className="w-5 h-5 text-pink-300 opacity-0 group-hover:opacity-100 transition-opacity absolute -right-8 top-1/2 -translate-y-1/2" />
+                  </span>
+                </>
+              ) : (
+                <>Where Japanese feels like <span className="text-[#FF8FAB]">love</span></>
+              )
             )}
+
           </h1>
           <p className="text-sm md:text-lg text-[#7A6B82] max-w-lg mx-auto leading-relaxed font-medium px-4">
             Learn through emotions, storytelling, and aesthetic comfort.
