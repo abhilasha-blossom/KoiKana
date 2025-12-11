@@ -148,6 +148,11 @@ const LandingPage = () => {
           />
         </div>
 
+        {/* Slogan - Added Below Logo */}
+        <h2 className="text-xl md:text-2xl font-bold text-[#FF8FAB] tracking-wide font-serif -mt-2 drop-shadow-sm">
+          Where Japanese feels like love
+        </h2>
+
         {/* Text Content */}
         <div className="space-y-2 text-center flex-shrink-0">
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-[#4A3B52] drop-shadow-sm flex items-center justify-center gap-2">
