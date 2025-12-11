@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ArrowLeft, Search, Book, Loader2, Volume2, Tag } from 'lucide-react';
+import { ArrowLeft, Search, Book, Loader2, Volume2, Tag, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import useAudio from '../hooks/useAudio';
@@ -13,36 +13,53 @@ const DictionaryPage = () => {
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searched, setSearched] = useState(false);
+    const [error, setError] = useState('');
 
-    // Cors proxy might be needed in production, but Jisho usually allows direct calls or requires a proxy.
-    // We will try direct first. If it fails due to CORS, we will use a public proxy.
-    // NOTE: Jisho API does not support CORS directly for browser fetch requests in strict environments.
-    // We will use a common CORS proxy for development/demo purposes.
-    const PROXY_URL = 'https://api.allorigins.win/get?url=';
+    const PROXIES = [
+        'https://corsproxy.io/?',
+        'https://api.allorigins.win/raw?url=',
+        'https://api.codetabs.com/v1/proxy?quest='
+    ];
+
     const API_URL = 'https://jisho.org/api/v1/search/words?keyword=';
+
+    const fetchJisho = async (keyword) => {
+        const targetUrl = API_URL + encodeURIComponent(keyword);
+
+        // Try each proxy in order
+        for (const proxy of PROXIES) {
+            try {
+                const response = await fetch(`${proxy}${encodeURIComponent(targetUrl)}`);
+                if (!response.ok) continue; // Try next proxy
+
+                const data = await response.json();
+                if (data.meta && data.meta.status === 200) {
+                    return data.data;
+                }
+            } catch (err) {
+                console.warn(`Proxy ${proxy} failed:`, err);
+                continue;
+            }
+        }
+        throw new Error('All connection methods failed. Please try again.');
+    };
 
     const handleSearch = async (e) => {
         e.preventDefault();
         if (!query.trim()) return;
 
         setLoading(true);
+        setError('');
         playSound('pop');
         setSearched(true);
-        setResults([]); // Clear previous results
+        setResults([]);
 
         try {
-            // Using allorigins to bypass CORS
-            const response = await fetch(`${PROXY_URL}${encodeURIComponent(API_URL + query)}`);
-            const data = await response.json();
-
-            // allorigins wraps the response in a 'contents' string which is the actual JSON
-            const jishoData = JSON.parse(data.contents);
-
-            if (jishoData.meta.status === 200) {
-                setResults(jishoData.data);
-            }
+            const data = await fetchJisho(query);
+            setResults(data);
         } catch (error) {
             console.error("Dictionary Search Error:", error);
+            setError("Could not connect to the dictionary service. This might be a temporary network issue.");
         } finally {
             setLoading(false);
         }
@@ -62,7 +79,7 @@ const DictionaryPage = () => {
                     <Book className="w-8 h-8" />
                     Kotoba Library
                 </h1>
-                <div className="w-12"></div> {/* Spacer for center alignment */}
+                <div className="w-12"></div>
             </div>
 
             {/* Search Section */}
@@ -85,9 +102,17 @@ const DictionaryPage = () => {
                 </form>
             </div>
 
+            {/* Error Message */}
+            {error && (
+                <div className="max-w-xl mx-auto mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 flex items-center gap-3 animate-bump">
+                    <AlertCircle className="w-5 h-5" />
+                    <p className="font-medium text-sm">{error}</p>
+                </div>
+            )}
+
             {/* Results Grid */}
             <div className="max-w-4xl mx-auto space-y-4">
-                {searched && results.length === 0 && !loading && (
+                {searched && results.length === 0 && !loading && !error && (
                     <div className="text-center py-10 opacity-70">
                         <p className="text-xl font-bold text-gray-500">No results found for "{query}"</p>
                         <p className="text-sm text-gray-400 mt-2">Try checking the spelling (e.g. "neko" instead of "necco")</p>
@@ -101,7 +126,8 @@ const DictionaryPage = () => {
                     return (
                         <div
                             key={index}
-                            className="bg-white/60 backdrop-blur-md border border-white/60 rounded-3xl p-6 shadow-sm hover:shadow-xl hover:translate-y-[-2px] transition-all duration-300"
+                            className="bg-white/60 backdrop-blur-md border border-white/60 rounded-3xl p-6 shadow-sm hover:shadow-xl hover:translate-y-[-2px] transition-all duration-300 animate-bump"
+                            style={{ animationDelay: `${index * 50}ms` }}
                         >
                             <div className="flex flex-col md:flex-row gap-6">
                                 {/* Left: Japanese Word */}
