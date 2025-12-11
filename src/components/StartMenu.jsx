@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower2, Palette, Settings, Coffee } from 'lucide-react';
+import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower2, Palette, Settings, Coffee, Feather } from 'lucide-react';
 import useAudio from '../hooks/useAudio';
 import OmikujiModal from './OmikujiModal';
 import SettingsModal from './SettingsModal';
@@ -240,6 +240,25 @@ const StartMenu = () => {
                         <div>
                             <h3 className={`text-xl font-bold ${theme.colors.primary} group-hover:text-sky-600 transition-colors`}>Onsen Mode</h3>
                             <p className="text-[#7A6B82] text-sm">Relax & Breathe ♨️</p>
+                        </div>
+                    </div>
+                </Link>
+
+                {/* 10. HAIKU GARDEN - Row 6 Left */}
+                <Link
+                    to="/haiku"
+                    onMouseEnter={() => playSound('pop')}
+                    className="md:col-span-2 group relative bg-white/40 backdrop-blur-xl rounded-[2rem] p-5 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(236,72,153,0.2)] transition-all duration-500 hover:-translate-y-1 overflow-hidden flex items-center justify-between"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-pink-100/30 via-white/20 to-fuchsia-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+
+                    <div className="relative z-10 flex items-center gap-4">
+                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-pink-500 shadow-sm group-hover:scale-110 transition-transform duration-500">
+                            <Feather className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <h3 className={`text-xl font-bold ${theme.colors.primary} group-hover:text-pink-600 transition-colors`}>Haiku Garden</h3>
+                            <p className="text-[#7A6B82] text-sm">Write Poetry 🌸</p>
                         </div>
                     </div>
                 </Link>

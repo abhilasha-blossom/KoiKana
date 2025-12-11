@@ -13,6 +13,7 @@ import QuizPage from './components/QuizPage';
 import NameStampPage from './components/NameStampPage';
 import VocabularyPage from './components/VocabularyPage';
 import ShopPage from './components/ShopPage';
+import HaikuGardenPage from './components/HaikuGardenPage';
 import { ThemeProvider } from './context/ThemeContext';
 import { SettingsProvider } from './contexts/SettingsContext';
 
@@ -40,6 +41,7 @@ function App() {
               <Route path="/name-stamp" element={<NameStampPage />} />
               <Route path="/vocabulary" element={<VocabularyPage />} />
               <Route path="/shop" element={<ShopPage />} />
+              <Route path="/haiku" element={<HaikuGardenPage />} />
             </Routes>
           </div>
         </Router>
