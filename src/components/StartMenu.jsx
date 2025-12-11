@@ -181,8 +181,8 @@ const StartMenu = () => {
                 <div className={`absolute -right-8 -bottom-8 w-32 h-32 md:w-48 md:h-48 rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-all duration-700 group-hover:scale-125 bg-gradient-to-br ${gradientColors}`}></div>
 
                 <div className={`relative z-10 flex ${item.full ? 'flex-row items-center gap-6 h-full' : 'flex-col h-full justify-between'}`}>
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${item.full ? '' : 'mb-3'} group-hover:scale-110 transition-transform duration-500 ${themeClasses.split(' ').slice(0, 2).join(' ')}`}>
-                        <item.icon className="w-6 h-6" />
+                    <div className={`${item.big || item.full ? 'w-20 h-20 rounded-3xl' : 'w-12 h-12 rounded-2xl'} flex items-center justify-center ${item.full ? '' : 'mb-3'} group-hover:scale-110 transition-transform duration-500 ${themeClasses.split(' ').slice(0, 2).join(' ')}`}>
+                        <item.icon className={item.big || item.full ? "w-10 h-10" : "w-6 h-6"} />
                     </div>
                     <div className={item.full ? 'flex-grow' : ''}>
                         <h3 className={`text-lg md:text-xl font-bold ${theme.colors.primary}`}>{item.title}</h3>
@@ -257,8 +257,8 @@ const StartMenu = () => {
                             key={tab}
                             onClick={() => setActiveTab(tab)}
                             className={`px-6 py-2 rounded-full font-bold text-sm transition-all duration-300 ${activeTab === tab
-                                    ? 'bg-pink-500 text-white shadow-lg shadow-pink-200 scale-105'
-                                    : 'bg-white/50 text-gray-500 hover:bg-white hover:text-pink-400'
+                                ? 'bg-pink-500 text-white shadow-lg shadow-pink-200 scale-105'
+                                : 'bg-white/50 text-gray-500 hover:bg-white hover:text-pink-400'
                                 }`}
                         >
                             {tab}
