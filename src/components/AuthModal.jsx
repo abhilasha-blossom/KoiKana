@@ -16,12 +16,13 @@ const AVATAR_PRESETS = [
 ];
 
 const AuthModal = ({ onClose }) => {
-    const { signIn, signUp } = useAuth();
+    const { signIn, signUp, resetPassword } = useAuth();
     const { theme } = useTheme();
     const [isLogin, setIsLogin] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
+    const [showForgot, setShowForgot] = useState(false);
 
     // Form States
     const [email, setEmail] = useState('');
@@ -95,6 +96,22 @@ const AuthModal = ({ onClose }) => {
         }
     };
 
+    const handleResetPassword = async (e) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        try {
+            await resetPassword(email);
+            setShowSuccess(true);
+        } catch (err) {
+            console.error(err);
+            setError(err.message || 'Failed to send reset email');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     if (showSuccess) {
         return (
             <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -112,15 +129,79 @@ const AuthModal = ({ onClose }) => {
                     </div>
                     <h2 className="text-2xl font-black text-[#503C5C] mb-2">Check your inbox!</h2>
                     <p className="text-gray-600 mb-6">
-                        We've sent a verification link to <span className="font-bold text-pink-500">{email}</span>. Please confirm your email to activate your account.
+                        {showForgot
+                            ? <span>We've sent a password reset link to <span className="font-bold text-pink-500">{email}</span>.</span>
+                            : <span>We've sent a verification link to <span className="font-bold text-pink-500">{email}</span>. Please confirm your email to activate your account.</span>
+                        }
                     </p>
 
                     <button
-                        onClick={() => { setShowSuccess(false); setIsLogin(true); }}
+                        onClick={() => { setShowSuccess(false); setIsLogin(true); setShowForgot(false); }}
                         className="w-full py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
                     >
                         Back to Log In
                     </button>
+                </div>
+            </div>
+        );
+    }
+
+    // FORGOT PASSWORD VIEW
+    if (showForgot) {
+        return (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-y-auto">
+                <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
+                <div className="relative bg-white/90 backdrop-blur-xl border border-white/60 p-6 md:p-8 rounded-[2rem] shadow-2xl w-full max-w-md animate-bump my-8">
+                    <button onClick={onClose} className="absolute top-4 right-4 p-2 rounded-full hover:bg-black/5 text-gray-500 transition-colors"><X className="w-5 h-5" /></button>
+
+                    <div className="text-center mb-6">
+                        <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-100 text-amber-500 flex items-center justify-center mb-4">
+                            <Lock className="w-8 h-8" />
+                        </div>
+                        <h2 className={`text-2xl font-black ${theme.colors.primary}`}>Reset Password</h2>
+                        <p className="text-gray-500 text-sm mt-1">Enter your email to receive a reset link</p>
+                    </div>
+
+                    {error && (
+                        <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm flex items-start gap-3">
+                            <AlertCircle className="w-5 h-5 shrink-0" />
+                            <p>{error}</p>
+                        </div>
+                    )}
+
+                    <form onSubmit={handleResetPassword} className="space-y-4">
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Email</label>
+                            <div className="relative">
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="w-full bg-white/50 border border-gray-200 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-amber-400/50 transition-all font-medium text-gray-700 placeholder:text-gray-400"
+                                    placeholder="name@example.com"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className={`w-full py-4 rounded-xl font-bold text-white shadow-lg shadow-amber-200 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-amber-400 to-orange-500'}`}
+                        >
+                            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Send Reset Link'}
+                        </button>
+                    </form>
+
+                    <div className="mt-6 text-center">
+                        <button
+                            onClick={() => setShowForgot(false)}
+                            className="text-sm font-bold text-gray-400 hover:text-gray-600 transition-colors"
+                        >
+                            Back to Log In
+                        </button>
+                    </div>
                 </div>
             </div>
         );
@@ -247,7 +328,14 @@ const AuthModal = ({ onClose }) => {
                     </div>
 
                     <div className="space-y-1">
-                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Password</label>
+                        <div className="flex justify-between items-center">
+                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Password</label>
+                            {isLogin && (
+                                <button type="button" onClick={() => setShowForgot(true)} className="text-xs font-bold text-pink-500 hover:text-pink-600 hover:underline">
+                                    Forgot Password?
+                                </button>
+                            )}
+                        </div>
                         <div className="relative">
                             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                             <input
