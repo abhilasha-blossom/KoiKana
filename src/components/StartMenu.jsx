@@ -35,6 +35,16 @@ const StartMenu = () => {
             big: true // 2x2
         },
         {
+            id: 'dictionary',
+            category: 'Study',
+            title: 'Kotoba Library',
+            subtitle: 'Dictionary',
+            icon: BookOpen,
+            color: 'emerald',
+            to: '/dictionary',
+            wide: true
+        },
+        {
             id: 'kanji',
             category: 'Study',
             title: 'Kanji Module',

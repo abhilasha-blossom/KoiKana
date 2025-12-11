@@ -19,6 +19,7 @@ import { SettingsProvider } from './contexts/SettingsContext';
 
 import SignInPage from './components/SignInPage';
 import UpdatePasswordPage from './components/UpdatePasswordPage';
+import DictionaryPage from './components/DictionaryPage';
 import BackgroundMusic from './components/BackgroundMusic';
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
               <Route path="/name-stamp" element={<NameStampPage />} />
               <Route path="/vocabulary" element={<VocabularyPage />} />
               <Route path="/shop" element={<ShopPage />} />
+              <Route path="/dictionary" element={<DictionaryPage />} />
               <Route path="/haiku" element={<HaikuGardenPage />} />
             </Routes>
           </div>
