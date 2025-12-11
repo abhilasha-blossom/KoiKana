@@ -26,13 +26,14 @@ export const AuthProvider = ({ children }) => {
         return () => subscription.unsubscribe();
     }, []);
 
-    const signUp = async (email, password, username) => {
+    const signUp = async (email, password, username, avatarUrl) => {
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
             options: {
                 data: {
                     username: username || email.split('@')[0],
+                    avatar_url: avatarUrl,
                 },
             },
         });

@@ -21,6 +21,7 @@ const useProgress = () => {
     const [xp, setXp] = useState(() => parseInt(localStorage.getItem('koiKana_xp') || '0'));
     const [lastVisit, setLastVisit] = useState(() => localStorage.getItem('koiKana_lastVisit'));
     const [username, setUsername] = useState(() => localStorage.getItem('koiKana_username'));
+    const [avatar, setAvatar] = useState(() => localStorage.getItem('koiKana_avatar'));
 
     const [mastery, setMastery] = useState(() => safeParse('koiKana_mastery', {}));
     const [srsData, setSRSData] = useState(() => safeParse('koiKana_srs', {}));
@@ -70,7 +71,7 @@ const useProgress = () => {
                 // Fetch remote profile
                 let { data: profile, error } = await supabase
                     .from('profiles')
-                    .select('xp, streak, username')
+                    .select('xp, streak, username, avatar_url')
                     .eq('id', user.id)
                     .single();
 
@@ -81,14 +82,24 @@ const useProgress = () => {
 
                 if (!profile) {
                     // Create profile if not exists (using local data)
+                    // Check if we have metadata from signUp
+                    const metaAvatar = user.user_metadata?.avatar_url;
+
                     const { error: insertError } = await supabase
                         .from('profiles')
                         .insert([{
                             id: user.id,
                             xp: xp,
                             streak: streak,
-                            username: username || user.email?.split('@')[0]
+                            username: username || user.email?.split('@')[0],
+                            avatar_url: avatar || metaAvatar
                         }]);
+
+                    // If we used metaAvatar, update local state
+                    if (metaAvatar && metaAvatar !== avatar) {
+                        setAvatar(metaAvatar);
+                        localStorage.setItem('koiKana_avatar', metaAvatar);
+                    }
 
                     if (insertError) console.error('Error creating profile:', insertError);
                 } else {
@@ -122,10 +133,18 @@ const useProgress = () => {
                         localStorage.setItem('koiKana_username', profile.username);
                     }
 
+                    if (profile.avatar_url && profile.avatar_url !== avatar) {
+                        setAvatar(profile.avatar_url);
+                        localStorage.setItem('koiKana_avatar', profile.avatar_url);
+                    } else if (avatar && !profile.avatar_url) {
+                        needsRemoteUpdate = true;
+                    }
+
                     if (needsRemoteUpdate) {
                         await supabase.from('profiles').update({
                             xp: xp,
                             streak: streak,
+                            avatar_url: avatar,
                             updated_at: new Date()
                         }).eq('id', user.id);
                     }
@@ -155,6 +174,14 @@ const useProgress = () => {
         localStorage.setItem('koiKana_username', name);
         if (user) {
             await supabase.from('profiles').update({ username: name }).eq('id', user.id);
+        }
+    };
+
+    const updateAvatar = async (url) => {
+        setAvatar(url);
+        localStorage.setItem('koiKana_avatar', url);
+        if (user) {
+            await supabase.from('profiles').update({ avatar_url: url }).eq('id', user.id);
         }
     };
 
@@ -212,7 +239,7 @@ const useProgress = () => {
         return Object.keys(srsData).filter(char => srsData[char].nextReview <= now);
     };
 
-    return { streak, xp, addXP, mastery, markMastered, srsData, updateSRS, getDueItems, unlockedThemes, buyTheme, username, updateUsername };
+    return { streak, xp, addXP, mastery, markMastered, srsData, updateSRS, getDueItems, unlockedThemes, buyTheme, username, updateUsername, avatar, updateAvatar };
 };
 
 export default useProgress;

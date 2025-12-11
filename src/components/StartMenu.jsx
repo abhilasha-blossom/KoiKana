@@ -6,6 +6,7 @@ import OmikujiModal from './OmikujiModal';
 import SettingsModal from './SettingsModal';
 import KanaGuideModal from './KanaGuideModal';
 import AuthModal from './AuthModal';
+import ProfileEditModal from './ProfileEditModal';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 
@@ -16,15 +17,17 @@ const StartMenu = () => {
     const [showSettings, setShowSettings] = useState(false);
     const [showGuide, setShowGuide] = useState(false);
     const [showAuth, setShowAuth] = useState(false);
+    const [showProfileModal, setShowProfileModal] = useState(false);
     const { user } = useAuth();
 
     return (
         <div className="h-screen bg-[#FFF0F5] relative overflow-hidden flex flex-col items-center justify-center p-4 selection:bg-pink-200">
-            {/* Omikuji Modal */}
+            {/* Modals */}
             {showFortune && <OmikujiModal onClose={() => setShowFortune(false)} />}
             {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
             {showGuide && <KanaGuideModal onClose={() => setShowGuide(false)} />}
             {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
+            {showProfileModal && <ProfileEditModal onClose={() => setShowProfileModal(false)} />}
 
             {/* Soft Moving Background Decor */}
             <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-gradient-to-br from-pink-200/40 to-purple-200/40 rounded-full blur-[100px] pointer-events-none mix-blend-multiply animate-blob"></div>
@@ -36,15 +39,18 @@ const StartMenu = () => {
                 <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             </Link>
 
-            {/* Omikuji Button */}
+            {/* Top Right Controls */}
             <div className="absolute top-4 right-4 flex items-center gap-3 z-50">
+
+                {/* User / Profile Button */}
                 <button
-                    onClick={() => setShowAuth(true)}
+                    onClick={() => user ? setShowProfileModal(true) : setShowAuth(true)}
                     className="p-3 rounded-full bg-white/60 hover:bg-white/90 transition-all duration-300 backdrop-blur-md shadow-sm border border-white/50 text-[#4A3B52] hover:scale-110 group relative"
+                    title={user ? "Edit Profile" : "Sign In"}
                 >
                     {user ? (
                         <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-pink-400 to-purple-400 text-white flex items-center justify-center text-xs font-bold">
-                            {user.email[0].toUpperCase()}
+                            {user.email ? user.email[0].toUpperCase() : <User className="w-3 h-3" />}
                         </div>
                     ) : (
                         <User className="w-5 h-5 group-hover:text-pink-500 transition-colors" />
