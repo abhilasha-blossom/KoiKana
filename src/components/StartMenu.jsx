@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower, Palette, Settings } from 'lucide-react';
+import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower2, Palette, Settings, Coffee } from 'lucide-react';
 import useAudio from '../hooks/useAudio';
 import OmikujiModal from './OmikujiModal';
 import SettingsModal from './SettingsModal';
@@ -42,7 +42,7 @@ const StartMenu = () => {
                     className="p-1.5 pr-3 rounded-full bg-red-50 hover:bg-red-100/80 transition-all duration-300 backdrop-blur-md shadow-sm border border-red-200 text-red-500 hover:scale-105 group flex items-center gap-2"
                 >
                     <div className="w-7 h-7 rounded-full bg-red-400 text-white flex items-center justify-center shadow-sm group-hover:rotate-12 transition-transform">
-                        <Flower className="w-4 h-4" />
+                        <Flower2 className="w-4 h-4" />
                     </div>
                     <span className="font-bold text-xs hidden md:block">Daily Fortune</span>
                 </button>
@@ -202,6 +202,44 @@ const StartMenu = () => {
                         <div>
                             <h3 className={`text-xl font-bold ${theme.colors.primary} group-hover:text-green-600 transition-colors`}>Theme Shop</h3>
                             <p className="text-[#7A6B82] text-sm">Customize look 🎨</p>
+                        </div>
+                    </div>
+                </Link>
+
+                {/* 8. YOKAI COLLECTION - Row 5 Left */}
+                <Link
+                    to="/yokai"
+                    onMouseEnter={() => playSound('pop')}
+                    className="md:col-span-2 group relative bg-white/40 backdrop-blur-xl rounded-[2rem] p-5 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(75,85,99,0.2)] transition-all duration-500 hover:-translate-y-1 overflow-hidden flex items-center justify-between"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-gray-100/30 via-white/20 to-slate-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+
+                    <div className="relative z-10 flex items-center gap-4">
+                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-slate-600 shadow-sm group-hover:scale-110 transition-transform duration-500">
+                            <ScrollText className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <h3 className={`text-xl font-bold ${theme.colors.primary} group-hover:text-slate-700 transition-colors`}>Collection</h3>
+                            <p className="text-[#7A6B82] text-sm">Japanese Spirits 👻</p>
+                        </div>
+                    </div>
+                </Link>
+
+                {/* 9. ONSEN MODE - Row 5 Right */}
+                <Link
+                    to="/onsen"
+                    onMouseEnter={() => playSound('pop')}
+                    className="md:col-span-2 group relative bg-white/40 backdrop-blur-xl rounded-[2rem] p-5 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(56,189,248,0.2)] transition-all duration-500 hover:-translate-y-1 overflow-hidden flex items-center justify-between"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-sky-100/30 via-white/20 to-blue-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+
+                    <div className="relative z-10 flex items-center gap-4">
+                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-sky-500 shadow-sm group-hover:scale-110 transition-transform duration-500">
+                            <Coffee className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <h3 className={`text-xl font-bold ${theme.colors.primary} group-hover:text-sky-600 transition-colors`}>Onsen Mode</h3>
+                            <p className="text-[#7A6B82] text-sm">Relax & Breathe ♨️</p>
                         </div>
                     </div>
                 </Link>

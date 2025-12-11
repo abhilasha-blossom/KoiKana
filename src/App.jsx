@@ -1,7 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LandingPage from './components/LandingPage';
+import LoadingScreen from './components/LoadingScreen';
+import LandingPage from './components/LandingPage'; // Restored Import
 import StartMenu from './components/StartMenu';
+import YokaiPage from './components/YokaiPage';
+import OnsenPage from './components/OnsenPage'; // New Feature
 import KanaPage from './components/KanaPage';
 import AboutPage from './components/AboutPage';
 import SpeakingPage from './components/SpeakingPage';
@@ -31,6 +34,8 @@ function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/speaking" element={<SpeakingPage />} />
               <Route path="/kanji" element={<KanjiPage />} />
+              <Route path="/yokai" element={<YokaiPage />} />
+              <Route path="/onsen" element={<OnsenPage />} />
               <Route path="/quiz" element={<QuizPage />} />
               <Route path="/name-stamp" element={<NameStampPage />} />
               <Route path="/vocabulary" element={<VocabularyPage />} />
