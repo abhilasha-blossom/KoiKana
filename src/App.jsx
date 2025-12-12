@@ -22,7 +22,9 @@ import { ProgressProvider } from './context/ProgressContext';
 import SignInPage from './components/SignInPage';
 import UpdatePasswordPage from './components/UpdatePasswordPage';
 import DictionaryPage from './components/DictionaryPage';
-import BackgroundMusic from './components/BackgroundMusic';
+import RadioPlayer from './components/RadioPlayer';
+import SushiGamePage from './components/SushiGamePage';
+import KanjiDojoPage from './components/KanjiDojoPage';
 
 function App() {
   return (
@@ -31,7 +33,7 @@ function App() {
         <ProgressProvider>
           <Router>
             <div className="min-h-screen bg-[#FDF6E3] font-sans text-gray-800 transition-colors duration-500">
-              <BackgroundMusic />
+              <RadioPlayer />
               <Routes>
                 <Route path="/" element={<SignInPage />} />
                 <Route path="/update-password" element={<UpdatePasswordPage />} />
@@ -49,6 +51,8 @@ function App() {
                 <Route path="/shop" element={<ShopPage />} />
                 <Route path="/dictionary" element={<DictionaryPage />} />
                 <Route path="/haiku" element={<HaikuGardenPage />} />
+                <Route path="/sushi" element={<SushiGamePage />} />
+                <Route path="/dojo" element={<KanjiDojoPage />} />
               </Routes>
             </div>
           </Router>

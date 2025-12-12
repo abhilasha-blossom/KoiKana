@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { ArrowLeft, Clock, CheckCircle, XCircle, Trophy, RefreshCcw, Star, Zap, Brain, PenTool, Hash, Ghost, Settings } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { hiragana, katakana, getKanaGroup } from '../data/kanaData';
 import useAudio from '../hooks/useAudio';
 import useProgress from '../hooks/useProgress';
@@ -253,6 +253,7 @@ const QuizPage = () => {
     const { playSound } = useAudio();
     const { addXP, updateSRS, getDueItems } = useProgress();
     const { theme } = useTheme();
+    const navigate = useNavigate();
 
     // Feedback Logic - Seprated to prevent "Incorrect Flash"
     const [feedbackStatus, setFeedbackStatus] = useState(null); // 'correct' | 'incorrect'
@@ -339,6 +340,12 @@ const QuizPage = () => {
             alert("Please select at least one kana group!");
             return;
         }
+
+        if (selectedMode === 'sushi') {
+            navigate('/sushi', { state: { scriptType } });
+            return;
+        }
+
         setMode(selectedMode);
         setScore(0);
         setQuestionCount(0);
@@ -462,6 +469,7 @@ const QuizPage = () => {
             { id: GAME_MODES.TIME_ATTACK, title: "Bubble Pop", icon: "🫧", desc: "Burst stats!", color: "cyan" },
             { id: GAME_MODES.NINJA, title: "Kana Ninja", icon: "🥷", desc: "Speed Type", color: "rose" },
             { id: GAME_MODES.SLICE, title: "Kana Slice", icon: "🏮", desc: "Swipe fast", color: "amber" },
+            { id: 'sushi', title: "Sushi Go!", icon: "🍣", desc: "Type the Romaji", color: "orange" },
         ];
 
         const DRILL_MODES = [

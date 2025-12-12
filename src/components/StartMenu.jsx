@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower2, Palette, Settings, Coffee, Feather, Quote, User, Brain, Gamepad2, Ghost } from 'lucide-react';
+import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower2, Palette, Settings, Coffee, Feather, Quote, User, Brain, Gamepad2, Ghost, Utensils, Brush } from 'lucide-react';
 import useAudio from '../hooks/useAudio';
 import OmikujiModal from './OmikujiModal';
 import SettingsModal from './SettingsModal';
@@ -62,6 +62,18 @@ const StartMenu = () => {
             color: 'rose',
             to: '/vocabulary'
         },
+        {
+            id: 'dojo',
+            category: 'Study',
+            title: 'Kanji Dojo',
+            subtitle: 'Stroke Practice',
+            icon: Brush,
+            color: 'indigo',
+            to: '/dojo',
+            big: true
+        },
+
+
         {
             id: 'speaking',
             category: 'Study',
@@ -134,6 +146,7 @@ const StartMenu = () => {
             to: '/onsen',
             wide: true
         },
+
         {
             id: 'shop',
             category: 'Relax',
