@@ -308,7 +308,6 @@ const MochiGamePage = () => {
                                         <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-1">Customer Order</p>
                                         {/* NEUTRAL COLOR TEXT TO PREVENT CHEATING */}
                                         <h2 className="text-4xl font-black text-gray-800 mb-1 drop-shadow-sm">{currentOrder.romaji}</h2>
-                                        <p className="text-gray-500 font-bold text-lg mb-1">{currentOrder.meaning}</p>
                                     </div>
                                 </div>
                             )}
