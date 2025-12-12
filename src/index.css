@@ -646,3 +646,121 @@
   animation-name: draw;
   animation-timing-function: ease-in-out;
 }
+
+/* AQUARIUM NEW ANIMATIONS */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+@keyframes float-particle {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(10px, -20px);
+  }
+}
+
+.animate-float-particle {
+  animation: float-particle 20s ease-in-out infinite;
+}
+
+@keyframes rise-wobble {
+  0% {
+    bottom: -20px;
+    transform: translateX(0);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.6;
+  }
+
+  100% {
+    bottom: 100%;
+    transform: translateX(20px);
+    opacity: 0;
+  }
+}
+
+.animate-rise-wobble {
+  animation: rise-wobble 10s linear infinite;
+}
+
+@keyframes swim-slow {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-swim-slow {
+  animation: swim-slow 6s ease-in-out infinite;
+}
+
+@keyframes tail-wag {
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(15deg);
+  }
+}
+
+.animate-tail-wag {
+  animation: tail-wag 1s ease-in-out infinite;
+}
+
+@keyframes fin-wave {
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(15deg);
+  }
+}
+
+.animate-fin-wave {
+  animation: fin-wave 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+
+  0%,
+  90%,
+  100% {
+    transform: scaleY(1);
+  }
+
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+.animate-blink {
+  animation: blink 4s infinite;
+}
