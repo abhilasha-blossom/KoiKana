@@ -198,7 +198,7 @@ const SushiGamePage = () => {
                             className="flex flex-col items-center transition-transform"
                         >
                             {/* Plate */}
-                            <div className="w-24 h-24 rounded-full bg-white shadow-xl border-4 border-gray-100 flex flex-col items-center justify-center relative">
+                            <div className="w-24 h-24 rounded-full bg-stone-200 shadow-xl border-4 border-white flex flex-col items-center justify-center relative">
                                 {/* Sushi Graphic */}
                                 <div className="scale-75 mb-1">
                                     {renderSushi(plate.sushi)}
