@@ -16,6 +16,8 @@ import ShopPage from './components/ShopPage';
 import HaikuGardenPage from './components/HaikuGardenPage';
 import { ThemeProvider } from './context/ThemeContext';
 import { SettingsProvider } from './contexts/SettingsContext';
+import { ProgressProvider } from './context/ProgressContext';
+
 
 import SignInPage from './components/SignInPage';
 import UpdatePasswordPage from './components/UpdatePasswordPage';
@@ -26,29 +28,31 @@ function App() {
   return (
     <ThemeProvider>
       <SettingsProvider>
-        <Router>
-          <div className="min-h-screen bg-[#FDF6E3] font-sans text-gray-800 transition-colors duration-500">
-            <BackgroundMusic />
-            <Routes>
-              <Route path="/" element={<SignInPage />} />
-              <Route path="/update-password" element={<UpdatePasswordPage />} />
-              <Route path="/home" element={<LandingPage />} />
-              <Route path="/start" element={<StartMenu />} />
-              <Route path="/kana" element={<KanaPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/speaking" element={<SpeakingPage />} />
-              <Route path="/kanji" element={<KanjiPage />} />
-              <Route path="/yokai" element={<YokaiPage />} />
-              <Route path="/onsen" element={<OnsenPage />} />
-              <Route path="/quiz" element={<QuizPage />} />
-              <Route path="/name-stamp" element={<NameStampPage />} />
-              <Route path="/vocabulary" element={<VocabularyPage />} />
-              <Route path="/shop" element={<ShopPage />} />
-              <Route path="/dictionary" element={<DictionaryPage />} />
-              <Route path="/haiku" element={<HaikuGardenPage />} />
-            </Routes>
-          </div>
-        </Router>
+        <ProgressProvider>
+          <Router>
+            <div className="min-h-screen bg-[#FDF6E3] font-sans text-gray-800 transition-colors duration-500">
+              <BackgroundMusic />
+              <Routes>
+                <Route path="/" element={<SignInPage />} />
+                <Route path="/update-password" element={<UpdatePasswordPage />} />
+                <Route path="/home" element={<LandingPage />} />
+                <Route path="/start" element={<StartMenu />} />
+                <Route path="/kana" element={<KanaPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/speaking" element={<SpeakingPage />} />
+                <Route path="/kanji" element={<KanjiPage />} />
+                <Route path="/yokai" element={<YokaiPage />} />
+                <Route path="/onsen" element={<OnsenPage />} />
+                <Route path="/quiz" element={<QuizPage />} />
+                <Route path="/name-stamp" element={<NameStampPage />} />
+                <Route path="/vocabulary" element={<VocabularyPage />} />
+                <Route path="/shop" element={<ShopPage />} />
+                <Route path="/dictionary" element={<DictionaryPage />} />
+                <Route path="/haiku" element={<HaikuGardenPage />} />
+              </Routes>
+            </div>
+          </Router>
+        </ProgressProvider>
       </SettingsProvider>
     </ThemeProvider>
   );
