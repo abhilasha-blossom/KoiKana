@@ -294,6 +294,17 @@ const StartMenu = () => {
                     <span className="font-bold text-xs hidden md:block">Daily Fortune</span>
                 </button>
 
+                {/* Stamp Card Manual Button */}
+                <button
+                    onClick={() => setShowStampCard(true)}
+                    className="p-1.5 pr-3 rounded-full bg-amber-50 hover:bg-amber-100/80 transition-all duration-300 backdrop-blur-md shadow-sm border border-amber-200 text-amber-600 hover:scale-105 group flex items-center gap-2"
+                >
+                    <div className="w-7 h-7 rounded-full bg-amber-400 text-white flex items-center justify-center shadow-sm group-hover:rotate-12 transition-transform">
+                        <Calendar className="w-4 h-4" />
+                    </div>
+                    <span className="font-bold text-xs hidden md:block">Stamp Card</span>
+                </button>
+
                 {/* Profile Button REMOVED as requested */}
 
                 {/* Settings */}
