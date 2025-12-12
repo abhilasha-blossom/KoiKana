@@ -40,6 +40,7 @@ const MochiGamePage = () => {
     const [ingredients, setIngredients] = useState([]);
     const [mochiState, setMochiState] = useState('empty'); // empty, filled, wrapped
     const [feedback, setFeedback] = useState(null); // 'correct', 'wrong'
+    const [isTransitioning, setIsTransitioning] = useState(false);
 
     // Timer
     useEffect(() => {
@@ -68,26 +69,31 @@ const MochiGamePage = () => {
     };
 
     const generateOrder = () => {
+        // Reset state first
         setMochiState('empty');
         setFeedback(null);
+        setIsTransitioning(true);
 
-        // Pick a random target
+        // Pick data
         const target = MOCHI_FLAVORS[Math.floor(Math.random() * MOCHI_FLAVORS.length)];
-        setCurrentOrder(target);
 
-        // Pick distractors (3 wrong options)
+        // Pick distractions
         const distractors = MOCHI_FLAVORS
             .filter(f => f.id !== target.id)
             .sort(() => Math.random() - 0.5)
             .slice(0, 3);
-
-        // Combine and shuffle
         const options = [...distractors, target].sort(() => Math.random() - 0.5);
-        setIngredients(options);
+
+        // Delay setting the order to avoid visual glitches (seeing the answer before swap)
+        setTimeout(() => {
+            setCurrentOrder(target);
+            setIngredients(options);
+            setIsTransitioning(false);
+        }, 600);
     };
 
     const handleIngredientClick = (ingredient) => {
-        if (mochiState !== 'empty') return; // Prevent double clicks
+        if (mochiState !== 'empty' || isTransitioning) return;
 
         if (ingredient.id === currentOrder.id) {
             // Correct!
@@ -104,35 +110,32 @@ const MochiGamePage = () => {
 
             setTimeout(() => {
                 generateOrder();
-            }, 1500);
+            }, 2000); // giving time to enjoy the cute wrapped state
         } else {
             // Wrong!
             playSound('incorrect');
             setFeedback('wrong');
-            // Shake effect handled by CSS
             setTimeout(() => setFeedback(null), 500);
         }
     };
 
     const renderFilling = (flavor) => {
+        if (!flavor) return null;
         switch (flavor.id) {
             case 'ichigo':
                 return (
                     <div className="w-full h-full rounded-full bg-rose-500 relative overflow-hidden shadow-inner border shadow-[inset_0_-4px_10px_rgba(0,0,0,0.2)]">
-                        {/* Seeds */}
                         <div className="absolute top-[20%] left-[30%] w-1.5 h-2 bg-yellow-100/60 rounded-full rotate-12"></div>
                         <div className="absolute top-[40%] left-[20%] w-1.5 h-2 bg-yellow-100/60 rounded-full -rotate-12"></div>
                         <div className="absolute top-[60%] left-[35%] w-1.5 h-2 bg-yellow-100/60 rounded-full rotate-6"></div>
                         <div className="absolute top-[30%] right-[30%] w-1.5 h-2 bg-yellow-100/60 rounded-full -rotate-6"></div>
                         <div className="absolute top-[55%] right-[25%] w-1.5 h-2 bg-yellow-100/60 rounded-full rotate-12"></div>
-                        {/* Leaf */}
                         <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-10 h-6 bg-green-500 rounded-b-full shadow-sm"></div>
                     </div>
                 );
             case 'matcha':
                 return (
                     <div className="w-full h-full rounded-full bg-green-600 relative shadow-inner flex items-center justify-center overflow-hidden">
-                        {/* Powder Texture */}
                         <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.3)_1px,transparent_1px)] bg-[length:4px_4px] opacity-40"></div>
                         <div className="absolute top-2 right-4 w-6 h-6 bg-white/10 blur-md rounded-full"></div>
                     </div>
@@ -140,14 +143,12 @@ const MochiGamePage = () => {
             case 'kinako':
                 return (
                     <div className="w-full h-full rounded-full bg-[#D4A373] relative shadow-inner flex items-center justify-center overflow-hidden">
-                        {/* Tan Powder Texture */}
                         <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.4)_1px,transparent_1px)] bg-[length:3px_3px] opacity-50"></div>
                     </div>
                 );
             case 'anko':
                 return (
                     <div className="w-full h-full rounded-full bg-[#5e1c1c] relative shadow-inner overflow-hidden border border-[#3d1212]">
-                        {/* Bean Texture */}
                         <div className="absolute top-3 left-4 w-4 h-3 bg-black/20 rounded-full rotate-45"></div>
                         <div className="absolute bottom-4 right-5 w-5 h-4 bg-black/20 rounded-full -rotate-12"></div>
                         <div className="absolute top-1/2 left-1/2 w-full h-full bg-gradient-to-br from-transparent to-black/30"></div>
@@ -156,7 +157,6 @@ const MochiGamePage = () => {
             case 'choco':
                 return (
                     <div className="w-full h-full rounded-full bg-[#3E2723] relative shadow-inner overflow-hidden border border-[#231512]">
-                        {/* Swirl Gloss */}
                         <div className="absolute top-2 left-2 w-8 h-8 rounded-full border-t-4 border-l-4 border-white/10 rotate-45 blur-[1px]"></div>
                     </div>
                 );
@@ -168,7 +168,6 @@ const MochiGamePage = () => {
                 const detailColor = isYuzu ? 'bg-yellow-200' : 'bg-orange-300';
                 return (
                     <div className={`w-full h-full rounded-full ${baseColor} relative shadow-inner overflow-hidden border ${borderColor}`}>
-                        {/* Segments */}
                         <div className={`absolute inset-2 border-2 ${isYuzu ? 'border-yellow-200' : 'border-orange-300'} rounded-full opacity-50`}></div>
                         <div className={`absolute w-full h-0.5 ${detailColor}/50 top-1/2 left-0 -translate-y-1/2 rotate-45`}></div>
                         <div className={`absolute w-full h-0.5 ${detailColor}/50 top-1/2 left-0 -translate-y-1/2 -rotate-45`}></div>
@@ -180,7 +179,6 @@ const MochiGamePage = () => {
                 return (
                     <div className="w-full h-full rounded-full bg-pink-300 relative shadow-inner flex items-center justify-center">
                         <div className="w-12 h-12 bg-pink-400/50 rounded-full blur-[1px] relative">
-                            {/* Petal shape hint */}
                             <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-4 h-4 bg-pink-100 rounded-full blur-sm"></div>
                         </div>
                     </div>
@@ -188,7 +186,6 @@ const MochiGamePage = () => {
             case 'imo':
                 return (
                     <div className="w-full h-full rounded-full bg-purple-600 relative shadow-inner flex items-center justify-center overflow-hidden border border-purple-800">
-                        {/* Skin Texture */}
                         <div className="absolute w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjOEUyNERBIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=')] opacity-50"></div>
                         <div className="absolute top-3 left-3 w-4 h-2 bg-purple-400/30 rounded-full -rotate-12"></div>
                     </div>
@@ -196,14 +193,12 @@ const MochiGamePage = () => {
             case 'goma':
                 return (
                     <div className="w-full h-full rounded-full bg-stone-800 relative shadow-inner flex items-center justify-center overflow-hidden">
-                        {/* Sesame Seeds */}
                         <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(200,200,200,0.6)_1px,transparent_1px)] bg-[length:6px_6px] opacity-60 rotate-12"></div>
                     </div>
                 );
             case 'ramune':
                 return (
                     <div className="w-full h-full rounded-full bg-cyan-400 relative shadow-inner flex items-center justify-center overflow-hidden border border-cyan-500">
-                        {/* Bubbles */}
                         <div className="absolute bottom-2 left-3 w-2 h-2 bg-white/60 rounded-full animate-bounce"></div>
                         <div className="absolute top-4 right-4 w-3 h-3 bg-white/40 rounded-full"></div>
                         <div className="absolute bottom-5 right-5 w-1.5 h-1.5 bg-white/70 rounded-full animate-pulse"></div>
@@ -212,7 +207,6 @@ const MochiGamePage = () => {
             case 'melon':
                 return (
                     <div className="w-full h-full rounded-full bg-green-400 relative shadow-inner flex items-center justify-center overflow-hidden border border-green-500">
-                        {/* Melon Grid */}
                         <div className="absolute inset-0 border-[0.5px] border-green-200/50 rounded-full scale-150 rotate-45 opacity-50" style={{ background: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.3) 10px, rgba(255,255,255,0.3) 11px), repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,0.3) 10px, rgba(255,255,255,0.3) 11px)' }}></div>
                     </div>
                 );
@@ -253,19 +247,21 @@ const MochiGamePage = () => {
             {/* Main Game Area */}
             <div className="flex-1 flex flex-col items-center justify-center relative z-10 max-w-4xl mx-auto w-full">
 
-                {gameState === 'playing' && currentOrder && (
+                {gameState === 'playing' && (
                     <>
                         {/* CUSTOMER ORDER BUBBLE */}
-                        <div className="mb-8 animate-fade-in-down w-full max-w-md px-4 relative z-30">
-                            <div className="bg-white/90 backdrop-blur-md rounded-[2rem] p-6 shadow-xl border-2 border-pink-100 relative">
-                                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-white rotate-45 border-r-2 border-b-2 border-pink-100"></div>
-                                <div className="text-center">
-                                    <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-1">Customer Order</p>
-                                    {/* NEUTRAL COLOR TEXT TO PREVENT CHEATING */}
-                                    <h2 className="text-4xl font-black text-gray-800 mb-1 drop-shadow-sm">{currentOrder.romaji}</h2>
-                                    <p className="text-gray-500 font-bold text-lg mb-1">{currentOrder.meaning}</p>
+                        <div className={`mb-8 w-full max-w-md px-4 relative z-30 transition-all duration-500 ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+                            {currentOrder && (
+                                <div className="bg-white/90 backdrop-blur-md rounded-[2rem] p-6 shadow-xl border-2 border-pink-100 relative">
+                                    <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-white rotate-45 border-r-2 border-b-2 border-pink-100"></div>
+                                    <div className="text-center">
+                                        <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-1">Customer Order</p>
+                                        {/* NEUTRAL COLOR TEXT TO PREVENT CHEATING */}
+                                        <h2 className="text-4xl font-black text-gray-800 mb-1 drop-shadow-sm">{currentOrder.romaji}</h2>
+                                        <p className="text-gray-500 font-bold text-lg mb-1">{currentOrder.meaning}</p>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
 
                         {/* WORKSPACE */}
@@ -276,10 +272,13 @@ const MochiGamePage = () => {
                             {/* THE MOCHI */}
                             <div className={`
                                 w-56 h-56 rounded-[3rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] transition-all duration-700 flex items-center justify-center relative overflow-hidden backdrop-blur-sm
-                                ${mochiState === 'wrapped' ? currentOrder.dough : 'bg-white/90'}
+                                ${mochiState === 'wrapped' && currentOrder ? currentOrder.dough : 'bg-white/95'}
                                 ${mochiState === 'wrapped' ? 'scale-105 shadow-[0_20px_60px_-12px_rgba(255,182,193,0.4)]' : 'scale-100'}
                                 ${feedback === 'wrong' ? 'animate-shake border-4 border-red-300' : 'border-4 border-white/50'}
                              `}>
+                                {/* Powder Texture */}
+                                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjRkZGIiBmaWxsLW9wYWNpdHk9IjAuMiIvPgo8L3N2Zz4=')] opacity-30 pointer-events-none z-20"></div>
+
                                 {/* Inner shadow/Highlight for Glossy Mochi Look */}
                                 <div className="absolute inset-0 rounded-[3rem] shadow-[inset_-10px_-10px_30px_rgba(0,0,0,0.05),inset_10px_10px_20px_rgba(255,255,255,0.8)] pointer-events-none z-20"></div>
 
@@ -288,21 +287,27 @@ const MochiGamePage = () => {
                                     absolute w-28 h-28 transition-all duration-500 z-10
                                     ${mochiState === 'empty' ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}
                                  `}>
-                                    {renderFilling(currentOrder)}
+                                    {currentOrder && renderFilling(currentOrder)}
                                 </div>
 
-                                {/* Face/Status */}
+                                {/* Kawaii Face (Only when wrapped) */}
                                 {mochiState === 'wrapped' && (
-                                    <div className="absolute inset-0 flex items-center justify-center animate-bounce z-30">
-                                        <span className="text-7xl filter drop-shadow-lg">✨</span>
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center z-30 animate-bounce-custom">
+                                        <div className="flex gap-12 mb-2">
+                                            <div className="w-3 h-3 bg-gray-800 rounded-full animate-blink"></div>
+                                            <div className="w-3 h-3 bg-gray-800 rounded-full animate-blink"></div>
+                                        </div>
+                                        <div className="w-4 h-2 bg-pink-400/50 rounded-full mb-1"></div>
                                     </div>
                                 )}
                             </div>
                         </div>
 
                         {/* INGREDIENTS AREA */}
-                        <div className="w-full px-4">
-                            <p className="text-center text-gray-500 font-bold mb-4 animate-pulse">Tap the correct ingredient!</p>
+                        <div className={`w-full px-4 transition-opacity duration-500 ${isTransitioning ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+                            <p className="text-center text-gray-500 font-bold mb-4 animate-pulse">
+                                {currentOrder ? `Select the ${currentOrder.romaji} filling!` : 'Loading...'}
+                            </p>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
                                 {ingredients.map((ing) => (
                                     <button
