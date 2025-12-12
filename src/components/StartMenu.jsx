@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower2, Palette, Settings, Coffee, Feather, Quote, User, Brain, Gamepad2, Ghost, Utensils, Brush } from 'lucide-react';
+import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower2, Palette, Settings, Coffee, Feather, Quote, User, Brain, Gamepad2, Ghost, Utensils, Brush, Calendar } from 'lucide-react';
 import useAudio from '../hooks/useAudio';
 import OmikujiModal from './OmikujiModal';
 import SettingsModal from './SettingsModal';
@@ -261,7 +261,6 @@ const StartMenu = () => {
             {/* Modals */}
             {showFortune && <OmikujiModal onClose={() => setShowFortune(false)} />}
             {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
-            {showGuide && <KanaGuideModal onClose={() => setShowGuide(false)} />}
             {showGuide && <KanaGuideModal onClose={() => setShowGuide(false)} />}
             {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
             {showStampCard && (
