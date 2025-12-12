@@ -6,14 +6,22 @@ import useAudio from '../hooks/useAudio';
 
 // Vocabulary Data
 const MOCHI_FLAVORS = [
-    { id: 'ichigo', romaji: 'Ichigo', kana: 'いちご', emoji: '🍓', color: 'bg-rose-500', dough: 'bg-rose-200', text: 'text-rose-600' },
-    { id: 'matcha', romaji: 'Matcha', kana: 'まっちゃ', emoji: '🍵', color: 'bg-green-600', dough: 'bg-green-200', text: 'text-green-700' },
-    { id: 'anko', romaji: 'Anko', kana: 'あんこ', emoji: '🫘', color: 'bg-red-900', dough: 'bg-white', text: 'text-red-900' }, // White dough for daifuku
-    { id: 'momo', romaji: 'Momo', kana: 'もも', emoji: '🍑', color: 'bg-pink-400', dough: 'bg-pink-100', text: 'text-pink-500' },
-    { id: 'mikan', romaji: 'Mikan', kana: 'みかん', emoji: '🍊', color: 'bg-orange-500', dough: 'bg-orange-100', text: 'text-orange-500' },
-    { id: 'sakura', romaji: 'Sakura', kana: 'さくら', emoji: '🌸', color: 'bg-pink-300', dough: 'bg-pink-50', text: 'text-pink-400' },
-    { id: 'kuri', romaji: 'Kuri', kana: 'くり', emoji: '🌰', color: 'bg-amber-700', dough: 'bg-amber-100', text: 'text-amber-700' },
-    { id: 'goma', romaji: 'Goma', kana: 'ごま', emoji: '⚫', color: 'bg-gray-800', dough: 'bg-gray-400', text: 'text-gray-700' },
+    { id: 'ichigo', romaji: 'Ichigo', meaning: 'Strawberry', kana: 'いちご', emoji: '🍓', color: 'bg-rose-500', dough: 'bg-rose-200' },
+    { id: 'matcha', romaji: 'Matcha', meaning: 'Green Tea', kana: 'まっちゃ', emoji: '🍵', color: 'bg-green-600', dough: 'bg-green-200' },
+    { id: 'anko', romaji: 'Anko', meaning: 'Red Bean', kana: 'あんこ', emoji: '🫘', color: 'bg-red-900', dough: 'bg-white' }, // White dough for daifuku
+    { id: 'momo', romaji: 'Momo', meaning: 'Peach', kana: 'もも', emoji: '🍑', color: 'bg-pink-400', dough: 'bg-pink-100' },
+    { id: 'mikan', romaji: 'Mikan', meaning: 'Mandarin', kana: 'みかん', emoji: '🍊', color: 'bg-orange-500', dough: 'bg-orange-100' },
+    { id: 'sakura', romaji: 'Sakura', meaning: 'Cherry Blossom', kana: 'さくら', emoji: '🌸', color: 'bg-pink-300', dough: 'bg-pink-50' },
+    { id: 'kuri', romaji: 'Kuri', meaning: 'Chestnut', kana: 'くり', emoji: '🌰', color: 'bg-amber-700', dough: 'bg-amber-100' },
+    { id: 'goma', romaji: 'Goma', meaning: 'Sesame', kana: 'ごま', emoji: '⚫', color: 'bg-gray-800', dough: 'bg-gray-400' },
+
+    // New Flavors
+    { id: 'yuzu', romaji: 'Yuzu', meaning: 'Citron', kana: 'ゆず', emoji: '🍋', color: 'bg-yellow-400', dough: 'bg-yellow-100' },
+    { id: 'choco', romaji: 'Choco', meaning: 'Chocolate', kana: 'ちょこ', emoji: '🍫', color: 'bg-[#5D4037]', dough: 'bg-[#D7CCC8]' },
+    { id: 'kinako', romaji: 'Kinako', meaning: 'Roasted Soy', kana: 'きなこ', emoji: '🥜', color: 'bg-[#D4A373]', dough: 'bg-[#FAEDCD]' },
+    { id: 'imo', romaji: 'Imo', meaning: 'Sweet Potato', kana: 'いも', emoji: '🍠', color: 'bg-purple-600', dough: 'bg-purple-200' },
+    { id: 'ramune', romaji: 'Ramune', meaning: 'Soda', kana: 'らむね', emoji: '🥤', color: 'bg-cyan-400', dough: 'bg-cyan-100' },
+    { id: 'melon', romaji: 'Melon', meaning: 'Melon', kana: 'めろん', emoji: '🍈', color: 'bg-green-400', dough: 'bg-green-100' },
 ];
 
 const MochiGamePage = () => {
@@ -129,6 +137,13 @@ const MochiGamePage = () => {
                         <div className="absolute top-2 right-4 w-6 h-6 bg-white/10 blur-md rounded-full"></div>
                     </div>
                 );
+            case 'kinako':
+                return (
+                    <div className="w-full h-full rounded-full bg-[#D4A373] relative shadow-inner flex items-center justify-center overflow-hidden">
+                        {/* Tan Powder Texture */}
+                        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.4)_1px,transparent_1px)] bg-[length:3px_3px] opacity-50"></div>
+                    </div>
+                );
             case 'anko':
                 return (
                     <div className="w-full h-full rounded-full bg-[#5e1c1c] relative shadow-inner overflow-hidden border border-[#3d1212]">
@@ -138,15 +153,27 @@ const MochiGamePage = () => {
                         <div className="absolute top-1/2 left-1/2 w-full h-full bg-gradient-to-br from-transparent to-black/30"></div>
                     </div>
                 );
-            case 'mikan':
+            case 'choco':
                 return (
-                    <div className="w-full h-full rounded-full bg-orange-400 relative shadow-inner overflow-hidden border border-orange-500">
+                    <div className="w-full h-full rounded-full bg-[#3E2723] relative shadow-inner overflow-hidden border border-[#231512]">
+                        {/* Swirl Gloss */}
+                        <div className="absolute top-2 left-2 w-8 h-8 rounded-full border-t-4 border-l-4 border-white/10 rotate-45 blur-[1px]"></div>
+                    </div>
+                );
+            case 'mikan':
+            case 'yuzu':
+                const isYuzu = flavor.id === 'yuzu';
+                const baseColor = isYuzu ? 'bg-yellow-400' : 'bg-orange-400';
+                const borderColor = isYuzu ? 'border-yellow-500' : 'border-orange-500';
+                const detailColor = isYuzu ? 'bg-yellow-200' : 'bg-orange-300';
+                return (
+                    <div className={`w-full h-full rounded-full ${baseColor} relative shadow-inner overflow-hidden border ${borderColor}`}>
                         {/* Segments */}
-                        <div className="absolute inset-2 border-2 border-orange-300 rounded-full opacity-50"></div>
-                        <div className="absolute w-full h-0.5 bg-orange-300/50 top-1/2 left-0 -translate-y-1/2 rotate-45"></div>
-                        <div className="absolute w-full h-0.5 bg-orange-300/50 top-1/2 left-0 -translate-y-1/2 -rotate-45"></div>
-                        <div className="absolute w-[2px] h-full bg-orange-300/50 left-1/2 top-0 -translate-x-1/2"></div>
-                        <div className="absolute w-full h-[2px] bg-orange-300/50 top-1/2 left-0 -translate-y-1/2"></div>
+                        <div className={`absolute inset-2 border-2 ${isYuzu ? 'border-yellow-200' : 'border-orange-300'} rounded-full opacity-50`}></div>
+                        <div className={`absolute w-full h-0.5 ${detailColor}/50 top-1/2 left-0 -translate-y-1/2 rotate-45`}></div>
+                        <div className={`absolute w-full h-0.5 ${detailColor}/50 top-1/2 left-0 -translate-y-1/2 -rotate-45`}></div>
+                        <div className={`absolute w-[2px] h-full ${detailColor}/50 left-1/2 top-0 -translate-x-1/2`}></div>
+                        <div className={`absolute w-full h-[2px] ${detailColor}/50 top-1/2 left-0 -translate-y-1/2`}></div>
                     </div>
                 );
             case 'sakura':
@@ -158,11 +185,35 @@ const MochiGamePage = () => {
                         </div>
                     </div>
                 );
+            case 'imo':
+                return (
+                    <div className="w-full h-full rounded-full bg-purple-600 relative shadow-inner flex items-center justify-center overflow-hidden border border-purple-800">
+                        {/* Skin Texture */}
+                        <div className="absolute w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjOEUyNERBIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=')] opacity-50"></div>
+                        <div className="absolute top-3 left-3 w-4 h-2 bg-purple-400/30 rounded-full -rotate-12"></div>
+                    </div>
+                );
             case 'goma':
                 return (
                     <div className="w-full h-full rounded-full bg-stone-800 relative shadow-inner flex items-center justify-center overflow-hidden">
                         {/* Sesame Seeds */}
                         <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(200,200,200,0.6)_1px,transparent_1px)] bg-[length:6px_6px] opacity-60 rotate-12"></div>
+                    </div>
+                );
+            case 'ramune':
+                return (
+                    <div className="w-full h-full rounded-full bg-cyan-400 relative shadow-inner flex items-center justify-center overflow-hidden border border-cyan-500">
+                        {/* Bubbles */}
+                        <div className="absolute bottom-2 left-3 w-2 h-2 bg-white/60 rounded-full animate-bounce"></div>
+                        <div className="absolute top-4 right-4 w-3 h-3 bg-white/40 rounded-full"></div>
+                        <div className="absolute bottom-5 right-5 w-1.5 h-1.5 bg-white/70 rounded-full animate-pulse"></div>
+                    </div>
+                );
+            case 'melon':
+                return (
+                    <div className="w-full h-full rounded-full bg-green-400 relative shadow-inner flex items-center justify-center overflow-hidden border border-green-500">
+                        {/* Melon Grid */}
+                        <div className="absolute inset-0 border-[0.5px] border-green-200/50 rounded-full scale-150 rotate-45 opacity-50" style={{ background: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.3) 10px, rgba(255,255,255,0.3) 11px), repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,0.3) 10px, rgba(255,255,255,0.3) 11px)' }}></div>
                     </div>
                 );
             default:
@@ -210,16 +261,15 @@ const MochiGamePage = () => {
                                 <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-white rotate-45 border-r-2 border-b-2 border-pink-100"></div>
                                 <div className="text-center">
                                     <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-1">Customer Order</p>
+                                    {/* NEUTRAL COLOR TEXT TO PREVENT CHEATING */}
                                     <h2 className="text-4xl font-black text-gray-800 mb-1 drop-shadow-sm">{currentOrder.romaji}</h2>
-                                    <p className={`${currentOrder.text} font-bold`}>
-                                        I want something mostly {currentOrder.id === 'matcha' ? 'bitter' : currentOrder.id === 'anko' ? 'sweet' : 'fruity'}!
-                                    </p>
+                                    <p className="text-gray-500 font-bold text-lg mb-1">{currentOrder.meaning}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* WORKSPACE */}
-                        <div className="relative w-72 h-72 flex items-center justify-center mb-12">
+                        <div className="relative w-72 h-72 flex items-center justify-center mb-6">
                             {/* Glow */}
                             <div className="absolute inset-0 bg-white/40 rounded-full scale-110 blur-2xl"></div>
 
