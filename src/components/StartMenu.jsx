@@ -8,11 +8,44 @@ import KanaGuideModal from './KanaGuideModal';
 import AuthModal from './AuthModal';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import StampCardModal from './StampCardModal';
 
 const StartMenu = () => {
     const { playSound } = useAudio();
     const { theme } = useTheme();
     const { user } = useAuth();
+
+    // Stamp Card Logic
+    const [showStampCard, setShowStampCard] = useState(false);
+    const [stampData, setStampData] = useState({ count: 0, justStamped: false });
+
+    useEffect(() => {
+        const checkDailyLogin = () => {
+            const today = new Date().toDateString();
+            const lastLogin = localStorage.getItem('last_login_date');
+            let currentStamps = parseInt(localStorage.getItem('stamp_count') || '0');
+
+            // Cycle logic (optional reset)
+            if (currentStamps >= 7 && lastLogin !== today) {
+                currentStamps = 0;
+            }
+
+            if (lastLogin !== today) {
+                const newCount = currentStamps + 1;
+                localStorage.setItem('last_login_date', today);
+                localStorage.setItem('stamp_count', newCount);
+
+                // Reward
+                const currentYen = parseInt(localStorage.getItem('mochi_yen') || '0');
+                const reward = newCount === 7 ? 1000 : 100;
+                localStorage.setItem('mochi_yen', currentYen + reward);
+
+                setStampData({ count: newCount, justStamped: true });
+                setShowStampCard(true);
+            }
+        };
+        checkDailyLogin();
+    }, []);
 
     // UI States
     const [activeTab, setActiveTab] = useState('Study'); // 'Study', 'Create', 'Relax'
@@ -229,7 +262,15 @@ const StartMenu = () => {
             {showFortune && <OmikujiModal onClose={() => setShowFortune(false)} />}
             {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
             {showGuide && <KanaGuideModal onClose={() => setShowGuide(false)} />}
+            {showGuide && <KanaGuideModal onClose={() => setShowGuide(false)} />}
             {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
+            {showStampCard && (
+                <StampCardModal
+                    initialStamps={stampData.count}
+                    onClose={() => setShowStampCard(false)}
+                    onStampComplete={() => { }}
+                />
+            )}
 
             {/* Background Decor */}
             <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-gradient-to-br from-pink-200/40 to-purple-200/40 rounded-full blur-[100px] pointer-events-none mix-blend-multiply animate-blob"></div>
