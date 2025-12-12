@@ -31,6 +31,12 @@ const MOCHI_PLATES = [
     { id: 'gold', name: 'Golden Luxury', cost: 20000, style: 'bg-yellow-100 border-4 border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.5)]' },
 ];
 
+const REVIEWS = {
+    high: ["Best mochi in Tokyo! ⭐⭐⭐⭐⭐", "So soft! 5 stars!", "I'm telling all my friends! 😍", "Mochi Master indeed! 🍡✨"],
+    mid: ["Pretty good! ⭐⭐⭐", "Nice texture. 🙂", "Will come back.", "Not bad at all."],
+    low: ["A bit hard... ⭐", "My order was wrong... 😔", "Meh.", "Service was slow..."]
+};
+
 const MochiGamePage = () => {
     const { theme } = useTheme();
     const { playSound } = useAudio();
@@ -54,6 +60,7 @@ const MochiGamePage = () => {
     const [score, setScore] = useState(0);
     const [ordersCompleted, setOrdersCompleted] = useState(0);
     const [timeLeft, setTimeLeft] = useState(60);
+    const [finalReview, setFinalReview] = useState("");
 
     // Streak State
     const [streak, setStreak] = useState(0);
@@ -61,6 +68,7 @@ const MochiGamePage = () => {
 
     // Round State
     const [currentOrder, setCurrentOrder] = useState(null);
+    const [isGolden, setIsGolden] = useState(false);
     const [ingredients, setIngredients] = useState([]);
     const [mochiState, setMochiState] = useState('empty'); // empty, filled, wrapped
     const [feedback, setFeedback] = useState(null); // 'correct', 'wrong'
@@ -90,6 +98,12 @@ const MochiGamePage = () => {
         setGameState('completed');
         playSound('win');
         setYen(prev => prev + score);
+
+        // Generate Review
+        let reviewPool = REVIEWS.low;
+        if (score > 2000) reviewPool = REVIEWS.high;
+        else if (score > 800) reviewPool = REVIEWS.mid;
+        setFinalReview(reviewPool[Math.floor(Math.random() * reviewPool.length)]);
     };
 
     const startGame = () => {
@@ -99,6 +113,7 @@ const MochiGamePage = () => {
         setTimeLeft(60);
         setStreak(0);
         setHighestStreak(0);
+        setFinalReview("");
         generateOrder();
     };
 
@@ -113,6 +128,11 @@ const MochiGamePage = () => {
             .sort(() => Math.random() - 0.5)
             .slice(0, 3);
         const options = [...distractors, target].sort(() => Math.random() - 0.5);
+
+        // Golden Chance (5%)
+        const golden = Math.random() < 0.05;
+        setIsGolden(golden);
+        if (golden) playSound('sparkle'); // Or some rare sound
 
         setTimeout(() => {
             setCurrentOrder(target);
@@ -139,7 +159,7 @@ const MochiGamePage = () => {
             setStreak(newStreak);
             if (newStreak > highestStreak) setHighestStreak(newStreak);
 
-            let points = 100;
+            let points = isGolden ? 500 : 100; // Base points
             if (newStreak >= 3) points += 20;
             if (newStreak >= 5) points += 50;
             if (newStreak >= 10) points += 100;
@@ -269,8 +289,14 @@ const MochiGamePage = () => {
                         {/* ORDER */}
                         <div className={`mb-8 w-full max-w-md px-4 relative z-30 transition-all duration-500 ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
                             {currentOrder && (
-                                <div className="bg-white/90 backdrop-blur-md rounded-[2rem] p-6 shadow-xl border-2 border-pink-100 relative text-center">
-                                    <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-1">Order</p>
+                                <div className={`
+                                    bg-white/90 backdrop-blur-md rounded-[2rem] p-6 shadow-xl relative text-center border-4
+                                    ${isGolden ? 'border-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.6)] animate-pulse' : 'border-pink-100'}
+                                `}>
+                                    {isGolden && <Sparkles className="absolute top-2 right-2 text-yellow-400 animate-spin-slow" />}
+                                    <p className={`uppercase text-xs font-bold tracking-widest mb-1 ${isGolden ? 'text-amber-500' : 'text-gray-400'}`}>
+                                        {isGolden ? '✨ GOLDEN ORDER ✨' : 'Order'}
+                                    </p>
                                     <h2 className="text-4xl font-black text-gray-800 drop-shadow-sm">{currentOrder.romaji}</h2>
                                 </div>
                             )}
@@ -287,6 +313,7 @@ const MochiGamePage = () => {
                                 ${mochiState === 'wrapped' && currentOrder ? currentOrder.dough : 'bg-white/80'}
                                 ${mochiState === 'wrapped' ? 'scale-110' : 'scale-100'}
                                 ${feedback === 'wrong' ? 'animate-shake border-4 border-red-300' : ''}
+                                ${isGolden && mochiState === 'wrapped' ? 'shadow-[0_0_40px_rgba(250,204,21,0.6)]' : ''}
                              `}>
                                 {/* Powder */}
                                 <div className="absolute inset-0 bg-white/20 pointer-events-none"></div>
@@ -450,8 +477,15 @@ const MochiGamePage = () => {
                         <h1 className="text-3xl font-black text-gray-800 mb-2">Shop Closed!</h1>
                         <p className="text-gray-500 font-medium mb-6">Great work today, Chef!</p>
 
-                        <div className="bg-pink-50 rounded-2xl p-6 mb-8 border border-pink-100">
-                            <div className="text-5xl font-black text-pink-500 mb-1">{score}</div>
+                        <div className="bg-pink-50 rounded-2xl p-6 mb-8 border border-pink-100 relative overflow-hidden">
+                            {/* CUSTOMER REVIEW */}
+                            {finalReview && (
+                                <div className="absolute top-0 inset-x-0 bg-yellow-100 p-2 text-center text-yellow-700 font-bold text-xs uppercase tracking-wide border-b border-yellow-200">
+                                    Customer Review: "{finalReview}"
+                                </div>
+                            )}
+
+                            <div className="text-5xl font-black text-pink-500 mb-1 mt-6">{score}</div>
                             <div className="text-sm font-bold text-pink-300 uppercase tracking-wider mb-6">Total Score</div>
 
                             <div className="flex flex-col gap-3">
