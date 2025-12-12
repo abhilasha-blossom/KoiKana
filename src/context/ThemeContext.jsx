@@ -55,6 +55,45 @@ export const THEMES = {
             blob1: 'bg-[#f0f]/30',
             blob2: 'bg-[#0ff]/30'
         }
+    },
+    golden_hour: {
+        id: 'golden_hour',
+        name: 'Golden Hour',
+        cost: 1200,
+        colors: {
+            bg: 'bg-[#FFF8E7]',
+            primary: 'text-[#5D4037]',
+            accent: 'text-[#FFA000]',
+            button: 'from-[#FFB74D] to-[#FFA000]',
+            blob1: 'bg-[#FFB74D]/40',
+            blob2: 'bg-[#FFD54F]/40'
+        }
+    },
+    ocean_breeze: {
+        id: 'ocean_breeze',
+        name: 'Ocean Breeze',
+        cost: 1500,
+        colors: {
+            bg: 'bg-[#E0F7FA]',
+            primary: 'text-[#006064]',
+            accent: 'text-[#00BCD4]',
+            button: 'from-[#4DD0E1] to-[#00BCD4]',
+            blob1: 'bg-[#4DD0E1]/40',
+            blob2: 'bg-[#26C6DA]/40'
+        }
+    },
+    ink_paper: {
+        id: 'ink_paper',
+        name: 'Ink & Paper',
+        cost: 2500,
+        colors: {
+            bg: 'bg-[#F5F5F5]',
+            primary: 'text-[#212121]',
+            accent: 'text-[#616161]',
+            button: 'from-[#424242] to-[#212121]',
+            blob1: 'bg-[#BDBDBD]/40',
+            blob2: 'bg-[#E0E0E0]/40'
+        }
     }
 };
 
