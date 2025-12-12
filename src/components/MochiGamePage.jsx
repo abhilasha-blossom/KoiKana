@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { ArrowLeft, ChefHat, Sparkles, Heart, Star, CheckCircle } from 'lucide-react';
+import { ArrowLeft, ChefHat, Sparkles, Heart, Star, CheckCircle, Flame, Zap } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import useAudio from '../hooks/useAudio';
@@ -35,6 +35,10 @@ const MochiGamePage = () => {
     const [ordersCompleted, setOrdersCompleted] = useState(0);
     const [timeLeft, setTimeLeft] = useState(60);
 
+    // Streak State
+    const [streak, setStreak] = useState(0);
+    const [highestStreak, setHighestStreak] = useState(0);
+
     // Round State
     const [currentOrder, setCurrentOrder] = useState(null);
     const [ingredients, setIngredients] = useState([]);
@@ -65,6 +69,8 @@ const MochiGamePage = () => {
         setScore(0);
         setOrdersCompleted(0);
         setTimeLeft(60);
+        setStreak(0);
+        setHighestStreak(0);
         generateOrder();
     };
 
@@ -101,10 +107,21 @@ const MochiGamePage = () => {
             setMochiState('filled'); // Trigger animation
             setFeedback('correct');
 
+            // Streak Logic
+            const newStreak = streak + 1;
+            setStreak(newStreak);
+            if (newStreak > highestStreak) setHighestStreak(newStreak);
+
+            // Score Calculation
+            let points = 100;
+            if (newStreak >= 3) points += 20; // Small bonus
+            if (newStreak >= 5) points += 50; // Medium bonus
+            if (newStreak >= 10) points += 100; // Large bonus
+
             setTimeout(() => {
                 setMochiState('wrapped');
                 playSound('correct');
-                setScore(s => s + 100);
+                setScore(s => s + points);
                 setOrdersCompleted(c => c + 1);
             }, 500);
 
@@ -115,8 +132,38 @@ const MochiGamePage = () => {
             // Wrong!
             playSound('incorrect');
             setFeedback('wrong');
+            setStreak(0); // Reset streak
             setTimeout(() => setFeedback(null), 500);
         }
+    };
+
+    const renderComboVisuals = () => {
+        if (streak < 2) return null;
+
+        let intensityClass = 'text-orange-500';
+        let icon = <Flame size={20} className="animate-pulse" />;
+        let message = "Combo!";
+
+        if (streak >= 5) {
+            intensityClass = 'text-red-500 font-black animate-bounce';
+            icon = <Flame size={28} className="animate-burn" fill="currentColor" />;
+            message = "HEATING UP!";
+        }
+        if (streak >= 10) {
+            intensityClass = 'text-purple-600 font-black animate-pulse drop-shadow-lg';
+            icon = <Zap size={28} className="animate-spin-slow" fill="currentColor" />;
+            message = "MOCHI MASTER!";
+        }
+
+        return (
+            <div className={`absolute top-20 right-4 flex flex-col items-end z-40 transition-all duration-300 animate-scale-up`}>
+                <div className={`flex items-center gap-1 ${intensityClass}`}>
+                    {icon}
+                    <span className="text-2xl font-black">x{streak}</span>
+                </div>
+                <span className="text-xs font-bold text-gray-500 tracking-widest uppercase">{message}</span>
+            </div>
+        );
     };
 
     const renderFilling = (flavor) => {
@@ -249,6 +296,9 @@ const MochiGamePage = () => {
 
                 {gameState === 'playing' && (
                     <>
+                        {/* COMBO VISUALS */}
+                        {renderComboVisuals()}
+
                         {/* CUSTOMER ORDER BUBBLE */}
                         <div className={`mb-8 w-full max-w-md px-4 relative z-30 transition-all duration-500 ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
                             {currentOrder && (
@@ -267,7 +317,10 @@ const MochiGamePage = () => {
                         {/* WORKSPACE */}
                         <div className="relative w-72 h-72 flex items-center justify-center mb-6">
                             {/* Glow */}
-                            <div className="absolute inset-0 bg-white/40 rounded-full scale-110 blur-2xl"></div>
+                            <div className={`
+                                absolute inset-0 rounded-full scale-110 blur-2xl transition-all duration-500
+                                ${streak >= 10 ? 'bg-purple-400/50 animate-pulse' : streak >= 5 ? 'bg-red-400/40 animate-pulse' : 'bg-white/40'}
+                             `}></div>
 
                             {/* THE MOCHI */}
                             <div className={`
@@ -364,6 +417,9 @@ const MochiGamePage = () => {
                             <div className="mt-4 pt-4 border-t border-pink-100 flex justify-between text-gray-600 text-sm font-bold">
                                 <span>Orders Served</span>
                                 <span>{ordersCompleted} 🍡</span>
+                            </div>
+                            <div className="mt-2 text-center">
+                                <span className="text-orange-500 font-black text-sm uppercase tracking-wide">Best Combo: {highestStreak} 🔥</span>
                             </div>
                         </div>
 
