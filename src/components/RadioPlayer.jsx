@@ -1,11 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, SkipForward, SkipBack, Volume2, Volume1, VolumeX, Music, Maximize2, Minimize2 } from 'lucide-react';
+import { Play, Pause, SkipForward, SkipBack, Volume2, Volume1, VolumeX, Music, Maximize2, Minimize2, List } from 'lucide-react';
 import { useSettings } from '../contexts/SettingsContext';
 
 const RADIO_STATIONS = [
-    { title: "Sakura Chill", src: "/music/peaceful.mp3", vibe: "Relaxing" },
-    { title: "Kyoto Flows", src: "/music/traditional.mp3", vibe: "Traditional" },
-    { title: "Midnight Tokyo", src: "/music/lofi_placeholder.mp3", vibe: "Focus" }, // Placeholder
+    {
+        title: "Sakura Chill",
+        src: "https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3",
+        vibe: "Relaxing"
+    },
+    {
+        title: "Kyoto Flows",
+        src: "https://cdn.pixabay.com/audio/2022/11/22/audio_febc508520.mp3",
+        vibe: "Traditional"
+    },
+    {
+        title: "Rainy Garden",
+        src: "https://cdn.pixabay.com/audio/2022/03/15/audio_7809a75168.mp3",
+        vibe: "Focus"
+    },
 ];
 
 const RadioPlayer = () => {
@@ -13,6 +25,7 @@ const RadioPlayer = () => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentStationIndex, setCurrentStationIndex] = useState(0);
     const [isExpanded, setIsExpanded] = useState(false);
+    const [showPlaylist, setShowPlaylist] = useState(false);
     const { musicVolume } = useSettings();
     const [volume, setVolume] = useState(musicVolume); // Local volume override if needed, or sync?
     // Let's sync local state for slider but effect updates global ref
@@ -118,13 +131,72 @@ const RadioPlayer = () => {
                                 <Music size={16} />
                                 <span className="text-xs font-bold uppercase tracking-widest">Lo-Fi Radio</span>
                             </div>
-                            <button
-                                onClick={() => setIsExpanded(false)}
-                                className="text-gray-400 hover:text-gray-600 transition-colors"
-                            >
-                                <Minimize2 size={16} />
-                            </button>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => setShowPlaylist(!showPlaylist)}
+                                    className={`p-1.5 rounded-full transition-colors ${showPlaylist ? 'bg-pink-100 text-pink-500' : 'text-gray-400 hover:text-gray-600'}`}
+                                >
+                                    <List size={16} />
+                                </button>
+                                <button
+                                    onClick={() => setIsExpanded(false)}
+                                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                                >
+                                    <Minimize2 size={16} />
+                                </button>
+                            </div>
                         </div>
+
+                        {/* Playlist Overlay */}
+                        {showPlaylist && (
+                            <div className="absolute top-14 left-0 right-0 bottom-0 bg-white/95 backdrop-blur-xl z-20 overflow-y-auto p-2 animate-fade-in-up">
+                                <div className="space-y-1">
+                                    {RADIO_STATIONS.map((station, idx) => (
+                                        <button
+                                            key={idx}
+                                            onClick={() => {
+                                                setCurrentStationIndex(idx);
+                                                setIsPlaying(true);
+                                                setShowPlaylist(false);
+                                            }}
+                                            className={`
+                                                w-full p-3 rounded-xl flex items-center justify-between transition-all
+                                                ${currentStationIndex === idx
+                                                    ? 'bg-pink-50 border border-pink-100'
+                                                    : 'hover:bg-gray-50 border border-transparent'
+                                                }
+                                            `}
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <div className={`
+                                                    w-8 h-8 rounded-lg flex items-center justify-center
+                                                    ${currentStationIndex === idx ? 'bg-pink-500 text-white' : 'bg-gray-100 text-gray-400'}
+                                                `}>
+                                                    {currentStationIndex === idx && isPlaying ? (
+                                                        <div className="flex gap-0.5 items-end h-3">
+                                                            <div className="w-0.5 bg-white animate-music-bar-1 h-full"></div>
+                                                            <div className="w-0.5 bg-white animate-music-bar-2 h-2"></div>
+                                                            <div className="w-0.5 bg-white animate-music-bar-3 h-3"></div>
+                                                        </div>
+                                                    ) : (
+                                                        <Music size={14} />
+                                                    )}
+                                                </div>
+                                                <div className="text-left">
+                                                    <h4 className={`text-sm font-bold ${currentStationIndex === idx ? 'text-gray-800' : 'text-gray-600'}`}>
+                                                        {station.title}
+                                                    </h4>
+                                                    <span className="text-[10px] uppercase tracking-wider text-gray-400">{station.vibe}</span>
+                                                </div>
+                                            </div>
+                                            {currentStationIndex === idx && (
+                                                <div className="text-pink-500 text-xs font-bold">PLAYING</div>
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
                         {/* Visualizer / Art area */}
                         <div className="flex-1 flex flex-col items-center justify-center p-4 relative overflow-hidden">
