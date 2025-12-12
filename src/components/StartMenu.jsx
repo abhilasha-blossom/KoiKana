@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower2, Palette, Settings, Coffee, Feather, Quote, User, Brain, Gamepad2, Ghost, Utensils, Brush, Calendar } from 'lucide-react';
+import { ArrowLeft, BookOpen, PenTool, Mic, ScrollText, Sparkles, Flower2, Palette, Settings, Coffee, Feather, Quote, User, Brain, Gamepad2, Ghost, Utensils, Brush, Calendar, Fish } from 'lucide-react';
 import useAudio from '../hooks/useAudio';
 import OmikujiModal from './OmikujiModal';
 import SettingsModal from './SettingsModal';
@@ -158,6 +158,17 @@ const StartMenu = () => {
             big: true
         },
 
+        {
+            id: 'diner',
+            category: 'Create',
+            title: 'Midnight Diner',
+            subtitle: 'Serve Ramen',
+            icon: Utensils,
+            color: 'indigo',
+            to: '/diner',
+            big: true
+        },
+
         // RELAX CATEGORY
         {
             id: 'yokai',
@@ -188,6 +199,16 @@ const StartMenu = () => {
             icon: Palette,
             color: 'emerald',
             to: '/shop',
+            wide: true
+        },
+        {
+            id: 'aquarium',
+            category: 'Relax',
+            title: 'My Aquarium',
+            subtitle: 'Feed your Pet',
+            icon: Fish,
+            color: 'sky',
+            to: '/aquarium',
             wide: true
         }
     ];
