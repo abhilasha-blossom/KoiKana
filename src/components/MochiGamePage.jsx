@@ -1,27 +1,25 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { ArrowLeft, ChefHat, Sparkles, Heart, Star, CheckCircle, Flame, Zap, ShoppingBag, Lock, Unlock } from 'lucide-react';
+import { ArrowLeft, ChefHat, Sparkles, Heart, Star, CheckCircle, Flame, Zap, ShoppingBag, BookOpen, Lock, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import useAudio from '../hooks/useAudio';
 
 // Vocabulary Data
 const MOCHI_FLAVORS = [
-    { id: 'ichigo', romaji: 'Ichigo', meaning: 'Strawberry', kana: 'いちご', emoji: '🍓', color: 'bg-rose-500', dough: 'bg-rose-200' },
-    { id: 'matcha', romaji: 'Matcha', meaning: 'Green Tea', kana: 'まっちゃ', emoji: '🍵', color: 'bg-green-600', dough: 'bg-green-200' },
-    { id: 'anko', romaji: 'Anko', meaning: 'Red Bean', kana: 'あんこ', emoji: '🫘', color: 'bg-red-900', dough: 'bg-white' }, // White dough for daifuku
-    { id: 'momo', romaji: 'Momo', meaning: 'Peach', kana: 'もも', emoji: '🍑', color: 'bg-pink-400', dough: 'bg-pink-100' },
-    { id: 'mikan', romaji: 'Mikan', meaning: 'Mandarin', kana: 'みかん', emoji: '🍊', color: 'bg-orange-500', dough: 'bg-orange-100' },
-    { id: 'sakura', romaji: 'Sakura', meaning: 'Cherry Blossom', kana: 'さくら', emoji: '🌸', color: 'bg-pink-300', dough: 'bg-pink-50' },
-    { id: 'kuri', romaji: 'Kuri', meaning: 'Chestnut', kana: 'くり', emoji: '🌰', color: 'bg-amber-700', dough: 'bg-amber-100' },
-    { id: 'goma', romaji: 'Goma', meaning: 'Sesame', kana: 'ごま', emoji: '⚫', color: 'bg-gray-800', dough: 'bg-gray-400' },
-
-    // New Flavors
-    { id: 'yuzu', romaji: 'Yuzu', meaning: 'Citron', kana: 'ゆず', emoji: '🍋', color: 'bg-yellow-400', dough: 'bg-yellow-100' },
-    { id: 'choco', romaji: 'Choco', meaning: 'Chocolate', kana: 'ちょこ', emoji: '🍫', color: 'bg-[#5D4037]', dough: 'bg-[#D7CCC8]' },
-    { id: 'kinako', romaji: 'Kinako', meaning: 'Roasted Soy', kana: 'きなこ', emoji: '🥜', color: 'bg-[#D4A373]', dough: 'bg-[#FAEDCD]' },
-    { id: 'imo', romaji: 'Imo', meaning: 'Sweet Potato', kana: 'いも', emoji: '🍠', color: 'bg-purple-600', dough: 'bg-purple-200' },
-    { id: 'ramune', romaji: 'Ramune', meaning: 'Soda', kana: 'らむね', emoji: '🥤', color: 'bg-cyan-400', dough: 'bg-cyan-100' },
-    { id: 'melon', romaji: 'Melon', meaning: 'Melon', kana: 'めろん', emoji: '🍈', color: 'bg-green-400', dough: 'bg-green-100' },
+    { id: 'ichigo', romaji: 'Ichigo', meaning: 'Strawberry', kana: 'いちご', emoji: '🍓', color: 'bg-rose-500', dough: 'bg-rose-200', desc: "A classic favorite! Sweet, tart strawberries wrapped in soft mochi." },
+    { id: 'matcha', romaji: 'Matcha', meaning: 'Green Tea', kana: 'まっちゃ', emoji: '🍵', color: 'bg-green-600', dough: 'bg-green-200', desc: "Earthy and aromatic. Made from premium shade-grown tea leaves." },
+    { id: 'anko', romaji: 'Anko', meaning: 'Red Bean', kana: 'あんこ', emoji: '🫘', color: 'bg-red-900', dough: 'bg-white', desc: "Traditional sweet paste made from azuki beans. The soul of wagashi." },
+    { id: 'momo', romaji: 'Momo', meaning: 'Peach', kana: 'もも', emoji: '🍑', color: 'bg-pink-400', dough: 'bg-pink-100', desc: "Juicy and fragrant white peach. A symbol of longevity." },
+    { id: 'mikan', romaji: 'Mikan', meaning: 'Mandarin', kana: 'みかん', emoji: '🍊', color: 'bg-orange-500', dough: 'bg-orange-100', desc: "Refreshing citrus burst! Popular in winter under the kotatsu." },
+    { id: 'sakura', romaji: 'Sakura', meaning: 'Cherry Blossom', kana: 'さくら', emoji: '🌸', color: 'bg-pink-300', dough: 'bg-pink-50', desc: "Salted cherry leaves and petals give this a unique sweet-salty taste." },
+    { id: 'kuri', romaji: 'Kuri', meaning: 'Chestnut', kana: 'くり', emoji: '🌰', color: 'bg-amber-700', dough: 'bg-amber-100', desc: "Warm and nutty. A comfort flavor for the autumn season." },
+    { id: 'goma', romaji: 'Goma', meaning: 'Sesame', kana: 'ごま', emoji: '⚫', color: 'bg-gray-800', dough: 'bg-gray-400', desc: "Rich, roasted black sesame paste. Nutty and aromatic." },
+    { id: 'yuzu', romaji: 'Yuzu', meaning: 'Citron', kana: 'ゆず', emoji: '🍋', color: 'bg-yellow-400', dough: 'bg-yellow-100', desc: "Aromatic citrus with a distinctively tart and fragrant zest." },
+    { id: 'choco', romaji: 'Choco', meaning: 'Chocolate', kana: 'ちょこ', emoji: '🍫', color: 'bg-[#5D4037]', dough: 'bg-[#D7CCC8]', desc: "A modern twist! Rich ganache wrapped in soft cocoa mochi." },
+    { id: 'kinako', romaji: 'Kinako', meaning: 'Roasted Soy', kana: 'きなこ', emoji: '🥜', color: 'bg-[#D4A373]', dough: 'bg-[#FAEDCD]', desc: "Nutty roasted soybean flour. Often dusted on top of warabi mochi." },
+    { id: 'imo', romaji: 'Imo', meaning: 'Sweet Potato', kana: 'いも', emoji: '🍠', color: 'bg-purple-600', dough: 'bg-purple-200', desc: "Sweet satsumaimo with a natural, earthy sweetness." },
+    { id: 'ramune', romaji: 'Ramune', meaning: 'Soda', kana: 'らむね', emoji: '🥤', color: 'bg-cyan-400', dough: 'bg-cyan-100', desc: "Fizzy and fun! Tastes like the popular Japanese summer soda." },
+    { id: 'melon', romaji: 'Melon', meaning: 'Melon', kana: 'めろん', emoji: '🍈', color: 'bg-green-400', dough: 'bg-green-100', desc: "Sweet musk melon flavor. A premium fruit treat." },
 ];
 
 // Shop Items
@@ -42,15 +40,17 @@ const MochiGamePage = () => {
     const [yen, setYen] = useState(() => parseInt(localStorage.getItem('mochi_yen')) || 0);
     const [ownedPlates, setOwnedPlates] = useState(() => JSON.parse(localStorage.getItem('mochi_owned_plates')) || ['wood']);
     const [selectedPlateId, setSelectedPlateId] = useState(() => localStorage.getItem('mochi_selected_plate') || 'wood');
+    const [unlockedFlavors, setUnlockedFlavors] = useState(() => JSON.parse(localStorage.getItem('mochi_unlocked_flavors')) || []);
 
     useEffect(() => { localStorage.setItem('mochi_yen', yen); }, [yen]);
     useEffect(() => { localStorage.setItem('mochi_owned_plates', JSON.stringify(ownedPlates)); }, [ownedPlates]);
     useEffect(() => { localStorage.setItem('mochi_selected_plate', selectedPlateId); }, [selectedPlateId]);
+    useEffect(() => { localStorage.setItem('mochi_unlocked_flavors', JSON.stringify(unlockedFlavors)); }, [unlockedFlavors]);
 
     const activePlate = MOCHI_PLATES.find(p => p.id === selectedPlateId) || MOCHI_PLATES[0];
 
     // -- Game State --
-    const [gameState, setGameState] = useState('menu'); // menu, playing, completed, shop
+    const [gameState, setGameState] = useState('menu'); // menu, playing, completed, shop, book
     const [score, setScore] = useState(0);
     const [ordersCompleted, setOrdersCompleted] = useState(0);
     const [timeLeft, setTimeLeft] = useState(60);
@@ -65,6 +65,9 @@ const MochiGamePage = () => {
     const [mochiState, setMochiState] = useState('empty'); // empty, filled, wrapped
     const [feedback, setFeedback] = useState(null); // 'correct', 'wrong'
     const [isTransitioning, setIsTransitioning] = useState(false);
+
+    // Book State
+    const [selectedBookFlavor, setSelectedBookFlavor] = useState(null);
 
     // Timer
     useEffect(() => {
@@ -86,7 +89,6 @@ const MochiGamePage = () => {
     const endGame = () => {
         setGameState('completed');
         playSound('win');
-        // Add score to Yen
         setYen(prev => prev + score);
     };
 
@@ -128,6 +130,11 @@ const MochiGamePage = () => {
             setMochiState('filled');
             setFeedback('correct');
 
+            // Unlock Flavor Logic
+            if (!unlockedFlavors.includes(ingredient.id)) {
+                setUnlockedFlavors(prev => [...prev, ingredient.id]);
+            }
+
             const newStreak = streak + 1;
             setStreak(newStreak);
             if (newStreak > highestStreak) setHighestStreak(newStreak);
@@ -160,7 +167,7 @@ const MochiGamePage = () => {
         if (yen >= plate.cost) {
             setYen(y => y - plate.cost);
             setOwnedPlates(curr => [...curr, plate.id]);
-            playSound('correct'); // Cha-ching sound fallback
+            playSound('correct');
         } else {
             playSound('incorrect');
         }
@@ -202,8 +209,6 @@ const MochiGamePage = () => {
 
     const renderFilling = (flavor) => {
         if (!flavor) return null;
-        // Simplified filling logic for brevity in this replace, fully preserved in actual file
-        // Re-using common styles
         switch (flavor.id) {
             case 'ichigo': return <div className="w-full h-full rounded-full bg-rose-500 relative overflow-hidden shadow-inner"><div className="absolute top-[30%] left-[40%] w-1 h-1.5 bg-yellow-100/50 rounded-full"></div></div>;
             case 'matcha': return <div className="w-full h-full rounded-full bg-green-600 shadow-inner"></div>;
@@ -342,9 +347,14 @@ const MochiGamePage = () => {
                             <button onClick={startGame} className="w-full py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold rounded-2xl shadow-lg transition-all hover:scale-105 active:scale-95 text-xl">
                                 Open Shop
                             </button>
-                            <button onClick={() => setGameState('shop')} className="w-full py-4 bg-white text-orange-500 font-bold rounded-2xl shadow-lg border-2 border-orange-100 transition-all hover:scale-105 active:scale-95 text-xl flex items-center justify-center gap-2">
-                                <ShoppingBag /> Plate Shop
-                            </button>
+                            <div className="flex gap-3">
+                                <button onClick={() => setGameState('shop')} className="flex-1 py-4 bg-white text-orange-500 font-bold rounded-2xl shadow-lg border-2 border-orange-100 transition-all hover:scale-105 active:scale-95 text-lg flex items-center justify-center gap-2">
+                                    <ShoppingBag /> Shop
+                                </button>
+                                <button onClick={() => setGameState('book')} className="flex-1 py-4 bg-white text-blue-500 font-bold rounded-2xl shadow-lg border-2 border-blue-100 transition-all hover:scale-105 active:scale-95 text-lg flex items-center justify-center gap-2">
+                                    <BookOpen /> Recipes
+                                </button>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -353,17 +363,13 @@ const MochiGamePage = () => {
                     <div className="absolute inset-0 z-50 bg-white/95 backdrop-blur-xl flex flex-col animate-fade-in">
                         <div className="p-6 flex justify-between items-center bg-white shadow-sm">
                             <h2 className="text-2xl font-black text-gray-800 flex items-center gap-2"><ShoppingBag /> Plate Shop</h2>
-                            <div className="flex items-center gap-4">
-                                <span className="font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-100">💴 {yen.toLocaleString()}</span>
-                                <button onClick={() => setGameState('menu')} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200"><ArrowLeft /></button>
-                            </div>
+                            <button onClick={() => setGameState('menu')} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200"><X /></button>
                         </div>
                         <div className="flex-1 overflow-y-auto p-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
                                 {MOCHI_PLATES.map(plate => {
                                     const isOwned = ownedPlates.includes(plate.id);
                                     const isEquipped = selectedPlateId === plate.id;
-
                                     return (
                                         <div key={plate.id} className={`p-6 rounded-3xl border-4 transition-all ${isEquipped ? 'border-green-400 bg-green-50' : 'border-gray-100 bg-white'}`}>
                                             <div className="flex justify-between items-start mb-4">
@@ -371,29 +377,68 @@ const MochiGamePage = () => {
                                                 {isEquipped && <CheckCircle className="text-green-500" />}
                                             </div>
                                             <div className={`w-32 h-32 mx-auto rounded-full mb-6 ${plate.style} shadow-xl transform rotate-12`}></div>
-
                                             {isOwned ? (
-                                                <button
-                                                    onClick={() => equipPlate(plate.id)}
-                                                    disabled={isEquipped}
-                                                    className={`w-full py-3 rounded-xl font-bold transition-all ${isEquipped ? 'bg-green-500 text-white opacity-50 cursor-default' : 'bg-gray-800 text-white hover:bg-gray-900 active:scale-95'}`}
-                                                >
-                                                    {isEquipped ? 'Equipped' : 'Equip'}
-                                                </button>
+                                                <button onClick={() => equipPlate(plate.id)} disabled={isEquipped} className={`w-full py-3 rounded-xl font-bold transition-all ${isEquipped ? 'bg-green-500 text-white opacity-50 cursor-default' : 'bg-gray-800 text-white hover:bg-gray-900 active:scale-95'}`}>{isEquipped ? 'Equipped' : 'Equip'}</button>
                                             ) : (
-                                                <button
-                                                    onClick={() => buyPlate(plate)}
-                                                    className={`w-full py-3 rounded-xl font-bold border-2 transition-all flex items-center justify-center gap-2 ${yen >= plate.cost ? 'border-amber-500 text-amber-600 hover:bg-amber-50 active:scale-95' : 'border-gray-200 text-gray-300 cursor-not-allowed'}`}
-                                                >
-                                                    <span className="text-sm">💴 {plate.cost.toLocaleString()}</span>
-                                                    {yen < plate.cost && <Lock size={16} />}
-                                                </button>
+                                                <button onClick={() => buyPlate(plate)} className={`w-full py-3 rounded-xl font-bold border-2 transition-all flex items-center justify-center gap-2 ${yen >= plate.cost ? 'border-amber-500 text-amber-600 hover:bg-amber-50 active:scale-95' : 'border-gray-200 text-gray-300 cursor-not-allowed'}`}><span className="text-sm">💴 {plate.cost.toLocaleString()}</span>{yen < plate.cost && <Lock size={16} />}</button>
                                             )}
                                         </div>
                                     )
                                 })}
                             </div>
                         </div>
+                    </div>
+                )}
+
+                {gameState === 'book' && (
+                    <div className="absolute inset-0 z-50 bg-white/95 backdrop-blur-xl flex flex-col animate-fade-in">
+                        <div className="p-6 flex justify-between items-center bg-white shadow-sm">
+                            <h2 className="text-2xl font-black text-gray-800 flex items-center gap-2"><BookOpen /> Recipes</h2>
+                            <button onClick={() => setGameState('menu')} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200"><X /></button>
+                        </div>
+                        <div className="flex-1 overflow-y-auto p-6">
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                                {MOCHI_FLAVORS.map(flavor => {
+                                    const isUnlocked = unlockedFlavors.includes(flavor.id);
+                                    return (
+                                        <div
+                                            key={flavor.id}
+                                            onClick={() => isUnlocked && setSelectedBookFlavor(flavor)}
+                                            className={`
+                                                relative p-4 rounded-3xl border-2 transition-all cursor-pointer
+                                                ${isUnlocked ? 'bg-white border-pink-100 hover:border-pink-300 hover:shadow-lg' : 'bg-gray-50 border-gray-100 opacity-70'}
+                                            `}
+                                        >
+                                            <div className="w-16 h-16 mx-auto mb-3 relative">
+                                                {isUnlocked ? renderFilling(flavor) : <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center"><Lock size={20} className="text-gray-400" /></div>}
+                                            </div>
+                                            <div className="text-center">
+                                                <h3 className="font-black text-gray-800">{isUnlocked ? flavor.romaji : '???'}</h3>
+                                                <p className="text-xs font-bold text-gray-400">{isUnlocked ? flavor.meaning : 'Locked'}</p>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                        {selectedBookFlavor && (
+                            <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelectedBookFlavor(null)}>
+                                <div className="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl animate-scale-up" onClick={e => e.stopPropagation()}>
+                                    <div className="text-center mb-6">
+                                        <div className="w-32 h-32 mx-auto mb-4 relative">
+                                            {renderFilling(selectedBookFlavor)}
+                                        </div>
+                                        <h2 className="text-3xl font-black text-gray-800">{selectedBookFlavor.romaji}</h2>
+                                        <p className="text-xl font-bold text-pink-500 mb-2">{selectedBookFlavor.meaning}</p>
+                                        <p className="text-4xl mb-4 font-black text-gray-200 jp-font">{selectedBookFlavor.kana}</p>
+                                        <div className="bg-pink-50 p-4 rounded-2xl border border-pink-100">
+                                            <p className="text-gray-600 font-medium leading-relaxed">{selectedBookFlavor.desc}</p>
+                                        </div>
+                                    </div>
+                                    <button onClick={() => setSelectedBookFlavor(null)} className="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold rounded-xl transition-all">Close</button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 
