@@ -346,6 +346,11 @@ const QuizPage = () => {
             return;
         }
 
+        if (selectedMode === 'mochi') {
+            navigate('/mochi');
+            return;
+        }
+
         setMode(selectedMode);
         setScore(0);
         setQuestionCount(0);
@@ -470,6 +475,7 @@ const QuizPage = () => {
             { id: GAME_MODES.NINJA, title: "Kana Ninja", icon: "🥷", desc: "Speed Type", color: "rose" },
             { id: GAME_MODES.SLICE, title: "Kana Slice", icon: "🏮", desc: "Swipe fast", color: "amber" },
             { id: 'sushi', title: "Sushi Go!", icon: "🍣", desc: "Type the Romaji", color: "orange" },
+            { id: 'mochi', title: "Mochi Master", icon: "🍡", desc: "Make Orders", color: "pink" },
         ];
 
         const DRILL_MODES = [

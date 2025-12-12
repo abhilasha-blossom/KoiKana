@@ -24,6 +24,7 @@ import UpdatePasswordPage from './components/UpdatePasswordPage';
 import DictionaryPage from './components/DictionaryPage';
 import RadioPlayer from './components/RadioPlayer';
 import SushiGamePage from './components/SushiGamePage';
+import MochiGamePage from './components/MochiGamePage';
 import KanjiDojoPage from './components/KanjiDojoPage';
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
                 <Route path="/dictionary" element={<DictionaryPage />} />
                 <Route path="/haiku" element={<HaikuGardenPage />} />
                 <Route path="/sushi" element={<SushiGamePage />} />
+                <Route path="/mochi" element={<MochiGamePage />} />
                 <Route path="/dojo" element={<KanjiDojoPage />} />
               </Routes>
             </div>
