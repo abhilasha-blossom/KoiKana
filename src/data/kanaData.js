@@ -121,13 +121,13 @@ export const katakana = [
     { char: 'ユ', romaji: 'yu', type: 'gojuon', mnemonic: 'Unique number 1', image: '/mnemonics/katakana_yu.png', examples: [{ word: 'Yuuzaa', meaning: 'User', kana: 'ユーザー' }] },
     { char: 'ヨ', romaji: 'yo', type: 'gojuon', mnemonic: 'Yoghurt cup', image: '/mnemonics/katakana_yo.png', examples: [{ word: 'Yooroppa', meaning: 'Europe', kana: 'ヨーロッパ' }] },
     { char: 'ラ', romaji: 'ra', type: 'gojuon', mnemonic: 'Raptor', image: '/mnemonics/katakana_ra.png', examples: [{ word: 'Rajio', meaning: 'Radio', kana: 'ラジオ' }, { word: 'Raion', meaning: 'Lion', kana: 'ライオン' }] },
-    { char: 'リ', romaji: 'ri', type: 'gojuon', mnemonic: 'River (straight lines)', examples: [{ word: 'Rizumu', meaning: 'Rhythm', kana: 'リズム' }] },
-    { char: 'ル', romaji: 'ru', type: 'gojuon', mnemonic: 'Roots of a tree', examples: [{ word: 'Ruuru', meaning: 'Rule', kana: 'ルール' }] },
-    { char: 'レ', romaji: 're', type: 'gojuon', mnemonic: 'Razor blade', examples: [{ word: 'Remon', meaning: 'Lemon', kana: 'レモン' }, { word: 'Resutoran', meaning: 'Restaurant', kana: 'レストラン' }] },
-    { char: 'ロ', romaji: 'ro', type: 'gojuon', mnemonic: 'Robot head (square)', examples: [{ word: 'Robot', meaning: 'Robot', kana: 'ロボット' }, { word: 'Rokketto', meaning: 'Rocket', kana: 'ロケット' }] },
-    { char: 'ワ', romaji: 'wa', type: 'gojuon', mnemonic: 'Wine glass', examples: [{ word: 'Wain', meaning: 'Wine', kana: 'ワイン' }, { word: 'Wairudo', meaning: 'Wild', kana: 'ワイルド' }] },
-    { char: 'ヲ', romaji: 'wo', type: 'gojuon', mnemonic: 'Wolf howling', examples: [] }, // Usually only grammatical particle
-    { char: 'ン', romaji: 'n', type: 'gojuon', mnemonic: 'Night (one eye closed)', examples: [{ word: 'Pain', meaning: 'Pineapple', kana: 'パイン' }] }
+    { char: 'リ', romaji: 'ri', type: 'gojuon', mnemonic: 'River (straight lines)', image: '/mnemonics/katakana_ri.png', examples: [{ word: 'Rizumu', meaning: 'Rhythm', kana: 'リズム' }] },
+    { char: 'ル', romaji: 'ru', type: 'gojuon', mnemonic: 'Roots of a tree', image: '/mnemonics/katakana_ru.png', examples: [{ word: 'Ruuru', meaning: 'Rule', kana: 'ルール' }] },
+    { char: 'レ', romaji: 're', type: 'gojuon', mnemonic: 'Razor blade', image: '/mnemonics/katakana_re.png', examples: [{ word: 'Remon', meaning: 'Lemon', kana: 'レモン' }, { word: 'Resutoran', meaning: 'Restaurant', kana: 'レストラン' }] },
+    { char: 'ロ', romaji: 'ro', type: 'gojuon', mnemonic: 'Robot head (square)', image: '/mnemonics/katakana_ro.png', examples: [{ word: 'Robot', meaning: 'Robot', kana: 'ロボット' }, { word: 'Rokketto', meaning: 'Rocket', kana: 'ロケット' }] },
+    { char: 'ワ', romaji: 'wa', type: 'gojuon', mnemonic: 'Wine glass', image: '/mnemonics/katakana_wa.png', examples: [{ word: 'Wain', meaning: 'Wine', kana: 'ワイン' }, { word: 'Wairudo', meaning: 'Wild', kana: 'ワイルド' }] },
+    { char: 'ヲ', romaji: 'wo', type: 'gojuon', mnemonic: 'Wolf howling', image: '/mnemonics/katakana_wo.png', examples: [] }, // Usually only grammatical particle
+    { char: 'ン', romaji: 'n', type: 'gojuon', mnemonic: 'Night (one eye closed)', image: '/mnemonics/katakana_n.png', examples: [{ word: 'Pain', meaning: 'Pineapple', kana: 'パイン' }] }
 ];
 
 // --- DAKUTEN (Voiced) ---
