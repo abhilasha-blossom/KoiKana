@@ -6,9 +6,15 @@ import useAudio from '../hooks/useAudio';
 import { hiragana, katakana } from '../data/kanaData';
 
 // Game Constants
-const SPAWN_RATE = 2000; // ms
 const BELT_SPEED = 1; // px per tick (can increase with difficulty)
-const PLATE_Y = 200; // Y position of the belt
+
+const SUSHI_TYPES = [
+    { type: 'salmon', color: 'bg-orange-400', detail: 'bg-orange-200' }, // Nigiri
+    { type: 'tuna', color: 'bg-red-500', detail: 'bg-red-300' }, // Nigiri
+    { type: 'egg', color: 'bg-yellow-300', detail: 'bg-black' }, // Tamago (black strip)
+    { type: 'shrimp', color: 'bg-rose-300', detail: 'bg-white' }, // Ebi
+    { type: 'maki', color: 'bg-black', detail: 'bg-green-400' }, // Maki Roll
+];
 
 const SushiGamePage = () => {
     const { theme } = useTheme();
@@ -19,11 +25,11 @@ const SushiGamePage = () => {
     const [score, setScore] = useState(0);
     const [lives, setLives] = useState(3);
     const [input, setInput] = useState('');
-    const [plates, setPlates] = useState([]); // { id, char, x, speed }
+    const [plates, setPlates] = useState([]); // { id, char, x, speed, sushiType }
+    const [collectedSushi, setCollectedSushi] = useState([]); // Array of eaten sushi types
 
     const requestRef = useRef();
     const lastSpawnTime = useRef(0);
-    const beltRef = useRef(null);
 
     const location = useLocation();
     const scriptType = location.state?.scriptType || 'mix'; // 'hiragana', 'katakana', 'mix'
@@ -41,6 +47,7 @@ const SushiGamePage = () => {
         setScore(0);
         setLives(3);
         setPlates([]);
+        setCollectedSushi([]);
         setInput('');
         playSound('pop');
         lastSpawnTime.current = performance.now();
@@ -49,12 +56,15 @@ const SushiGamePage = () => {
 
     const spawnPlate = () => {
         const randomKana = gameKana[Math.floor(Math.random() * gameKana.length)];
+        const randomSushi = SUSHI_TYPES[Math.floor(Math.random() * SUSHI_TYPES.length)];
+
         const newPlate = {
             id: Date.now() + Math.random(),
             char: randomKana.char,
             romaji: randomKana.romaji,
             x: window.innerWidth + 50, // Start off-screen right
-            speed: 1.5 + (score / 50) // Speed up as score increases
+            speed: 1.5 + (score / 100), // Speed up slightly as score increases
+            sushi: randomSushi
         };
         setPlates(prev => [...prev, newPlate]);
     };
@@ -63,7 +73,7 @@ const SushiGamePage = () => {
         if (gameState !== 'playing') return;
 
         // Spawn logic
-        if (time - lastSpawnTime.current > Math.max(800, 2000 - (score * 10))) {
+        if (time - lastSpawnTime.current > Math.max(800, 2000 - (score * 5))) {
             spawnPlate();
             lastSpawnTime.current = time;
         }
@@ -99,21 +109,11 @@ const SushiGamePage = () => {
             return nextPlates;
         });
 
-        if (lives > 0) { // Only continue if alive (state update is async so check ref or careful logic)
-            // Ideally we check newLives but inside setPlates is tricky. 
-            // We'll rely on next render stopping the loop if lives is 0, 
-            // but actually we need to stop *requesting* the frame.
-            // The check below (lives > 0) uses closure value which might be stale?
-            // Yes. But setGameState('gameover') triggers re-render, 
-            // and we clean up the loop in useEffect/dependency.
+        if (lives > 0) {
             requestRef.current = requestAnimationFrame(gameLoop);
         }
     }, [gameState, score, lives]);
-    // ^ Dependency on lives/score might cause jitter if re-creating loop often.
-    // Better to use refs for mutable game state in loop, but React state for UI.
-    // For MVP, we'll let it re-bind.
 
-    // Better Loop Management:
     useEffect(() => {
         if (gameState === 'playing') {
             requestRef.current = requestAnimationFrame(gameLoop);
@@ -126,20 +126,43 @@ const SushiGamePage = () => {
         const val = e.target.value.toLowerCase();
         setInput(val);
 
-        // Check against active plates
-        // Find match?
-        // We match the *closest* or *first* match?
-        // Let's match any visible plate.
-
         const matchIndex = plates.findIndex(p => p.romaji === val);
         if (matchIndex !== -1) {
             // Success!
             const plate = plates[matchIndex];
             setScore(s => s + 10);
+
+            // Add to collection
+            setCollectedSushi(prev => [...prev, plate.sushi]);
+
             setPlates(prev => prev.filter((_, i) => i !== matchIndex));
             setInput(''); // Clear input
             playSound('correct');
         }
+    };
+
+    // Helper to render proper sushi CSS
+    const renderSushi = (sushi) => {
+        if (sushi.type === 'maki') {
+            return (
+                <div className="relative w-16 h-16 rounded-full bg-black flex items-center justify-center border-4 border-black">
+                    <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
+                        <div className={`w-8 h-8 rounded-full ${sushi.detail}`}></div>
+                    </div>
+                </div>
+            );
+        }
+        // Nigiri Style
+        return (
+            <div className="relative w-20 h-10 bg-white rounded-full shadow-sm mt-4">
+                {/* Topping */}
+                <div className={`absolute -top-3 left-0 w-full h-8 ${sushi.color} rounded-full rotate-1 shadow-sm`}>
+                    {/* Detail Stripe */}
+                    {sushi.type !== 'egg' && <div className="absolute top-2 left-2 w-16 h-1 bg-white/30 rounded-full"></div>}
+                    {sushi.type === 'egg' && <div className="absolute top-3 left-1/2 -translate-x-1/2 w-4 h-8 bg-black"></div>}
+                </div>
+            </div>
+        );
     };
 
     return (
@@ -163,9 +186,9 @@ const SushiGamePage = () => {
             <div className="w-full h-screen flex flex-col justify-center relative">
 
                 {/* Visual: Conveyor Belt */}
-                <div className="w-full h-32 bg-gray-200 border-y-4 border-gray-300 relative flex items-center mb-20 overflow-hidden">
+                <div className="w-full h-40 bg-[#e0e0e0] border-y-8 border-[#d0d0d0] relative flex items-center mb-20 overflow-hidden shadow-inner">
                     {/* Moving Track Texture */}
-                    <div className="absolute inset-0 opacity-20 bg-[repeating-linear-gradient(90deg,transparent,transparent_20px,#000_20px,#000_22px)] animate-conveyor"></div>
+                    <div className="absolute inset-0 opacity-10 bg-[repeating-linear-gradient(90deg,transparent,transparent_20px,#000_20px,#000_22px)] animate-conveyor"></div>
 
                     {/* Plates */}
                     {plates.map(plate => (
@@ -174,14 +197,16 @@ const SushiGamePage = () => {
                             style={{ left: plate.x, position: 'absolute' }}
                             className="flex flex-col items-center transition-transform"
                         >
-                            {/* Sushi on Plate */}
-                            <div className="relative">
-                                <div className="w-20 h-20 bg-white rounded-full border-4 border-gray-100 shadow-lg flex items-center justify-center z-10 relative">
-                                    <span className="text-3xl font-black text-gray-800">{plate.char}</span>
+                            {/* Plate */}
+                            <div className="w-24 h-24 rounded-full bg-white shadow-xl border-4 border-gray-100 flex flex-col items-center justify-center relative">
+                                {/* Sushi Graphic */}
+                                <div className="scale-75 mb-1">
+                                    {renderSushi(plate.sushi)}
                                 </div>
-                                {/* Sushi visuals (css shapes) */}
-                                <div className="absolute -bottom-2 w-16 h-8 bg-orange-300 rounded-full left-2 -z-0"></div>
-                                <div className="absolute -bottom-3 w-18 h-4 bg-black/80 rounded-full left-1 -z-0"></div>
+                                {/* Kana Bubble */}
+                                <div className="absolute -top-8 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-xl shadow-md border border-gray-200">
+                                    <span className="text-2xl font-black text-gray-800">{plate.char}</span>
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -223,19 +248,41 @@ const SushiGamePage = () => {
                 )}
 
                 {gameState === 'gameover' && (
-                    <div className="absolute inset-0 bg-red-900/40 backdrop-blur-md z-50 flex items-center justify-center">
-                        <div className="bg-white p-8 rounded-3xl text-center shadow-2xl max-w-sm w-full animate-shake">
-                            <h1 className="text-4xl font-black text-red-500 mb-2">Game Over!</h1>
-                            <p className="text-xl font-bold text-gray-800 mb-6">Score: {score}</p>
-                            <button
-                                onClick={startGame}
-                                className="w-full py-4 bg-gray-800 hover:bg-gray-900 text-white font-bold rounded-xl shadow-lg transition-transform active:scale-95 text-xl flex items-center justify-center gap-2"
-                            >
-                                <RotateCcw size={24} /> Try Again
-                            </button>
-                            <Link to="/quiz" className="block mt-4 text-gray-400 hover:text-gray-600 font-bold">
-                                Return to Menu
-                            </Link>
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center">
+                        <div className="bg-white p-6 rounded-[2rem] text-center shadow-2xl max-w-lg w-full animate-shake relative overflow-hidden">
+
+                            <h1 className="text-4xl font-black text-red-500 mb-2">Ochimashita!</h1>
+                            <p className="text-gray-500 font-bold mb-4">You dropped a plate!</p>
+
+                            {/* COLLECTED SUSHI PLATE */}
+                            <div className="bg-amber-100 rounded-xl p-4 mb-6 border-2 border-amber-200 shadow-inner max-h-48 overflow-y-auto">
+                                <h3 className="text-amber-800 font-bold text-sm mb-2 uppercase tracking-widest">Your Meal</h3>
+                                {collectedSushi.length === 0 ? (
+                                    <p className="text-gray-400 italic text-sm">You didn&apos;t eat anything...</p>
+                                ) : (
+                                    <div className="flex flex-wrap justify-center gap-2">
+                                        {collectedSushi.map((s, i) => (
+                                            <div key={i} className="scale-50 -m-2">
+                                                {renderSushi(s)}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            <p className="text-2xl font-black text-gray-800 mb-6">Total Score: {score}</p>
+
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={startGame}
+                                    className="flex-1 py-3 bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-xl shadow-lg transition-transform active:scale-95"
+                                >
+                                    Eat More
+                                </button>
+                                <Link to="/quiz" className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold rounded-xl transition-colors flex items-center justify-center">
+                                    Menu
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 )}
