@@ -73,6 +73,7 @@ npm run dev
 ## 🎨 Tech Stack
 
 -   **Frontend**: React (Vite)
+-   **Database**: Supabase
 -   **Styling**: Tailwind CSS, Lucide Icons
 -   **Logic**: HTML5 Canvas, LocalStorage (No Backend required!)
 -   **Audio**: Native HTML5 Audio API
